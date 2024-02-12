@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.processor.UserMessageProcessor;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,6 +16,7 @@ public class Bot implements UpdatesListener {
     private final TelegramBot telegramBot;
     private final UserMessageProcessor processor;
 
+    @Autowired
     public Bot(TelegramBot telegramBot, UserMessageProcessor processor) {
         this.telegramBot = telegramBot;
         this.processor = processor;

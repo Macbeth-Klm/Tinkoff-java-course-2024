@@ -3,7 +3,9 @@ package edu.java.bot.processor;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.commands.Command;
+import java.util.Collections;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,14 +14,9 @@ public class Processor implements UserMessageProcessor {
         "Увы, но я не понимаю... Введите /help, чтобы узнать, какие команды есть.";
     private final List<Command> commands;
 
-    public Processor(
-        Command startCommand,
-        Command helpCommand,
-        Command listCommand,
-        Command trackCommand,
-        Command untrackCommand
-    ) {
-        commands = List.of(startCommand, helpCommand, listCommand, trackCommand, untrackCommand);
+    @Autowired
+    public Processor(List<Command> commands) {
+        this.commands = Collections.unmodifiableList(commands);
     }
 
     @Override

@@ -4,15 +4,11 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.database.DatabaseImitation;
 import edu.java.bot.linkvalidators.LinkValidatorManager;
 import java.net.URI;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
-@Component
+@RequiredArgsConstructor
 public class UntrackCommand implements Command {
     private final LinkValidatorManager linkManager;
-
-    public UntrackCommand(LinkValidatorManager linkManager) {
-        this.linkManager = linkManager;
-    }
 
     @Override
     public String name() {

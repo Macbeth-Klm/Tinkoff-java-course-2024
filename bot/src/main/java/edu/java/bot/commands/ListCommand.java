@@ -4,9 +4,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.database.DatabaseImitation;
 import java.net.URI;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ListCommand implements Command {
     @Override
     public String name() {

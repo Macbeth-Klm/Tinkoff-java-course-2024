@@ -6,6 +6,7 @@ import edu.java.bot.linkvalidators.StackOverflowValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import java.util.List;
 
 public class LinkValidatorTest {
 
@@ -18,8 +19,10 @@ public class LinkValidatorTest {
     })
     void shouldHandleCorrectURI(String uri) {
         LinkValidatorManager validator = new LinkValidatorManager(
-            new GitHubValidator(),
-            new StackOverflowValidator()
+            List.of(
+                new GitHubValidator(),
+                new StackOverflowValidator()
+            )
         );
 
         Assertions.assertTrue(validator.isValid(uri));
@@ -36,8 +39,10 @@ public class LinkValidatorTest {
     })
     void shouldHandleIncorrectURI(String uri) {
         LinkValidatorManager validator = new LinkValidatorManager(
-            new GitHubValidator(),
-            new StackOverflowValidator()
+            List.of(
+                new GitHubValidator(),
+                new StackOverflowValidator()
+            )
         );
 
         Assertions.assertFalse(validator.isValid(uri));

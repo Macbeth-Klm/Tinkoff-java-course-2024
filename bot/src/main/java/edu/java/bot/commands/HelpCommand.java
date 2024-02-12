@@ -3,25 +3,11 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.database.DatabaseImitation;
 import java.util.List;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
-@Component
+@RequiredArgsConstructor
 public class HelpCommand implements Command {
-    private final List<Command> commands;
-
-    public HelpCommand(
-        Command startCommand,
-        Command listCommand,
-        Command trackCommand,
-        Command untrackCommand
-    ) {
-        commands = List.of(
-            startCommand,
-            listCommand,
-            trackCommand,
-            untrackCommand
-        );
-    }
+    private final List<String> commands;
 
     @Override
     public String name() {
@@ -41,7 +27,7 @@ public class HelpCommand implements Command {
         if (text.equals(this.name())) {
             StringBuilder sb = new StringBuilder("Список команд:\n");
             for (var command : commands) {
-                sb.append(command.name()).append(" - ").append(command.description()).append("\n");
+                sb.append(command);
             }
             return new SendMessage(chatId, sb.toString());
         }

@@ -12,22 +12,50 @@ import edu.java.bot.linkvalidators.GitHubValidator;
 import edu.java.bot.linkvalidators.LinkValidatorManager;
 import edu.java.bot.linkvalidators.StackOverflowValidator;
 import java.net.URI;
+import java.util.List;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 public class CommandsTest {
     @Test
-    public void shouldReturnCorrectAnswersFromHelpCommandHandler() {
-        var linkManager = new LinkValidatorManager(
-            new GitHubValidator(),
-            new StackOverflowValidator()
+    public void shouldReturnCorrectAnswersFromStartCommandHandler() {
+        long randomId = 1L;
+        long thirdId = 2L;
+        Command start = new StartCommand();
+
+        SendMessage firstAnswer = start.handle(randomId, "/start");
+        SendMessage secondAnswer = start.handle(randomId, "/start");
+        SendMessage thirdAnswer = start.handle(thirdId, "/start:(");
+        Assertions.assertAll(
+            () -> Assertions.assertEquals(
+                1L,
+                firstAnswer.getParameters().get("chat_id")
+            ),
+            () -> Assertions.assertEquals(
+                "Вы успешно зарегистрированы!",
+                firstAnswer.getParameters().get("text")
+            ),
+            () -> Assertions.assertEquals(
+                "Вы уже зарегистрированы!",
+                secondAnswer.getParameters().get("text")
+            ),
+            () -> Assertions.assertEquals(
+                "Введите /start, чтобы зарегистрироваться.",
+                thirdAnswer.getParameters().get("text")
+            )
         );
+    }
+
+    @Test
+    public void shouldReturnCorrectAnswersFromHelpCommandHandler() {
         long randomId = 3L;
         Command help = new HelpCommand(
-            new StartCommand(),
-            new ListCommand(),
-            new TrackCommand(linkManager),
-            new UntrackCommand(linkManager)
+            List.of(
+                "/start - Зарегистрироваться на Link_Tracker_Bot\n",
+                "/list - Ваши подписки\n",
+                "/track - Подписаться\n",
+                "/untrack - Отписаться\n"
+            )
         );
 
         SendMessage firstAnswer = help.handle(randomId, "/help");
@@ -35,7 +63,6 @@ public class CommandsTest {
         SendMessage secondAnswer = help.handle(randomId, "/help");
         SendMessage thirdAnswer =
             help.handle(randomId, "/help (idk who can type like this but everything is possible)");
-
         Assertions.assertAll(
             () -> Assertions.assertEquals(
                 "Вы не зарегистрированы! Введите /start",
@@ -97,8 +124,10 @@ public class CommandsTest {
     public void shouldReturnCorrectAnswersFromTrackCommandHandler() {
         long randomId = 5L;
         Command track = new TrackCommand(new LinkValidatorManager(
-            new GitHubValidator(),
-            new StackOverflowValidator()
+            List.of(
+                new GitHubValidator(),
+                new StackOverflowValidator()
+            )
         ));
 
         SendMessage firstAnswer = track.handle(randomId, "/track");
@@ -137,8 +166,10 @@ public class CommandsTest {
     public void shouldReturnCorrectAnswersFromUntrackCommandHandler() {
         long randomId = 6L;
         Command untrack = new UntrackCommand(new LinkValidatorManager(
-            new GitHubValidator(),
-            new StackOverflowValidator()
+            List.of(
+                new GitHubValidator(),
+                new StackOverflowValidator()
+            )
         ));
 
         SendMessage firstAnswer = untrack.handle(randomId, "/untrack");

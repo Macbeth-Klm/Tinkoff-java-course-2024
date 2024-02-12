@@ -3,21 +3,11 @@ package edu.java.bot.linkvalidators;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
-@Component
+@RequiredArgsConstructor
 public final class LinkValidatorManager {
     private final List<LinkValidator> validators;
-
-    public LinkValidatorManager(
-        LinkValidator gitHubValidator,
-        LinkValidator stackOverflowValidator
-    ) {
-        validators = List.of(
-            gitHubValidator,
-            stackOverflowValidator
-        );
-    }
 
     public boolean isValid(String link) {
         String scheme = "https://";
