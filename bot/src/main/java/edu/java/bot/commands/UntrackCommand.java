@@ -50,8 +50,8 @@ public class UntrackCommand implements Command {
         }
         return new SendMessage(
             chatId,
-            "Введите /untrack + ссылка на ресурс, чтобы отписаться от рассылки изменений.\n" +
-                "Например, /untrack https://..."
+            "Введите /untrack + ссылка на ресурс, чтобы отписаться от рассылки изменений.\n"
+                + "Например, /untrack https://..."
         );
     }
 }

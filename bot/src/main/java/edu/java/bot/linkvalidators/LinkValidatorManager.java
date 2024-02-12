@@ -21,18 +21,19 @@ public final class LinkValidatorManager {
 
     public boolean isValid(String link) {
         String scheme = "https://";
+        String fullUri = link;
         if (!link.startsWith(scheme)) {
-            link = scheme + link;
+            fullUri = scheme + link;
         }
         try {
-            URI uri = new URI(link);
+            URI uri = new URI(fullUri);
             for (var validator : validators) {
                 if (validator.isValid(uri)) {
                     return true;
                 }
             }
             return false;
-        } catch (URISyntaxException ee) {
+        } catch (URISyntaxException e) {
             return false;
         }
     }

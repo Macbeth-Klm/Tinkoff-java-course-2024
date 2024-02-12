@@ -50,8 +50,8 @@ public class TrackCommand implements Command {
         }
         return new SendMessage(
             chatId,
-            "Введите /track + ссылка на ресурс, чтобы подписаться на рассылку изменений.\n" +
-                "Например, /track https://..."
+            "Введите /track + ссылка на ресурс, чтобы подписаться на рассылку изменений.\n"
+                + "Например, /track https://..."
         );
     }
 }
