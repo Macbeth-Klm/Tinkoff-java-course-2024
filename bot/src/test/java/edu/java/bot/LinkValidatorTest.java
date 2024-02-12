@@ -1,8 +1,15 @@
 package edu.java.bot;
 
+import edu.java.bot.linkvalidators.GitHubValidator;
+import edu.java.bot.linkvalidators.LinkValidatorManager;
+import edu.java.bot.linkvalidators.StackOverflowValidator;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 public class LinkValidatorTest {
 
-/*    @ParameterizedTest
+    @ParameterizedTest
     @ValueSource(strings = {
         "https://github.com/pengrad/java-telegram-bot-api",
         "github.com/pengrad/java-telegram-bot-api",
@@ -14,6 +21,7 @@ public class LinkValidatorTest {
             new GitHubValidator(),
             new StackOverflowValidator()
         );
+
         Assertions.assertTrue(validator.isValid(uri));
     }
 
@@ -31,6 +39,7 @@ public class LinkValidatorTest {
             new GitHubValidator(),
             new StackOverflowValidator()
         );
+
         Assertions.assertFalse(validator.isValid(uri));
-    }*/
+    }
 }

@@ -7,6 +7,19 @@ import org.junit.jupiter.api.Assertions;
 
 public class StartCommandTest {
     @Test
+    public void shouldReturnCorrectInformationAboutCommand() {
+        StartCommand start = new StartCommand();
+
+        String name = start.name();
+        String description = start.description();
+
+        Assertions.assertAll(
+            () -> Assertions.assertEquals("/start", name),
+            () -> Assertions.assertEquals("Зарегистрироваться на Link_Tracker_Bot", description)
+        );
+    }
+
+    @Test
     public void shouldReturnSuccessfulRegistrationMessage() {
         long randomId = 1L;
         StartCommand start = new StartCommand();
