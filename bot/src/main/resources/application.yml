@@ -1,9 +1,9 @@
 app:
-  telegram-token: unset
+  telegram-token: ${TELEGRAM_TOKEN}
 
 spring:
   application:
-    name: bot
+    name: ${TELEGRAM_NAME}
   jackson:
     time-zone: UTC
 
