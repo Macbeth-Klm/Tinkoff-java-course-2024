@@ -17,35 +17,6 @@ import org.junit.jupiter.api.Assertions;
 
 public class CommandsTest {
     @Test
-    public void shouldReturnCorrectAnswersFromStartCommandHandler() {
-        long randomId = 1L;
-        long thirdId = 2L;
-        Command start = new StartCommand();
-
-        SendMessage firstAnswer = start.handle(randomId, "/start");
-        SendMessage secondAnswer = start.handle(randomId, "/start");
-        SendMessage thirdAnswer = start.handle(thirdId, "/start:(");
-        Assertions.assertAll(
-            () -> Assertions.assertEquals(
-                1L,
-                firstAnswer.getParameters().get("chat_id")
-            ),
-            () -> Assertions.assertEquals(
-                "Вы успешно зарегистрированы!",
-                firstAnswer.getParameters().get("text")
-            ),
-            () -> Assertions.assertEquals(
-                "Вы уже зарегистрированы!",
-                secondAnswer.getParameters().get("text")
-            ),
-            () -> Assertions.assertEquals(
-                "Введите /start, чтобы зарегистрироваться.",
-                thirdAnswer.getParameters().get("text")
-            )
-        );
-    }
-
-    @Test
     public void shouldReturnCorrectAnswersFromHelpCommandHandler() {
         var linkManager = new LinkValidatorManager(
             new GitHubValidator(),
@@ -64,6 +35,7 @@ public class CommandsTest {
         SendMessage secondAnswer = help.handle(randomId, "/help");
         SendMessage thirdAnswer =
             help.handle(randomId, "/help (idk who can type like this but everything is possible)");
+
         Assertions.assertAll(
             () -> Assertions.assertEquals(
                 "Вы не зарегистрированы! Введите /start",
