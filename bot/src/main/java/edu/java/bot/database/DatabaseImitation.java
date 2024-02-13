@@ -40,4 +40,8 @@ public final class DatabaseImitation {
     public static boolean isExistSubscription(Long chatId, URI link) {
         return STORAGE.get(chatId).contains(link);
     }
+
+    public static void clear() {
+        STORAGE.clear();
+    }
 }

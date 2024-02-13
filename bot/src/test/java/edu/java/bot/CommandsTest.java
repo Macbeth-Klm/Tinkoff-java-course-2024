@@ -13,22 +13,28 @@ import edu.java.bot.linkvalidators.LinkValidatorManager;
 import edu.java.bot.linkvalidators.StackOverflowValidator;
 import java.net.URI;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CommandsTest {
+    private static final long CHAT_ID = 10L;
+
+    @AfterEach
+    public void clearDatabase() {
+        DatabaseImitation.clear();
+    }
+
     @Test
     public void shouldReturnCorrectAnswersFromStartCommandHandler() {
-        long randomId = 1L;
-        long thirdId = 2L;
         Command start = new StartCommand();
 
-        SendMessage firstAnswer = start.handle(randomId, "/start");
-        SendMessage secondAnswer = start.handle(randomId, "/start");
-        SendMessage thirdAnswer = start.handle(thirdId, "/start:(");
+        SendMessage firstAnswer = start.handle(CHAT_ID, "/start");
+        SendMessage secondAnswer = start.handle(CHAT_ID, "/start");
+        SendMessage thirdAnswer = start.handle(CHAT_ID, "/start:(");
         Assertions.assertAll(
             () -> Assertions.assertEquals(
-                1L,
+                10L,
                 firstAnswer.getParameters().get("chat_id")
             ),
             () -> Assertions.assertEquals(
@@ -48,7 +54,6 @@ public class CommandsTest {
 
     @Test
     public void shouldReturnCorrectAnswersFromHelpCommandHandler() {
-        long randomId = 3L;
         Command help = new HelpCommand(
             List.of(
                 "/start - Зарегистрироваться на Link_Tracker_Bot\n",
@@ -58,11 +63,11 @@ public class CommandsTest {
             )
         );
 
-        SendMessage firstAnswer = help.handle(randomId, "/help");
-        DatabaseImitation.registerUser(randomId);
-        SendMessage secondAnswer = help.handle(randomId, "/help");
+        SendMessage firstAnswer = help.handle(CHAT_ID, "/help");
+        DatabaseImitation.registerUser(CHAT_ID);
+        SendMessage secondAnswer = help.handle(CHAT_ID, "/help");
         SendMessage thirdAnswer =
-            help.handle(randomId, "/help (idk who can type like this but everything is possible)");
+            help.handle(CHAT_ID, "/help (idk who can type like this but everything is possible)");
         Assertions.assertAll(
             () -> Assertions.assertEquals(
                 "Вы не зарегистрированы! Введите /start",
@@ -87,18 +92,17 @@ public class CommandsTest {
 
     @Test
     public void shouldReturnCorrectAnswersFromListCommandHandler() {
-        long randomId = 4L;
         Command list = new ListCommand();
 
-        SendMessage firstAnswer = list.handle(randomId, "/list");
-        DatabaseImitation.registerUser(randomId);
-        SendMessage secondAnswer = list.handle(randomId, "/list");
+        SendMessage firstAnswer = list.handle(CHAT_ID, "/list");
+        DatabaseImitation.registerUser(CHAT_ID);
+        SendMessage secondAnswer = list.handle(CHAT_ID, "/list");
         DatabaseImitation.addSubscriptionToUser(
-            randomId,
+            CHAT_ID,
             URI.create("https://github.com/pengrad/java-telegram-bot-api")
         );
-        SendMessage thirdAnswer = list.handle(randomId, "/list");
-        SendMessage fourthAnswer = list.handle(randomId, "/list something");
+        SendMessage thirdAnswer = list.handle(CHAT_ID, "/list");
+        SendMessage fourthAnswer = list.handle(CHAT_ID, "/list something");
 
         Assertions.assertAll(
             () -> Assertions.assertEquals(
@@ -122,7 +126,6 @@ public class CommandsTest {
 
     @Test
     public void shouldReturnCorrectAnswersFromTrackCommandHandler() {
-        long randomId = 5L;
         Command track = new TrackCommand(new LinkValidatorManager(
             List.of(
                 new GitHubValidator(),
@@ -130,12 +133,12 @@ public class CommandsTest {
             )
         ));
 
-        SendMessage firstAnswer = track.handle(randomId, "/track");
-        DatabaseImitation.registerUser(randomId);
-        SendMessage secondAnswer = track.handle(randomId, "/track https://github.com/pengrad/java-telegram-bot-api");
-        SendMessage thirdAnswer = track.handle(randomId, "/track github.com/pengrad/java-telegram-bot-api");
-        SendMessage fourthAnswer = track.handle(randomId, "/track incorrectURI");
-        SendMessage fifthAnswer = track.handle(randomId, "/track");
+        SendMessage firstAnswer = track.handle(CHAT_ID, "/track");
+        DatabaseImitation.registerUser(CHAT_ID);
+        SendMessage secondAnswer = track.handle(CHAT_ID, "/track https://github.com/pengrad/java-telegram-bot-api");
+        SendMessage thirdAnswer = track.handle(CHAT_ID, "/track github.com/pengrad/java-telegram-bot-api");
+        SendMessage fourthAnswer = track.handle(CHAT_ID, "/track incorrectURI");
+        SendMessage fifthAnswer = track.handle(CHAT_ID, "/track");
 
         Assertions.assertAll(
             () -> Assertions.assertEquals(
@@ -164,7 +167,6 @@ public class CommandsTest {
 
     @Test
     public void shouldReturnCorrectAnswersFromUntrackCommandHandler() {
-        long randomId = 6L;
         Command untrack = new UntrackCommand(new LinkValidatorManager(
             List.of(
                 new GitHubValidator(),
@@ -172,17 +174,17 @@ public class CommandsTest {
             )
         ));
 
-        SendMessage firstAnswer = untrack.handle(randomId, "/untrack");
-        DatabaseImitation.registerUser(randomId);
+        SendMessage firstAnswer = untrack.handle(CHAT_ID, "/untrack");
+        DatabaseImitation.registerUser(CHAT_ID);
         SendMessage secondAnswer =
-            untrack.handle(randomId, "/untrack https://github.com/pengrad/java-telegram-bot-api");
+            untrack.handle(CHAT_ID, "/untrack https://github.com/pengrad/java-telegram-bot-api");
         DatabaseImitation.addSubscriptionToUser(
-            randomId,
+            CHAT_ID,
             URI.create("https://github.com/pengrad/java-telegram-bot-api")
         );
-        SendMessage thirdAnswer = untrack.handle(randomId, "/untrack github.com/pengrad/java-telegram-bot-api");
-        SendMessage fourthAnswer = untrack.handle(randomId, "/untrack incorrectURI");
-        SendMessage fifthAnswer = untrack.handle(randomId, "/untrack");
+        SendMessage thirdAnswer = untrack.handle(CHAT_ID, "/untrack github.com/pengrad/java-telegram-bot-api");
+        SendMessage fourthAnswer = untrack.handle(CHAT_ID, "/untrack incorrectURI");
+        SendMessage fifthAnswer = untrack.handle(CHAT_ID, "/untrack");
 
         Assertions.assertAll(
             () -> Assertions.assertEquals(
