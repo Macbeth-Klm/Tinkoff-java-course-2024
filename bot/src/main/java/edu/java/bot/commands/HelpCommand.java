@@ -1,7 +1,6 @@
 package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.database.DatabaseImitation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -21,9 +20,6 @@ public class HelpCommand implements Command {
 
     @Override
     public SendMessage handle(long chatId, String text) {
-        if (!DatabaseImitation.isRegisteredUser(chatId)) {
-            return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
-        }
         if (text.equals(this.name())) {
             StringBuilder sb = new StringBuilder("Список команд:\n");
             for (var command : commands) {

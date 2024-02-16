@@ -2,46 +2,61 @@ package edu.java.bot.database;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 
-public final class DatabaseImitation {
+@AllArgsConstructor
+public class DatabaseImitation {
     /*
      * Данный класс создан исключительно, чтобы проверить работу скелета Телеграм-бота.
      */
-    private static final Map<Long, List<URI>> STORAGE = new HashMap<>();
+    private final Map<Long, List<URI>> storage;
+    private final String unknownUserMessage;
 
-    private DatabaseImitation() {
+    public void registerUser(Long chatId) {
+        storage.put(chatId, new ArrayList<>());
     }
 
-    public static void registerUser(Long chatId) {
-        STORAGE.put(chatId, new ArrayList<>());
+    public void addSubscriptionToUser(Long chatId, URI link) throws Exception {
+        if (isRegisteredUser(chatId)) {
+            var subscriptions = storage.get(chatId);
+            subscriptions.add(link);
+        } else {
+            throw new Exception(unknownUserMessage);
+        }
     }
 
-    public static void addSubscriptionToUser(Long chatId, URI link) {
-        var subscriptions = STORAGE.get(chatId);
-        subscriptions.add(link);
+    public void removeSubscriptionToUser(Long chatId, URI link) throws Exception {
+        if (isRegisteredUser(chatId)) {
+            var subscriptions = storage.get(chatId);
+            subscriptions.remove(link);
+        } else {
+            throw new Exception(unknownUserMessage);
+        }
     }
 
-    public static void removeSubscriptionToUser(Long chatId, URI link) {
-        var subscriptions = STORAGE.get(chatId);
-        subscriptions.remove(link);
+    public boolean isRegisteredUser(Long chatId) {
+        return storage.containsKey(chatId);
     }
 
-    public static boolean isRegisteredUser(Long chatId) {
-        return STORAGE.containsKey(chatId);
+    public List<URI> getUserSubscriptions(Long chatId) throws Exception {
+        if (isRegisteredUser(chatId)) {
+            return storage.get(chatId);
+        } else {
+            throw new Exception(unknownUserMessage);
+        }
     }
 
-    public static List<URI> getUserSubscriptions(Long chatId) {
-        return STORAGE.get(chatId);
+    public boolean isExistSubscription(Long chatId, URI link) throws Exception {
+        if (isRegisteredUser(chatId)) {
+            return storage.get(chatId).contains(link);
+        } else {
+            throw new Exception(unknownUserMessage);
+        }
     }
 
-    public static boolean isExistSubscription(Long chatId, URI link) {
-        return STORAGE.get(chatId).contains(link);
-    }
-
-    public static void clear() {
-        STORAGE.clear();
+    public void clear() {
+        storage.clear();
     }
 }

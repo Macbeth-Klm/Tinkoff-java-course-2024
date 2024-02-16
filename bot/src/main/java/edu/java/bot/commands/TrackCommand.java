@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TrackCommand implements Command {
     private final LinkValidatorManager linkManager;
+    private final DatabaseImitation database;
 
     @Override
     public String name() {
@@ -22,9 +23,6 @@ public class TrackCommand implements Command {
 
     @Override
     public SendMessage handle(long chatId, String text) {
-        if (!DatabaseImitation.isRegisteredUser(chatId)) {
-            return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
-        }
         String[] commandAndUri = text.split(" ");
         if (commandAndUri.length == 2) {
             String enteredUri = commandAndUri[1];
@@ -33,13 +31,17 @@ public class TrackCommand implements Command {
             if (linkManager.isValid(uri)) {
                 URI link = URI.create(uri);
                 String answer;
-                if (!DatabaseImitation.isExistSubscription(chatId, link)) {
-                    DatabaseImitation.addSubscriptionToUser(chatId, link);
-                    answer = "Подписка выполнена успешно!";
-                } else {
-                    answer = "Вы уже подписаны на данный ресурс!";
+                try {
+                    if (!database.isExistSubscription(chatId, link)) {
+                        database.addSubscriptionToUser(chatId, link);
+                        answer = "Подписка выполнена успешно!";
+                    } else {
+                        answer = "Вы уже подписаны на данный ресурс!";
+                    }
+                    return new SendMessage(chatId, answer);
+                } catch (Exception e) {
+                    return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
                 }
-                return new SendMessage(chatId, answer);
             } else {
                 return new SendMessage(chatId, "Ссылка введена неверно!");
             }

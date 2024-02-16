@@ -4,8 +4,12 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.database.DatabaseImitation;
 import java.net.URI;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ListCommand implements Command {
+    private final DatabaseImitation database;
+
     @Override
     public String name() {
         return "/list";
@@ -18,12 +22,9 @@ public class ListCommand implements Command {
 
     @Override
     public SendMessage handle(long chatId, String text) {
-        if (!DatabaseImitation.isRegisteredUser(chatId)) {
-            return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
-        }
         if (text.equals(this.name())) {
-            if (DatabaseImitation.isRegisteredUser(chatId)) {
-                List<URI> links = DatabaseImitation.getUserSubscriptions(chatId);
+            try {
+                List<URI> links = database.getUserSubscriptions(chatId);
                 if (links.isEmpty()) {
                     return new SendMessage(chatId, "У вас нет подписок!");
                 }
@@ -32,6 +33,8 @@ public class ListCommand implements Command {
                     sb.append(link.toString()).append("\n");
                 }
                 return new SendMessage(chatId, sb.toString());
+            } catch (Exception e) {
+                return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
             }
         }
         return new SendMessage(chatId, "Команда введена неправильно. Введите /list для просмотра ваших подписок.");
