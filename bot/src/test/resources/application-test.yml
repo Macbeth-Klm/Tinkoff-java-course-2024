@@ -3,7 +3,7 @@ app:
 
 spring:
   application:
-    name: ${TELEGRAM_NAME}
+    name: macbeth_link_tracker_bot
   jackson:
     time-zone: UTC
 
