@@ -2,6 +2,7 @@ package edu.java.bot.database;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -15,12 +16,12 @@ public class DatabaseImitation {
     private final String unknownUserMessage;
 
     public void registerUser(Long chatId) {
-        storage.put(chatId, new ArrayList<>());
+        storage.put(chatId, Collections.synchronizedList(new ArrayList<>()));
     }
 
     public void addSubscriptionToUser(Long chatId, URI link) throws Exception {
-        if (isRegisteredUser(chatId)) {
-            var subscriptions = storage.get(chatId);
+        var subscriptions = storage.get(chatId);
+        if (subscriptions != null) {
             subscriptions.add(link);
         } else {
             throw new Exception(unknownUserMessage);
@@ -28,8 +29,8 @@ public class DatabaseImitation {
     }
 
     public void removeSubscriptionToUser(Long chatId, URI link) throws Exception {
-        if (isRegisteredUser(chatId)) {
-            var subscriptions = storage.get(chatId);
+        var subscriptions = storage.get(chatId);
+        if (subscriptions != null) {
             subscriptions.remove(link);
         } else {
             throw new Exception(unknownUserMessage);
@@ -41,16 +42,18 @@ public class DatabaseImitation {
     }
 
     public List<URI> getUserSubscriptions(Long chatId) throws Exception {
-        if (isRegisteredUser(chatId)) {
-            return storage.get(chatId);
+        var subscriptions = storage.get(chatId);
+        if (subscriptions != null) {
+            return subscriptions;
         } else {
             throw new Exception(unknownUserMessage);
         }
     }
 
     public boolean isExistSubscription(Long chatId, URI link) throws Exception {
-        if (isRegisteredUser(chatId)) {
-            return storage.get(chatId).contains(link);
+        var subscriptions = storage.get(chatId);
+        if (subscriptions != null) {
+            return subscriptions.contains(link);
         } else {
             throw new Exception(unknownUserMessage);
         }
