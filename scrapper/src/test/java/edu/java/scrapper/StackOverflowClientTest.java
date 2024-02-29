@@ -147,4 +147,27 @@ public class StackOverflowClientTest {
 
         assertThat(response).isNotPresent();
     }
+
+    @Test
+    public void shouldReturnEmptyResponseBecauseOfInvalidBodyFormat() {
+        long questionId = 21295883L;
+        String responseBody = "weird json but everything is possible";
+        var uri = UriComponentsBuilder
+            .fromPath("/questions/{id}/answers")
+            .queryParam("order", "desc")
+            .queryParam("sort", "activity")
+            .queryParam("site", "stackoverflow")
+            .uriVariables(Map.of("id", questionId));
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo(uri.toUriString()))
+            .willReturn(WireMock.aResponse()
+                .withStatus(200)
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBody(responseBody)
+            )
+        );
+
+        var response = stackOverflowClient.fetchQuestionUpdates(questionId);
+
+        assertThat(response).isNotPresent();
+    }
 }

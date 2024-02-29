@@ -146,4 +146,29 @@ public class GitHubClientTest {
 
         assertThat(response).isNotPresent();
     }
+
+    @Test
+    public void shouldReturnEmptyResponseBecauseOfInvalidBodyFormat() {
+        String ownerName = "Macbeth-Klm";
+        String repoName = "Tinkoff-java-course-2023";
+        String responseBody = "hw2 has been done!";
+        var uri = UriComponentsBuilder
+            .fromPath("/repos/{owner}/{repo}/events")
+            .queryParam("per_page", 1)
+            .uriVariables(Map.of(
+                "owner", ownerName,
+                "repo", repoName
+            ));
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo(uri.toUriString()))
+            .willReturn(WireMock.aResponse()
+                .withStatus(200)
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBody(responseBody)
+            )
+        );
+
+        var response = gitHubClient.fetchRepositoryEvents(ownerName, repoName);
+
+        assertThat(response).isNotPresent();
+    }
 }
