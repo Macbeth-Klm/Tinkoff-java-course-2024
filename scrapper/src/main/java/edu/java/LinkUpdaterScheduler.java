@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "app.scheduler.enable", havingValue = "true")
 public class LinkUpdaterScheduler {
 
-    @Scheduled(fixedDelayString = "#{@applicationConfig.scheduler.interval}")
+    @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
         log.info("Update!!!");
     }

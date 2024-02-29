@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,13 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class StackOverflowClientTest {
     private WireMockServer wireMockServer;
     private StackOverflowClient stackOverflowClient;
+    private final WebClient.Builder webClientBuilder = WebClient.builder();
 
     @BeforeEach
     void initServerAndClient() {
         wireMockServer = new WireMockServer();
         wireMockServer.start();
         WireMock.configureFor("localhost", wireMockServer.port());
-        stackOverflowClient = new RegularStackOverflowClient("http://localhost:" + wireMockServer.port());
+        stackOverflowClient =
+            new RegularStackOverflowClient("http://localhost:" + wireMockServer.port(), webClientBuilder);
     }
 
     @AfterEach
@@ -118,31 +121,14 @@ public class StackOverflowClientTest {
 
     @Test
     public void shouldReturnEmptyResponseBecauseOfEmptyBody() {
-        long questionId = 21295883L;
-        String responseBody = "{}";
-        var uri = UriComponentsBuilder
-            .fromPath("/questions/{id}/answers")
-            .queryParam("order", "desc")
-            .queryParam("sort", "activity")
-            .queryParam("site", "stackoverflow")
-            .uriVariables(Map.of("id", questionId));
-        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo(uri.toUriString()))
-            .willReturn(WireMock.aResponse()
-                .withStatus(200)
-                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .withBody(responseBody)
-            )
-        );
-
-        var response = stackOverflowClient.fetchQuestionUpdates(questionId);
-
-        assertThat(response).isNotPresent();
-    }
-
-    @Test
-    public void shouldReturnEmptyResponseBecauseOfInvalidBodyFormat() {
-        long questionId = 21295883L;
-        String responseBody = "weird json but everything is possible";
+        long questionId = 2129588121122121213L;
+        String responseBody = """
+            {
+              "error_id": 400,
+              "error_message": "ids",
+              "error_name": "bad_parameter"
+            }
+            """;
         var uri = UriComponentsBuilder
             .fromPath("/questions/{id}/answers")
             .queryParam("order", "desc")

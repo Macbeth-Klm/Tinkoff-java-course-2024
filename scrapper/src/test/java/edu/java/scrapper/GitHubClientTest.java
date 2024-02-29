@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,13 +22,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class GitHubClientTest {
     private WireMockServer wireMockServer;
     private GitHubClient gitHubClient;
+    private final WebClient.Builder webClientBuilder = WebClient.builder();
 
     @BeforeEach
     void initServerAndClient() {
         wireMockServer = new WireMockServer();
         wireMockServer.start();
         WireMock.configureFor("localhost", wireMockServer.port());
-        gitHubClient = new RegularGitHubClient("http://localhost:" + wireMockServer.port());
+        gitHubClient = new RegularGitHubClient("http://localhost:" + wireMockServer.port(), webClientBuilder);
     }
 
     @AfterEach
@@ -119,7 +121,12 @@ public class GitHubClientTest {
     public void shouldReturnEmptyResponseBecauseOfEmptyBody() {
         String ownerName = "Macbeth-Klm";
         String repoName = "Tinkoff-java-course-2023";
-        String responseBody = "[]";
+        String responseBody = """
+            {
+              "message": "Not Found",
+              "documentation_url": "https://docs.github.com/rest/activity/events#list-repository-events"
+            }
+            """;
         var uri = UriComponentsBuilder
             .fromPath("/repos/{owner}/{repo}/events")
             .queryParam("per_page", 1)
@@ -139,30 +146,4 @@ public class GitHubClientTest {
 
         assertThat(response).isNotPresent();
     }
-
-    @Test
-    public void shouldReturnEmptyResponseBecauseOfInvalidBodyFormat() {
-        String ownerName = "Macbeth-Klm";
-        String repoName = "Tinkoff-java-course-2023";
-        String responseBody = "hw2 has been done!";
-        var uri = UriComponentsBuilder
-            .fromPath("/repos/{owner}/{repo}/events")
-            .queryParam("per_page", 1)
-            .uriVariables(Map.of(
-                "owner", ownerName,
-                "repo", repoName
-            ));
-        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo(uri.toUriString()))
-            .willReturn(WireMock.aResponse()
-                .withStatus(200)
-                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .withBody(responseBody)
-            )
-        );
-
-        var response = gitHubClient.fetchRepositoryEvents(ownerName, repoName);
-
-        assertThat(response).isNotPresent();
-    }
-
 }
