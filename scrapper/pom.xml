@@ -123,6 +123,11 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>edu.java</groupId>
+            <artifactId>models</artifactId>
+            <version>0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,4 +1,4 @@
-package edu.java.api.models;
+package edu.java.models;
 
 import java.util.List;
 

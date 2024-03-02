@@ -2,7 +2,7 @@ package edu.java.api.exceptionhandlers;
 
 import edu.java.api.exceptions.ScrapperInvalidReqException;
 import edu.java.api.exceptions.ScrapperNotFoundException;
-import edu.java.api.models.ApiErrorResponse;
+import edu.java.models.ApiErrorResponse;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;

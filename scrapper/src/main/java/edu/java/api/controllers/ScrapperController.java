@@ -1,11 +1,11 @@
 package edu.java.api.controllers;
 
 import edu.java.api.exceptions.ScrapperInvalidReqException;
-import edu.java.api.models.AddLinkRequest;
-import edu.java.api.models.LinkResponse;
-import edu.java.api.models.ListLinksResponse;
-import edu.java.api.models.RemoveLinkRequest;
 import edu.java.api.services.ScrapperService;
+import edu.java.models.AddLinkRequest;
+import edu.java.models.LinkResponse;
+import edu.java.models.ListLinksResponse;
+import edu.java.models.RemoveLinkRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package edu.java.api.services;
 
-import edu.java.api.models.LinkResponse;
-import edu.java.api.models.ListLinksResponse;
 import edu.java.dao.UserDao;
+import edu.java.models.LinkResponse;
+import edu.java.models.ListLinksResponse;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;

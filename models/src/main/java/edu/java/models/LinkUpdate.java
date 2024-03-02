@@ -1,4 +1,4 @@
-package edu.java.api.models;
+package edu.java.models;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
