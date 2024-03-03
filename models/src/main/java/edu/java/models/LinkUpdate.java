@@ -1,16 +1,19 @@
 package edu.java.models;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.net.URI;
 import java.util.List;
 
-public class LinkUpdate {
-    @Min(1)
-    private Long id;
+public record LinkUpdate(
+    @PositiveOrZero
+    Long id,
+    @NotNull
+    URI url,
     @NotEmpty
-    private String url;
+    String description,
     @NotEmpty
-    private String description;
-    @NotEmpty
-    private List<Long> tgChatIds;
+    List<Long> tgChatIds
+) {
 }

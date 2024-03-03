@@ -1,5 +1,6 @@
 package edu.java.dao;
 
+import java.net.URI;
 import java.util.Map;
 
 public interface UserDao {
@@ -7,10 +8,10 @@ public interface UserDao {
 
     void deleteUserById(Long id);
 
-    Map<Long, String> getLinks(Long id);
+    Map<Long, URI> getLinks(Long id);
 
-    Long addLink(Long id, String link);
+    Long addLink(Long id, URI link);
 
-    Long deleteLink(Long id, String link);
+    Long deleteLink(Long id, URI link);
 
 }

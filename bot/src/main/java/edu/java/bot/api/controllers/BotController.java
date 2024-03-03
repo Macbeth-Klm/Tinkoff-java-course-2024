@@ -17,12 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class BotController {
     private final BotService botService;
 
-    @PostMapping
+    @PostMapping("post-update")
     public ResponseEntity<Void> postUpdate(@RequestBody @Valid LinkUpdate req, BindingResult errors) {
         botService.postUpdate(req, errors);
         return ResponseEntity
             .ok()
-            .header("Description", "Обновление обработано")
             .build();
     }
 }

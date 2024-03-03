@@ -1,4 +1,4 @@
-package edu.java.bot.api.exceptions;
+package edu.java.exceptions;
 
 public class BotApiException extends RuntimeException {
     public BotApiException(String message) {

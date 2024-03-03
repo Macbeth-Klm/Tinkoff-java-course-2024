@@ -1,12 +1,13 @@
 package edu.java.api.controllers;
 
-import edu.java.api.exceptions.ScrapperInvalidReqException;
 import edu.java.api.services.ScrapperService;
+import edu.java.exceptions.ScrapperInvalidReqException;
 import edu.java.models.AddLinkRequest;
 import edu.java.models.LinkResponse;
 import edu.java.models.ListLinksResponse;
 import edu.java.models.RemoveLinkRequest;
 import jakarta.validation.Valid;
+import java.net.URI;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class ScrapperController {
     private final ScrapperService scrapperService;
-    private final String headerName = "Description";
     private final String exceptionName = "Invalid HTTP-request parameters";
     private final String exceptionDescription = "Некорректные параметры запроса";
 
@@ -32,7 +32,6 @@ public class ScrapperController {
         scrapperService.registerChat(id);
         return ResponseEntity
             .ok()
-            .header(headerName, "Чат зарегистрирован")
             .build();
     }
 
@@ -42,7 +41,6 @@ public class ScrapperController {
         scrapperService.deleteChat(id);
         return ResponseEntity
             .ok()
-            .header(headerName, "Чат успешно удалён")
             .build();
     }
 
@@ -52,7 +50,6 @@ public class ScrapperController {
         ListLinksResponse response = scrapperService.getLinks(id);
         return ResponseEntity
             .ok()
-            .header(headerName, "Ссылки успешно получены")
             .body(response);
     }
 
@@ -68,11 +65,10 @@ public class ScrapperController {
                 exceptionDescription
             );
         }
-        String link = req.link();
+        URI link = req.link();
         LinkResponse response = scrapperService.addLinks(id, link);
         return ResponseEntity
             .ok()
-            .header(headerName, "Ссылка успешно добавлена")
             .body(response);
     }
 
@@ -88,11 +84,10 @@ public class ScrapperController {
                 exceptionDescription
             );
         }
-        String link = req.link();
+        URI link = req.link();
         LinkResponse response = scrapperService.deleteLinks(id, link);
         return ResponseEntity
             .ok()
-            .header(headerName, "Ссылка успешно убрана")
             .body(response);
     }
 

@@ -1,4 +1,4 @@
-package edu.java.api.exceptions;
+package edu.java.exceptions;
 
 import lombok.Getter;
 

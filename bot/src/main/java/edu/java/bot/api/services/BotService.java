@@ -1,6 +1,6 @@
 package edu.java.bot.api.services;
 
-import edu.java.bot.api.exceptions.BotApiException;
+import edu.java.exceptions.BotApiException;
 import edu.java.models.LinkUpdate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
