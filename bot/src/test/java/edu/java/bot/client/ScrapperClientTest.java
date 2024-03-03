@@ -136,6 +136,7 @@ public class ScrapperClientTest {
             .willReturn(WireMock.aResponse()
                 .withStatus(200))
         );
+        scrapperClient.registerChat(id);
 
         scrapperApi.stubFor(WireMock.delete(urlEqualTo("/tg-chat/1"))
             .willReturn(WireMock.aResponse()
