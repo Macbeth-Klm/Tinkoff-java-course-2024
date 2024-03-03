@@ -1,6 +1,6 @@
 package edu.java.bot.api.exceptionhandlers;
 
-import edu.java.exceptions.BotApiException;
+import edu.java.exceptions.BadRequestException;
 import edu.java.models.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
-    private final String apiErrorDescription = "Некорректные параметры запроса";
     private final String apiErrorCode = "400";
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BotApiException.class)
-    public ApiErrorResponse handleValidationExceptions(BotApiException ex) {
+    @ExceptionHandler(BadRequestException.class)
+    public ApiErrorResponse handleValidationExceptions(BadRequestException ex) {
         return new ApiErrorResponse(
-            apiErrorDescription,
+            ex.getDescription(),
             apiErrorCode,
             ex.getClass().getSimpleName(),
             ex.getMessage(),
@@ -30,7 +29,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiErrorResponse handleInvalidUriException(HttpMessageNotReadableException ex) {
         return new ApiErrorResponse(
-            apiErrorDescription,
+            "Некорректные параметры запроса",
             apiErrorCode,
             ex.getClass().getSimpleName(),
             ex.getMessage(),

@@ -1,7 +1,7 @@
 package edu.java.dao;
 
-import edu.java.exceptions.ScrapperInvalidReqException;
-import edu.java.exceptions.ScrapperNotFoundException;
+import edu.java.exceptions.BadRequestException;
+import edu.java.exceptions.NotFoundException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class RegularUserDao implements UserDao {
     @Override
     public void registerUser(Long id) {
         if (users.containsKey(id)) {
-            throw new ScrapperInvalidReqException(
+            throw new BadRequestException(
                 "User with the given chat id is already registered",
                 "Пользователь уже зарегистрирован"
             );
@@ -44,7 +44,7 @@ public class RegularUserDao implements UserDao {
         notFoundCheck(id);
         var links = users.get(id);
         if (links.containsValue(link)) {
-            throw new ScrapperInvalidReqException(
+            throw new BadRequestException(
                 "User with the given chat id is already tracking this link",
                 "Пользователь уже отслеживает данную ссылку"
             );
@@ -64,7 +64,7 @@ public class RegularUserDao implements UserDao {
                 return linkId;
             }
         }
-        throw new ScrapperNotFoundException(
+        throw new NotFoundException(
             "The user with the given chat id is not tracking this link",
             "Ссылка не найдена"
         );
@@ -72,7 +72,7 @@ public class RegularUserDao implements UserDao {
 
     private void notFoundCheck(Long id) {
         if (!users.containsKey(id)) {
-            throw new ScrapperNotFoundException(
+            throw new NotFoundException(
                 "User with the given chat id is not exist",
                 "Чат не существует"
             );

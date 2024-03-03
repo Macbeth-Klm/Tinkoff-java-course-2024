@@ -1,7 +1,7 @@
 package edu.java.api.exceptionhandlers;
 
-import edu.java.exceptions.ScrapperInvalidReqException;
-import edu.java.exceptions.ScrapperNotFoundException;
+import edu.java.exceptions.BadRequestException;
+import edu.java.exceptions.NotFoundException;
 import edu.java.models.ApiErrorResponse;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +16,8 @@ public class ApiExceptionHandler {
     private final String apiErrorCode = "400";
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ScrapperInvalidReqException.class)
-    public ApiErrorResponse handleValidationExceptions(@NotNull ScrapperInvalidReqException ex) {
+    @ExceptionHandler(BadRequestException.class)
+    public ApiErrorResponse handleValidationExceptions(@NotNull BadRequestException ex) {
         return new ApiErrorResponse(
             ex.getDescription(),
             apiErrorCode,
@@ -28,8 +28,8 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ScrapperNotFoundException.class)
-    public ApiErrorResponse handleNotFoundExceptions(@NotNull ScrapperNotFoundException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ApiErrorResponse handleNotFoundExceptions(@NotNull NotFoundException ex) {
         return new ApiErrorResponse(
             ex.getDescription(),
             "404",

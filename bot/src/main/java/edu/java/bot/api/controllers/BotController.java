@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BotController {
     private final BotService botService;
 
-    @PostMapping("post-update")
+    @PostMapping
     public ResponseEntity<Void> postUpdate(@RequestBody @Valid LinkUpdate req, BindingResult errors) {
         botService.postUpdate(req, errors);
         return ResponseEntity

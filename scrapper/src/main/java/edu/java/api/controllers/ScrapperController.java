@@ -1,7 +1,7 @@
 package edu.java.api.controllers;
 
 import edu.java.api.services.ScrapperService;
-import edu.java.exceptions.ScrapperInvalidReqException;
+import edu.java.exceptions.BadRequestException;
 import edu.java.models.AddLinkRequest;
 import edu.java.models.LinkResponse;
 import edu.java.models.ListLinksResponse;
@@ -60,7 +60,7 @@ public class ScrapperController {
         BindingResult errors
     ) {
         if (id < 1L || errors.hasErrors()) {
-            throw new ScrapperInvalidReqException(
+            throw new BadRequestException(
                 exceptionName,
                 exceptionDescription
             );
@@ -79,7 +79,7 @@ public class ScrapperController {
         BindingResult errors
     ) {
         if (id < 1L || errors.hasErrors()) {
-            throw new ScrapperInvalidReqException(
+            throw new BadRequestException(
                 exceptionName,
                 exceptionDescription
             );
@@ -93,7 +93,7 @@ public class ScrapperController {
 
     private void checkValidationId(Long id) {
         if (id < 1L) {
-            throw new ScrapperInvalidReqException(
+            throw new BadRequestException(
                 exceptionName,
                 exceptionDescription
             );

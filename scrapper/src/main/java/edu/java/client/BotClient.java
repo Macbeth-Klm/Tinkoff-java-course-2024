@@ -1,6 +1,6 @@
 package edu.java.client;
 
-import edu.java.exceptions.BotApiException;
+import edu.java.exceptions.ApiException;
 import edu.java.models.ApiErrorResponse;
 import edu.java.models.LinkUpdate;
 import org.springframework.http.HttpMethod;
@@ -26,8 +26,9 @@ public class BotClient {
                 HttpStatusCode::is4xxClientError,
                 clientResponse -> clientResponse
                     .bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new BotApiException(
-                        "Некорректные параметры запроса"
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .bodyToMono(String.class)

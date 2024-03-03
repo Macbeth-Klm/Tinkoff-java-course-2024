@@ -1,7 +1,6 @@
 package edu.java.bot.client;
 
-import edu.java.exceptions.ScrapperInvalidReqException;
-import edu.java.exceptions.ScrapperNotFoundException;
+import edu.java.exceptions.ApiException;
 import edu.java.models.AddLinkRequest;
 import edu.java.models.ApiErrorResponse;
 import edu.java.models.LinkResponse;
@@ -16,10 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 public class ScrapperClient {
-    private final String apiExceptionMessage = "Invalid request parameters";
-    private final String apiExceptionDescription = "Некорректные параметры запроса";
-    private final String notFoundExceptionMessage = "User with the given chat id is not exist";
-    private final String notFoundExceptionDescription = "Чат не существует";
     private final String chatPath = "tg-chat/{id}";
     private final String linksUriPath = "/links";
     private final String tgChatIdHeaderName = "Tg-Chat-Id";
@@ -37,9 +32,9 @@ public class ScrapperClient {
             .retrieve().onStatus(
                 HttpStatusCode::is4xxClientError,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperInvalidReqException(
-                        apiExceptionMessage,
-                        apiExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .bodyToMono(String.class)
@@ -54,17 +49,17 @@ public class ScrapperClient {
             .retrieve().onStatus(
                 HttpStatus.BAD_REQUEST::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperInvalidReqException(
-                        apiExceptionMessage,
-                        apiExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperNotFoundException(
-                        notFoundExceptionMessage,
-                        notFoundExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .bodyToMono(String.class)
@@ -80,17 +75,17 @@ public class ScrapperClient {
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperInvalidReqException(
-                        apiExceptionMessage,
-                        apiExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperNotFoundException(
-                        notFoundExceptionMessage,
-                        notFoundExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .bodyToMono(ListLinksResponse.class)
@@ -107,17 +102,17 @@ public class ScrapperClient {
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperInvalidReqException(
-                        apiExceptionMessage,
-                        apiExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperNotFoundException(
-                        notFoundExceptionMessage,
-                        notFoundExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .bodyToMono(LinkResponse.class)
@@ -134,17 +129,17 @@ public class ScrapperClient {
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperInvalidReqException(
-                        apiExceptionMessage,
-                        apiExceptionDescription
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .onStatus(
                 HttpStatus.NOT_FOUND::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class)
-                    .flatMap(apiErrorResponse -> Mono.error(new ScrapperNotFoundException(
-                        "The user with the given chat id is not tracking this link",
-                        "Ссылка не найдена"
+                    .flatMap(apiErrorResponse -> Mono.error(new ApiException(
+                        apiErrorResponse.exceptionMessage(),
+                        apiErrorResponse.description()
                     )))
             )
             .bodyToMono(LinkResponse.class)
