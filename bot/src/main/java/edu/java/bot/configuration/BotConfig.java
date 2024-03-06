@@ -1,6 +1,7 @@
 package edu.java.bot.configuration;
 
 import com.pengrad.telegrambot.TelegramBot;
+import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.commands.Command;
 import edu.java.bot.commands.HelpCommand;
 import edu.java.bot.commands.ListCommand;
@@ -14,11 +15,16 @@ import edu.java.bot.linkvalidators.LinkValidatorManager;
 import edu.java.bot.linkvalidators.StackOverflowValidator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class BotConfig {
+    @Value(value = "${api.scrapper.defaultUrl}")
+    private String defaultScrapperUrl;
+
     @Bean
     TelegramBot telegramBot(ApplicationConfig applicationConfig) {
         return new TelegramBot(applicationConfig.telegramToken());
@@ -68,5 +74,15 @@ public class BotConfig {
         List<String> otherCommands = commands.stream()
             .map(command -> command.name() + " - " + command.description() + "\n").toList();
         return new HelpCommand(otherCommands);
+    }
+
+    @Bean
+    WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
+    ScrapperClient scrapperClient(WebClient.Builder webClientBuilder) {
+        return new ScrapperClient(defaultScrapperUrl, webClientBuilder);
     }
 }
