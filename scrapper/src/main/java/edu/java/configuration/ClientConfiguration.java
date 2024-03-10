@@ -18,24 +18,20 @@ public class ClientConfiguration {
     private String defaultStackOverflowUrl;
     @Value(value = "${api.bot.defaultUrl}")
     private String defaultScrapperUrl;
+    private final WebClient.Builder webClientBuilder = WebClient.builder();
 
     @Bean
-    WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
-    }
-
-    @Bean
-    GitHubClient gitHubClient(WebClient.Builder webClientBuilder) {
+    GitHubClient gitHubClient() {
         return new RegularGitHubClient(defaultGitHubUrl, webClientBuilder);
     }
 
     @Bean
-    StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder) {
+    StackOverflowClient stackOverflowClient() {
         return new RegularStackOverflowClient(defaultStackOverflowUrl, webClientBuilder);
     }
 
     @Bean
-    BotClient botClient(WebClient.Builder webClientBuilder) {
+    BotClient botClient() {
         return new BotClient(defaultScrapperUrl, webClientBuilder);
     }
 }

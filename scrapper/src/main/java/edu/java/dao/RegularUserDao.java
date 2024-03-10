@@ -3,7 +3,6 @@ package edu.java.dao;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Repository;
@@ -24,7 +23,7 @@ public class RegularUserDao implements UserDao {
                 "Пользователь уже зарегистрирован"
             );
         }
-        users.put(id, new HashMap<>());
+        users.put(id, new ConcurrentHashMap<>());
     }
 
     @Override

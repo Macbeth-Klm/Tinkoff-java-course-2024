@@ -24,6 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class BotConfig {
     @Value(value = "${api.scrapper.defaultUrl}")
     private String defaultScrapperUrl;
+    private final WebClient.Builder webClientBuilder = WebClient.builder();
 
     @Bean
     TelegramBot telegramBot(ApplicationConfig applicationConfig) {
@@ -77,12 +78,7 @@ public class BotConfig {
     }
 
     @Bean
-    WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
-    }
-
-    @Bean
-    ScrapperClient scrapperClient(WebClient.Builder webClientBuilder) {
+    ScrapperClient scrapperClient() {
         return new ScrapperClient(defaultScrapperUrl, webClientBuilder);
     }
 }
