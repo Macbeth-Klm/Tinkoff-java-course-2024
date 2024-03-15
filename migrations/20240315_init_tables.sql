@@ -24,6 +24,6 @@ create table if not exists link_chat_join_table
     link_id bigint not null,
 
     primary key (chat_id, link_id),
-    foreign key (link_id) references link (link_id),
-    foreign key (chat_id) references chat (chat_id)
+    foreign key (link_id) references link (link_id) on delete cascade,
+    foreign key (chat_id) references chat (chat_id) on delete cascade
 );
