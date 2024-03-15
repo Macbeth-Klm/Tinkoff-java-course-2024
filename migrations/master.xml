@@ -7,15 +7,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="init_chat_table" author="Popov Ilia">
-        <sqlFile path="sql/init_chat_table.sql" relativeToChangelogFile="true"/>
-    </changeSet>
-
-    <changeSet id="init_link_table" author="Popov Ilia">
-        <sqlFile path="sql/init_link_table.sql" relativeToChangelogFile="true"/>
-    </changeSet>
-
-    <changeSet id="init_chat_links_join_table" author="Popov Ilia">
-        <sqlFile path="sql/init_chat_links_join_table.sql" relativeToChangelogFile="true"/>
+    <changeSet id="init_tables" author="Ilia Popov">
+        <sqlFile path="20240315_init_tables.sql" relativeToChangelogFile="true"/>
     </changeSet>
 </databaseChangeLog>
