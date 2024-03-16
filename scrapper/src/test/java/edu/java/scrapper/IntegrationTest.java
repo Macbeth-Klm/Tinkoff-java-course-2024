@@ -32,21 +32,22 @@ public abstract class IntegrationTest {
     }
 
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
-        try (Connection connection = DriverManager.getConnection(
-            c.getJdbcUrl(),
-            c.getUsername(),
-            c.getPassword()
-        )) {
+        Path changeLogPath = new File("").toPath().toAbsolutePath()
+            .getParent().resolve("migrations");
+        try (
+            Connection connection = DriverManager.getConnection(
+                c.getJdbcUrl(),
+                c.getUsername(),
+                c.getPassword()
+            );
             Database database = DatabaseFactory.getInstance()
                 .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Path changeLogPath = new File("").toPath().toAbsolutePath()
-                .getParent().resolve("migrations");
-            Liquibase liquibase =
-                new liquibase.Liquibase(
-                    "master.xml",
-                    new DirectoryResourceAccessor(changeLogPath),
-                    database
-                );
+            Liquibase liquibase = new liquibase.Liquibase(
+                "master.xml",
+                new DirectoryResourceAccessor(changeLogPath),
+                database
+            )
+        ) {
             liquibase.update(new Contexts(), new LabelExpression());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
