@@ -2,36 +2,27 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>edu.java</groupId>
     <artifactId>root</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
         <maven.version>3.8.6</maven.version>
         <jdk.version>21</jdk.version>
         <java.release>21</java.release>
-
         <revision>0.1</revision>
-
         <skip.unit.tests>false</skip.unit.tests>
-
         <!-- Spring -->
         <spring-boot.version>3.2.2</spring-boot.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
-
         <!-- Other -->
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
         <java-telegram-bot-api.version>7.0.1</java-telegram-bot-api.version>
-
         <!-- Tests -->
         <testcontainers.version>1.19.4</testcontainers.version>
         <wiremock.version>3.3.1</wiremock.version>
-
         <!-- Plugins -->
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
         <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
@@ -39,15 +30,14 @@
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <git-commit-id-maven-plugin.version>7.0.0</git-commit-id-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
-
         <!-- Linters -->
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <checkstyle.version>10.12.7</checkstyle.version>
     </properties>
-
     <modules>
         <module>bot</module>
         <module>scrapper</module>
+        <module>models</module>
     </modules>
 
     <dependencyManagement>
@@ -62,7 +52,6 @@
                 <artifactId>wiremock</artifactId>
                 <version>${wiremock.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
@@ -70,7 +59,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -78,7 +66,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -88,7 +75,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -96,7 +82,6 @@
             <version>${jetbrains-annotations.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <!-- Tests -->
         <dependency>
             <groupId>org.assertj</groupId>
@@ -119,7 +104,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -131,9 +115,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
             </plugin>
-
         </plugins>
-
         <pluginManagement>
             <plugins>
                 <!-- Spring Boot -->
@@ -161,7 +143,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
@@ -181,7 +162,6 @@
                         </generateGitPropertiesFilename>
                     </configuration>
                 </plugin>
-
                 <!-- Compiler -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -190,12 +170,10 @@
                     <configuration>
                         <release>${java.release}</release>
                         <parameters>true</parameters>
-
                         <compilerArgument>-Xlint:all</compilerArgument>
                         <compilerArgument>-Xdoclint:all</compilerArgument>
                     </configuration>
                 </plugin>
-
                 <!-- Tests-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -240,7 +218,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
                 <!-- Checkers -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

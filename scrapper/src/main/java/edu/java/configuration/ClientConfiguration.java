@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.clients.BotClient.BotClient;
 import edu.java.clients.GitHubClient.GitHubClient;
 import edu.java.clients.GitHubClient.RegularGitHubClient;
 import edu.java.clients.StackOverflowClient.RegularStackOverflowClient;
@@ -11,23 +12,27 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class ClientConfiguration {
-    @Value(value = "${api.github.defaultUrl}")
-    private String defaultGitHubUrl;
-    @Value(value = "${api.stackoverflow.defaultUrl}")
-    private String defaultStackOverflowUrl;
-
     @Bean
-    WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
-    }
-
-    @Bean
-    GitHubClient gitHubClient(WebClient.Builder webClientBuilder) {
+    GitHubClient gitHubClient(
+        @Value(value = "${api.github.defaultUrl}") String defaultGitHubUrl,
+        WebClient.Builder webClientBuilder
+    ) {
         return new RegularGitHubClient(defaultGitHubUrl, webClientBuilder);
     }
 
     @Bean
-    StackOverflowClient stackOverflowClient(WebClient.Builder webClientBuilder) {
+    StackOverflowClient stackOverflowClient(
+        @Value(value = "${api.stackoverflow.defaultUrl}") String defaultStackOverflowUrl,
+        WebClient.Builder webClientBuilder
+    ) {
         return new RegularStackOverflowClient(defaultStackOverflowUrl, webClientBuilder);
+    }
+
+    @Bean
+    BotClient botClient(
+        @Value(value = "${api.bot.defaultUrl}") String defaultScrapperUrl,
+        WebClient.Builder webClientBuilder
+    ) {
+        return new BotClient(defaultScrapperUrl, webClientBuilder);
     }
 }
