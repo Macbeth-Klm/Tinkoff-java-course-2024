@@ -80,12 +80,12 @@ public class JdbcChatRepository implements ChatRepository {
 
     @Override
     @Transactional
-    public boolean isNotRegistered(Long id) {
+    public boolean isNotRegistered(Long chatId) {
         try {
             List<Long> chats = template.query(
                 "SELECT * FROM chat WHERE chat_id = ?",
                 (rowSet, rowNum) -> rowSet.getLong(chatIdColumn),
-                id
+                chatId
             );
             return chats.isEmpty();
         } catch (DataAccessException e) {

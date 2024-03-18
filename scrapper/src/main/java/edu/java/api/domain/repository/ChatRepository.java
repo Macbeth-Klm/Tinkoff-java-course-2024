@@ -9,5 +9,5 @@ public interface ChatRepository {
 
     List<Long> findAll();
 
-    boolean isNotRegistered(Long id);
+    boolean isNotRegistered(Long chatId);
 }
