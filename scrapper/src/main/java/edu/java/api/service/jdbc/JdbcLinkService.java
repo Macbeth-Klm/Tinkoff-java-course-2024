@@ -28,8 +28,9 @@ public class JdbcLinkService implements LinkService {
                 userIsNotRegisteredDescription
             );
         }
+        isValidUri(url);
         Long linkId = (linkRepository.isExist(url)) ? linkRepository.findByUrl(url).id() : linkRepository.add(url);
-        joinTableRepository.addRecord(tgChatId, linkId);
+        joinTableRepository.add(tgChatId, linkId);
         return new LinkResponse(linkId, url);
     }
 
@@ -42,7 +43,7 @@ public class JdbcLinkService implements LinkService {
             );
         }
         Long linkId = linkRepository.findByUrl(url).id();
-        joinTableRepository.deleteRecord(tgChatId, linkId);
+        joinTableRepository.remove(tgChatId, linkId);
         return new LinkResponse(linkId, url);
     }
 
@@ -55,5 +56,14 @@ public class JdbcLinkService implements LinkService {
             );
         }
         return joinTableRepository.findAllByChatId(tgChatId);
+    }
+
+    private void isValidUri(URI uri) {
+        if (!uri.getHost().equals("github.com") && !uri.getHost().equals("stackoverflow.com")) {
+            throw new BadRequestException(
+                "That resources is not supported",
+                "Данный ресурс не поддерживается!"
+            );
+        }
     }
 }

@@ -6,7 +6,6 @@ import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,7 +23,7 @@ public class JoinTableRepository {
     private final String linkIdColumn = "link_id";
 
     @Transactional
-    public void addRecord(Long chatId, Long linkId) {
+    public void add(Long chatId, Long linkId) {
         try {
             template.update(
                 "INSERT INTO link_chat_join_table (chat_id, link_id) VALUES (?, ?)",
@@ -45,7 +44,7 @@ public class JoinTableRepository {
     }
 
     @Transactional
-    public void deleteRecord(Long chatId, Long linkId) {
+    public void remove(Long chatId, Long linkId) {
         try {
             int deletedRow = template.update(
                 "DELETE FROM link_chat_join_table WHERE chat_id = ? AND link_id = ?",
@@ -53,7 +52,7 @@ public class JoinTableRepository {
                 linkId
             );
             if (deletedRow == 0) {
-                throw new BadRequestException(
+                throw new NotFoundException(
                     "User with the given chat id is not tracking this link",
                     "Пользователь не отслеживает данную ссылку"
                 );
@@ -67,14 +66,13 @@ public class JoinTableRepository {
     }
 
     @Transactional
-    public Optional<List<JoinTableDto>> findAll() {
+    public List<JoinTableDto> findAll() {
         try {
-            List<JoinTableDto> records = template.query(
+            return template.query(
                 "SELECT * FROM link_chat_join_table",
                 (rowSet, rowNum) -> new JoinTableDto(rowSet.getLong(chatIdColumn), rowSet.getLong(linkIdColumn))
             );
-            return Optional.of(records);
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             throw new BadRequestException(
                 dataAccessMessage,
                 dataAccessDescription
@@ -120,7 +118,7 @@ public class JoinTableRepository {
                 ),
                 linkId
             );
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             throw new BadRequestException(
                 dataAccessMessage,
                 dataAccessDescription

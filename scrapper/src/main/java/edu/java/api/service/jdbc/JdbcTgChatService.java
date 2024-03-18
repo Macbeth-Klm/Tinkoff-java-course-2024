@@ -12,11 +12,11 @@ public class JdbcTgChatService implements TgChatService {
 
     @Override
     public void register(Long tgChatId) {
-        chatRepository.addChat(tgChatId);
+        chatRepository.add(tgChatId);
     }
 
     @Override
     public void unregister(Long tgChatId) {
-        chatRepository.deleteChat(tgChatId);
+        chatRepository.remove(tgChatId);
     }
 }

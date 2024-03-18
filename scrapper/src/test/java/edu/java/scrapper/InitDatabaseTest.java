@@ -3,12 +3,11 @@ package edu.java.scrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
-import static edu.java.scrapper.IntegrationTest.POSTGRES;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class InitDatabaseTest {
+public class InitDatabaseTest extends IntegrationTest {
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(
         DataSourceBuilder
             .create()

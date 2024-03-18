@@ -19,8 +19,6 @@ public class LinkRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
-    private final String noLinksMessage = "There's not links";
-    private final String noLinksDescription = "Отсутствуют ресурсы";
     private final String findByUrlSqlReq = "SELECT * FROM link WHERE url = ?";
 
     @Transactional
@@ -48,8 +46,8 @@ public class LinkRepository {
             );
             if (deletedRow == 0) {
                 throw new NotFoundException(
-                    "The user with the given chat id is not registered",
-                    "Пользователь не зарегистрирован"
+                    "Given link does not exist",
+                    "Данная ссылка не зарегистрирована"
                 );
             }
         } catch (DataAccessException e) {
@@ -90,17 +88,10 @@ public class LinkRepository {
     @Transactional
     public List<Link> findAll() {
         try {
-            List<Link> links = template.query(
+            return template.query(
                 "SELECT * FROM link",
                 new LinkDtoRowMapper()
             );
-            if (links.isEmpty()) {
-                throw new NotFoundException(
-                    noLinksMessage,
-                    noLinksDescription
-                );
-            }
-            return links;
         } catch (DataAccessException e) {
             throw new BadRequestException(
                 dataAccessMessage,
@@ -118,6 +109,8 @@ public class LinkRepository {
                 link.toString()
             );
             if (links.isEmpty()) {
+                String noLinksMessage = "There's not links";
+                String noLinksDescription = "Отсутствуют ресурсы";
                 throw new NotFoundException(
                     noLinksMessage,
                     noLinksDescription

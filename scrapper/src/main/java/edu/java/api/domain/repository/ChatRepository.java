@@ -19,7 +19,7 @@ public class ChatRepository {
     private final String chatIdColumn = "chat_id";
 
     @Transactional
-    public void addChat(Long chatId) {
+    public void add(Long chatId) {
         try {
             template.update(
                 "INSERT INTO chat (chat_id) VALUES (?)",
@@ -39,7 +39,7 @@ public class ChatRepository {
     }
 
     @Transactional
-    public void deleteChat(Long chatId) {
+    public void remove(Long chatId) {
         try {
             int deletedRow = template.update(
                 "DELETE FROM chat WHERE chat_id = ?",
