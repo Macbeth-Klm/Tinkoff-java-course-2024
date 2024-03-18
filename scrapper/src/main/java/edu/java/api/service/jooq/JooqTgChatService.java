@@ -1,4 +1,4 @@
-package edu.java.api.service.jdbc;
+package edu.java.api.service.jooq;
 
 import edu.java.api.domain.repository.ChatRepository;
 import edu.java.api.service.TgChatService;
@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class JdbcTgChatService implements TgChatService {
-    private final ChatRepository jdbcChatRepository;
+public class JooqTgChatService implements TgChatService {
+    private final ChatRepository jooqChatRepository;
 
     @Override
     public void register(Long tgChatId) {
-        jdbcChatRepository.add(tgChatId);
+        jooqChatRepository.add(tgChatId);
     }
 
     @Override
     public void unregister(Long tgChatId) {
-        jdbcChatRepository.remove(tgChatId);
+        jooqChatRepository.remove(tgChatId);
     }
 }

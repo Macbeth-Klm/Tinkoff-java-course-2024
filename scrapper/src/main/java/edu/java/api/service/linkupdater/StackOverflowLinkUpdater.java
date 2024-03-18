@@ -50,8 +50,13 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
         return 1;
     }
 
+    /* Метод реализует задачу 1 из hw5-bonus, но я написал его в hw5, исходя из полей LinkUpdate и response
+     каждого клиента, реализованного в предыдущих дз, и из того, что LinkUpdate.description пойдет в качестве
+     ответа пользователю из скелета бота. Поэтому оставлю тут коммент, чтобы он пошёл в hw5-bonus PR
+     */
     private String getDescription(StackOverflowResponse response) {
-        return "На вопрос " + response.questionId() + " пришел новый ответ на Stackoverflow от "
-            + response.owner().displayName();
+        return "Обновление на StackOverflow!\n"
+            + "На вопрос №" + response.questionId() + " пришёл ответ №" + response.answerId()
+            + " от пользователя " + response.owner().displayName();
     }
 }

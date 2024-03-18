@@ -50,9 +50,13 @@ public class GitHubLinkUpdater implements LinkUpdater {
         return 1;
     }
 
+    /* Метод реализует задачу 1 из hw5-bonus, но я написал его в hw5, исходя из полей LinkUpdate и response
+     каждого клиента, реализованного в предыдущих дз, и из того, что LinkUpdate.description пойдет в качестве
+     ответа пользователю из скелета бота. Поэтому оставлю тут коммент, чтобы он пошёл в hw5-bonus PR
+     */
     private String getDescription(GitHubResponse response) {
-        return "Произошло обновление типа " + response.type()
-            + " в репозитории " + response.repo() + " от автора "
-            + response.actor();
+        return "Обновление на GitHub!\n"
+            + "Пользователь " + response.actor().login() + " внёс изменение " + response.type()
+            + " в репозиторий " + response.repo().name();
     }
 }

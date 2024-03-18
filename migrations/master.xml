@@ -8,6 +8,6 @@
        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="init_tables" author="Ilia Popov">
-        <sqlFile path="20240315_init_tables.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="scripts/2024_03_15_init_tables.sql" relativeToChangelogFile="true"/>
     </changeSet>
 </databaseChangeLog>
