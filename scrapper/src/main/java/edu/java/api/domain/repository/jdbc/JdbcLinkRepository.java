@@ -85,8 +85,11 @@ public class JdbcLinkRepository implements LinkRepository {
                 "UPDATE link SET checked_at = current_timestamp WHERE url = ?",
                 checkedLink.toString()
             );
-        } catch (Exception ex) {
-            throw new BadRequestException("Invalid HTTP-request parameters", "Некорректные параметры запроса");
+        } catch (DataAccessException e) {
+            throw new BadRequestException(
+                dataAccessMessage,
+                dataAccessDescription
+            );
         }
     }
 

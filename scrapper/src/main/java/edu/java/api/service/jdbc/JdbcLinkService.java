@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
-    private final ChatRepository chatRepository;
+    private final ChatRepository jdbcChatRepository;
     private final LinkRepository jdbcLinkRepository;
     private final JoinTableRepository jdbcJoinTableRepository;
 
@@ -53,7 +53,7 @@ public class JdbcLinkService implements LinkService {
     }
 
     private void registrationValidation(Long tgChatId) {
-        if (chatRepository.isNotRegistered(tgChatId)) {
+        if (jdbcChatRepository.isNotRegistered(tgChatId)) {
             throw new BadRequestException(
                 "The user with the given chat id is not registered",
                 "Пользователь не зарегистрирован"

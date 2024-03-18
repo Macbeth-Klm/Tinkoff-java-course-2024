@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class JdbcTgChatService implements TgChatService {
-    private final JdbcChatRepository chatRepository;
+    private final JdbcChatRepository jdbcChatRepository;
 
     @Override
     public void register(Long tgChatId) {
-        chatRepository.add(tgChatId);
+        jdbcChatRepository.add(tgChatId);
     }
 
     @Override
     public void unregister(Long tgChatId) {
-        chatRepository.remove(tgChatId);
+        jdbcChatRepository.remove(tgChatId);
     }
 }
