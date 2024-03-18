@@ -15,7 +15,7 @@ public class LinkUpdateService {
 
     public int update() {
         int count = 0;
-        List<Link> links = linkRepository.findByCheckedAt(5);
+        List<Link> links = linkRepository.findByCheckedAt(1);
         for (var link : links) {
             String host = link.url().getHost();
             for (var linkUpdater : linkUpdaters) {

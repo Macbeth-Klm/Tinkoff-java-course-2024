@@ -17,13 +17,15 @@ public class JdbcLinkService implements LinkService {
     private final ChatRepository chatRepository;
     private final LinkRepository linkRepository;
     private final JoinTableRepository joinTableRepository;
+    private final String userIsNotRegisteredMessage = "The user with the given chat id is not registered";
+    private final String userIsNotRegisteredDescription = "Пользователь не зарегистрирован";
 
     @Override
     public LinkResponse add(Long tgChatId, URI url) {
         if (chatRepository.isNotRegistered(tgChatId)) {
             throw new BadRequestException(
-                "The user with the given chat id is not registered",
-                "Пользователь не зарегистрирован"
+                userIsNotRegisteredMessage,
+                userIsNotRegisteredDescription
             );
         }
         Long linkId = (linkRepository.isExist(url)) ? linkRepository.findByUrl(url).id() : linkRepository.add(url);
@@ -35,8 +37,8 @@ public class JdbcLinkService implements LinkService {
     public LinkResponse remove(Long tgChatId, URI url) {
         if (chatRepository.isNotRegistered(tgChatId)) {
             throw new BadRequestException(
-                "The user with the given chat id is not registered",
-                "Пользователь не зарегистрирован"
+                userIsNotRegisteredMessage,
+                userIsNotRegisteredDescription
             );
         }
         Long linkId = linkRepository.findByUrl(url).id();
@@ -48,8 +50,8 @@ public class JdbcLinkService implements LinkService {
     public List<LinkResponse> listAll(long tgChatId) {
         if (chatRepository.isNotRegistered(tgChatId)) {
             throw new BadRequestException(
-                "The user with the given chat id is not registered",
-                "Пользователь не зарегистрирован"
+                userIsNotRegisteredMessage,
+                userIsNotRegisteredDescription
             );
         }
         return joinTableRepository.findAllByChatId(tgChatId);

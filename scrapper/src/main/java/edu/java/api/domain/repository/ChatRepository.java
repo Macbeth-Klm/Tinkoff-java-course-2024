@@ -16,6 +16,7 @@ public class ChatRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
+    private final String chatIdColumn = "chat_id";
 
     @Transactional
     public void addChat(Long chatId) {
@@ -63,7 +64,7 @@ public class ChatRepository {
         try {
             return template.query(
                 "SELECT * FROM chat",
-                (rowSet, rowNum) -> rowSet.getLong("chat_id")
+                (rowSet, rowNum) -> rowSet.getLong(chatIdColumn)
             );
         } catch (DataAccessException e) {
             throw new BadRequestException(
@@ -78,7 +79,7 @@ public class ChatRepository {
         try {
             List<Long> chats = template.query(
                 "SELECT * FROM chat WHERE chat_id = ?",
-                (rowSet, rowNum) -> rowSet.getLong("chat_id"),
+                (rowSet, rowNum) -> rowSet.getLong(chatIdColumn),
                 id
             );
             return chats.isEmpty();

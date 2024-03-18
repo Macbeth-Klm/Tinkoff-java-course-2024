@@ -1,7 +1,7 @@
 package edu.java.api.domain.repository;
 
-import edu.java.api.domain.mapper.LinkDtoRowMapper;
 import edu.java.api.domain.dto.Link;
+import edu.java.api.domain.mapper.LinkDtoRowMapper;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import java.net.URI;
@@ -19,6 +19,9 @@ public class LinkRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
+    private final String noLinksMessage = "There's not links";
+    private final String noLinksDescription = "Отсутствуют ресурсы";
+    private final String findByUrlSqlReq = "SELECT * FROM link WHERE url = ?";
 
     @Transactional
     public Long add(URI link) {
@@ -40,7 +43,7 @@ public class LinkRepository {
     public void remove(URI link) {
         try {
             int deletedRow = template.update(
-                "DELETE FROM link WHERE url = ? RETURNING link_id",
+                "DELETE FROM link WHERE url = ?",
                 link.toString()
             );
             if (deletedRow == 0) {
@@ -73,15 +76,12 @@ public class LinkRepository {
     }
 
     @Transactional
-    public void setCheckedAt(List<URI> checkedLinks) {
-        List<String> links = checkedLinks.stream().map(URI::toString).toList();
+    public void setCheckedAt(URI checkedLink) {
         try {
-            for (String link : links) {
-                template.update(
-                    "UPDATE link SET checked_at = current_timestamp WHERE url = ?",
-                    link
-                );
-            }
+            template.update(
+                "UPDATE link SET checked_at = current_timestamp WHERE url = ?",
+                checkedLink.toString()
+            );
         } catch (Exception ex) {
             throw new BadRequestException("Invalid HTTP-request parameters", "Некорректные параметры запроса");
         }
@@ -96,8 +96,8 @@ public class LinkRepository {
             );
             if (links.isEmpty()) {
                 throw new NotFoundException(
-                    "There's not links",
-                    "Отсутствуют ресурсы"
+                    noLinksMessage,
+                    noLinksDescription
                 );
             }
             return links;
@@ -113,14 +113,14 @@ public class LinkRepository {
     public Link findByUrl(URI link) {
         try {
             List<Link> links = template.query(
-                "SELECT * FROM link WHERE url = ?",
+                findByUrlSqlReq,
                 new LinkDtoRowMapper(),
                 link.toString()
             );
             if (links.isEmpty()) {
                 throw new NotFoundException(
-                    "There's not links",
-                    "Отсутствуют ресурсы"
+                    noLinksMessage,
+                    noLinksDescription
                 );
             }
             return links.getFirst();
@@ -135,11 +135,10 @@ public class LinkRepository {
     @Transactional
     public List<Link> findByCheckedAt(int minutes) {
         try {
-            List<Link> linkList = template.query(
-                "SELECT * FROM link WHERE current_timestamp - checked_at > '" + minutes + " seconds'",
+            return template.query(
+                "SELECT * FROM link WHERE current_timestamp - checked_at > '" + minutes + " minutes'",
                 new LinkDtoRowMapper()
             );
-            return linkList;
         } catch (DataAccessException e) {
             throw new BadRequestException(
                 dataAccessMessage,
@@ -152,7 +151,7 @@ public class LinkRepository {
     public boolean isExist(URI url) {
         try {
             List<Long> links = template.query(
-                "SELECT * FROM link WHERE url = ?",
+                findByUrlSqlReq,
                 (rowSet, rowNum) -> rowSet.getLong("link_id"),
                 url.toString()
             );

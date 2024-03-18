@@ -20,6 +20,8 @@ public class JoinTableRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
+    private final String chatIdColumn = "chat_id";
+    private final String linkIdColumn = "link_id";
 
     @Transactional
     public void addRecord(Long chatId, Long linkId) {
@@ -69,7 +71,7 @@ public class JoinTableRepository {
         try {
             List<JoinTableDto> records = template.query(
                 "SELECT * FROM link_chat_join_table",
-                (rowSet, rowNum) -> new JoinTableDto(rowSet.getLong("chat_id"), rowSet.getLong("link_id"))
+                (rowSet, rowNum) -> new JoinTableDto(rowSet.getLong(chatIdColumn), rowSet.getLong(linkIdColumn))
             );
             return Optional.of(records);
         } catch (Exception e) {
@@ -84,9 +86,10 @@ public class JoinTableRepository {
     public List<LinkResponse> findAllByChatId(Long chatId) {
         try {
             List<LinkResponse> responses = template.query(
-                "SELECT link_id, url FROM ((SELECT * FROM link_chat_join_table WHERE chat_id = ?) AS subtable JOIN link USING (link_id))",
+                "SELECT link_id, url FROM ((SELECT * FROM link_chat_join_table WHERE chat_id = ?)"
+                    + " AS subtable JOIN link USING (link_id))",
                 (rowSet, rowNum) -> new LinkResponse(
-                    rowSet.getLong("link_id"),
+                    rowSet.getLong(linkIdColumn),
                     URI.create(rowSet.getString("url"))
                 ),
                 chatId
@@ -112,8 +115,8 @@ public class JoinTableRepository {
             return template.query(
                 "SELECT * FROM link_chat_join_table WHERE link_id = ?",
                 (rowSet, rowNum) -> new JoinTableDto(
-                    rowSet.getLong("chat_id"),
-                    rowSet.getLong("link_id")
+                    rowSet.getLong(chatIdColumn),
+                    rowSet.getLong(linkIdColumn)
                 ),
                 linkId
             );

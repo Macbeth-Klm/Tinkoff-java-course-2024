@@ -30,12 +30,12 @@ public class GitHubLinkUpdater implements LinkUpdater {
         String repo = splitLink[splitLink.length - 1];
         GitHubResponse response = gitHubClient.fetchRepositoryEvents(owner, repo)
             .orElseThrow(IllegalArgumentException::new);
+        List<JoinTableDto> joinTableDtos = joinTableRepository.findAllByLinkId(link.id());
+        if (joinTableDtos.isEmpty()) {
+            linkRepository.remove(link.url());
+            return 1;
+        }
         if (link.updatedAt().isAfter(response.createdAt())) {
-            List<JoinTableDto> joinTableDtos = joinTableRepository.findAllByLinkId(link.id());
-            if (joinTableDtos.isEmpty()) {
-                linkRepository.remove(link.url());
-                return 1;
-            }
             List<Long> tgChatIds = joinTableDtos.stream().map(JoinTableDto::chatId).toList();
             botClient.postUpdates(new LinkUpdate(
                 link.id(),
@@ -43,7 +43,10 @@ public class GitHubLinkUpdater implements LinkUpdater {
                 getDescription(response),
                 tgChatIds
             ));
+            linkRepository.updateLink(link.url(), response.createdAt());
+
         }
+        linkRepository.setCheckedAt(link.url());
         return 1;
     }
 

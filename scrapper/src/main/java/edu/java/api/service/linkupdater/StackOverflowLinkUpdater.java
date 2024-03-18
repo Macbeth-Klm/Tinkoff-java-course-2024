@@ -28,15 +28,15 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
     @Override
     public int process(Link link) {
         String[] splitLink = link.url().getPath().split("/");
-        Long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
+        long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
         StackOverflowResponse response = stackOverflowClient.fetchQuestionUpdates(questionId)
             .orElseThrow(IllegalArgumentException::new);
+        List<JoinTableDto> joinTableDtos = joinTableRepository.findAllByLinkId(link.id());
+        if (joinTableDtos.isEmpty()) {
+            linkRepository.remove(link.url());
+            return 1;
+        }
         if (link.updatedAt().isAfter(response.lastActivityDate())) {
-            List<JoinTableDto> joinTableDtos = joinTableRepository.findAllByLinkId(link.id());
-            if (joinTableDtos.isEmpty()) {
-                linkRepository.remove(link.url());
-                return 1;
-            }
             List<Long> tgChatIds = joinTableDtos.stream().map(JoinTableDto::chatId).toList();
             botClient.postUpdates(new LinkUpdate(
                 link.id(),
@@ -44,7 +44,9 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
                 getDescription(response),
                 tgChatIds
             ));
+            linkRepository.updateLink(link.url(), response.lastActivityDate());
         }
+        linkRepository.setCheckedAt(link.url());
         return 1;
     }
 
