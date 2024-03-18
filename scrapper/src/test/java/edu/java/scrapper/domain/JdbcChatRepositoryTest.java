@@ -10,13 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class ChatRepositoryTest extends IntegrationTest {
+public class JdbcChatRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository chatRepository;
+    private ChatRepository jdbcChatRepository;
 
     @Test
     @Transactional
@@ -24,8 +27,8 @@ public class ChatRepositoryTest extends IntegrationTest {
     void shouldAddChat() {
         Long chatId = 1L;
 
-        chatRepository.add(chatId);
-        List<Long> chatIds = chatRepository.findAll();
+        jdbcChatRepository.add(chatId);
+        List<Long> chatIds = jdbcChatRepository.findAll();
 
         assertThat(chatIds).containsOnly(chatId);
     }
@@ -36,9 +39,9 @@ public class ChatRepositoryTest extends IntegrationTest {
     void shouldThrowDuplicateKeyExceptionWhileAddingChat() {
         Long chatId = 1L;
 
-        chatRepository.add(chatId);
+        jdbcChatRepository.add(chatId);
 
-        Throwable ex = catchThrowable(() -> chatRepository.add(chatId));
+        Throwable ex = catchThrowable(() -> jdbcChatRepository.add(chatId));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
     }
@@ -49,9 +52,9 @@ public class ChatRepositoryTest extends IntegrationTest {
     void shouldRemoveChat() {
         Long chatId = 1L;
 
-        chatRepository.add(chatId);
-        chatRepository.remove(chatId);
-        List<Long> chatIds = chatRepository.findAll();
+        jdbcChatRepository.add(chatId);
+        jdbcChatRepository.remove(chatId);
+        List<Long> chatIds = jdbcChatRepository.findAll();
 
         assertThat(chatIds).isEmpty();
     }
@@ -62,7 +65,7 @@ public class ChatRepositoryTest extends IntegrationTest {
     void shouldThrowNotFoundExceptionWhileRemovingChat() {
         Long chatId = 1L;
 
-        Throwable ex = catchThrowable(() -> chatRepository.remove(chatId));
+        Throwable ex = catchThrowable(() -> jdbcChatRepository.remove(chatId));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
@@ -74,9 +77,9 @@ public class ChatRepositoryTest extends IntegrationTest {
         Long firstChatId = 1L;
         Long secondChatId = 2L;
 
-        chatRepository.add(firstChatId);
-        boolean firstIsNotRegistered = chatRepository.isNotRegistered(firstChatId);
-        boolean secondIsNotRegistered = chatRepository.isNotRegistered(secondChatId);
+        jdbcChatRepository.add(firstChatId);
+        boolean firstIsNotRegistered = jdbcChatRepository.isNotRegistered(firstChatId);
+        boolean secondIsNotRegistered = jdbcChatRepository.isNotRegistered(secondChatId);
 
         assertAll(
             () -> assertFalse(firstIsNotRegistered),

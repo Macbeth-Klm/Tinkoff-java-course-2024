@@ -3,8 +3,8 @@ package edu.java.api.service.linkupdater;
 import edu.java.Responses.GitHubResponse;
 import edu.java.api.domain.dto.JoinTableDto;
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.JoinTableRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcJoinTableRepository;
+import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.clients.BotClient.BotClient;
 import edu.java.clients.GitHubClient.GitHubClient;
 import edu.java.models.LinkUpdate;
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 public class GitHubLinkUpdater implements LinkUpdater {
     private final String host = "github.com";
     private final GitHubClient gitHubClient;
-    private final LinkRepository linkRepository;
-    private final JoinTableRepository joinTableRepository;
+    private final JdbcLinkRepository jdbcLinkRepository;
+    private final JdbcJoinTableRepository jdbcJoinTableRepository;
     private final BotClient botClient;
 
     @Override
@@ -30,9 +30,9 @@ public class GitHubLinkUpdater implements LinkUpdater {
         String repo = splitLink[splitLink.length - 1];
         GitHubResponse response = gitHubClient.fetchRepositoryEvents(owner, repo)
             .orElseThrow(IllegalArgumentException::new);
-        List<JoinTableDto> joinTableDtos = joinTableRepository.findAllByLinkId(link.id());
+        List<JoinTableDto> joinTableDtos = jdbcJoinTableRepository.findAllByLinkId(link.id());
         if (joinTableDtos.isEmpty()) {
-            linkRepository.remove(link.url());
+            jdbcLinkRepository.remove(link.url());
             return 1;
         }
         if (link.updatedAt().isAfter(response.createdAt())) {
@@ -43,10 +43,10 @@ public class GitHubLinkUpdater implements LinkUpdater {
                 getDescription(response),
                 tgChatIds
             ));
-            linkRepository.updateLink(link.url(), response.createdAt());
+            jdbcLinkRepository.updateLink(link.url(), response.createdAt());
 
         }
-        linkRepository.setCheckedAt(link.url());
+        jdbcLinkRepository.setCheckedAt(link.url());
         return 1;
     }
 

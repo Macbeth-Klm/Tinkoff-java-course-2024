@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain;
 
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private LinkRepository linkRepository;
+    private JdbcLinkRepository jdbcLinkRepository;
 
     @Test
     @Transactional
@@ -28,8 +29,8 @@ public class LinkRepositoryTest extends IntegrationTest {
     void shouldAddLink() {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        linkRepository.add(link);
-        List<Link> links = linkRepository.findAll();
+        jdbcLinkRepository.add(link);
+        List<Link> links = jdbcLinkRepository.findAll();
         List<URI> uris = links.stream().map(Link::url).toList();
         assertThat(uris).containsOnly(link);
     }
@@ -40,9 +41,9 @@ public class LinkRepositoryTest extends IntegrationTest {
     void shouldRemoveLink() {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        linkRepository.add(link);
-        linkRepository.remove(link);
-        List<Link> links = linkRepository.findAll();
+        jdbcLinkRepository.add(link);
+        jdbcLinkRepository.remove(link);
+        List<Link> links = jdbcLinkRepository.findAll();
 
         assertThat(links).isEmpty();
     }
@@ -53,7 +54,7 @@ public class LinkRepositoryTest extends IntegrationTest {
     void shouldThrowNotFoundExceptionWhileRemovingLink() {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        Throwable ex = catchThrowable(() -> linkRepository.remove(link));
+        Throwable ex = catchThrowable(() -> jdbcLinkRepository.remove(link));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
@@ -65,9 +66,9 @@ public class LinkRepositoryTest extends IntegrationTest {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
 
-        linkRepository.add(firstLink);
-        linkRepository.add(secondLink);
-        Link link = linkRepository.findByUrl(firstLink);
+        jdbcLinkRepository.add(firstLink);
+        jdbcLinkRepository.add(secondLink);
+        Link link = jdbcLinkRepository.findByUrl(firstLink);
 
         assertEquals(firstLink, link.url());
     }
@@ -78,7 +79,7 @@ public class LinkRepositoryTest extends IntegrationTest {
     void shouldThrowNotFoundExceptionWhileFindingByUrl() {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        Throwable ex = catchThrowable(() -> linkRepository.findByUrl(firstLink));
+        Throwable ex = catchThrowable(() -> jdbcLinkRepository.findByUrl(firstLink));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
@@ -90,9 +91,9 @@ public class LinkRepositoryTest extends IntegrationTest {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
 
-        linkRepository.add(firstLink);
-        boolean firstIsExists = linkRepository.isExist(firstLink);
-        boolean secondIsNotExists = linkRepository.isExist(secondLink);
+        jdbcLinkRepository.add(firstLink);
+        boolean firstIsExists = jdbcLinkRepository.isExist(firstLink);
+        boolean secondIsNotExists = jdbcLinkRepository.isExist(secondLink);
 
         assertAll(
             () -> assertTrue(firstIsExists),

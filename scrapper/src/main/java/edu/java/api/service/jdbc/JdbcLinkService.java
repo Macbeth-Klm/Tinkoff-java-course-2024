@@ -1,8 +1,8 @@
 package edu.java.api.service.jdbc;
 
-import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.JoinTableRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
+import edu.java.api.domain.repository.jdbc.JdbcJoinTableRepository;
+import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.api.service.LinkService;
 import edu.java.exceptions.BadRequestException;
 import edu.java.models.LinkResponse;
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
-    private final ChatRepository chatRepository;
-    private final LinkRepository linkRepository;
-    private final JoinTableRepository joinTableRepository;
+    private final JdbcChatRepository chatRepository;
+    private final JdbcLinkRepository jdbcLinkRepository;
+    private final JdbcJoinTableRepository jdbcJoinTableRepository;
     private final String userIsNotRegisteredMessage = "The user with the given chat id is not registered";
     private final String userIsNotRegisteredDescription = "Пользователь не зарегистрирован";
 
@@ -29,8 +29,10 @@ public class JdbcLinkService implements LinkService {
             );
         }
         isValidUri(url);
-        Long linkId = (linkRepository.isExist(url)) ? linkRepository.findByUrl(url).id() : linkRepository.add(url);
-        joinTableRepository.add(tgChatId, linkId);
+        Long linkId = (jdbcLinkRepository.isExist(url))
+            ? jdbcLinkRepository.findByUrl(url).id()
+            : jdbcLinkRepository.add(url);
+        jdbcJoinTableRepository.add(tgChatId, linkId);
         return new LinkResponse(linkId, url);
     }
 
@@ -42,8 +44,8 @@ public class JdbcLinkService implements LinkService {
                 userIsNotRegisteredDescription
             );
         }
-        Long linkId = linkRepository.findByUrl(url).id();
-        joinTableRepository.remove(tgChatId, linkId);
+        Long linkId = jdbcLinkRepository.findByUrl(url).id();
+        jdbcJoinTableRepository.remove(tgChatId, linkId);
         return new LinkResponse(linkId, url);
     }
 
@@ -55,7 +57,7 @@ public class JdbcLinkService implements LinkService {
                 userIsNotRegisteredDescription
             );
         }
-        return joinTableRepository.findAllByChatId(tgChatId);
+        return jdbcJoinTableRepository.findAllByChatId(tgChatId);
     }
 
     private void isValidUri(URI uri) {
