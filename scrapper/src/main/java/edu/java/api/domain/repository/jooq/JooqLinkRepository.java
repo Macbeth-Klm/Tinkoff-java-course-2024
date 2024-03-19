@@ -88,8 +88,11 @@ public class JooqLinkRepository implements LinkRepository {
                 .set(LINK.CHECKED_AT, OffsetDateTime.now())
                 .where(LINK.URL.eq(checkedLink.toString()))
                 .execute();
-        } catch (Exception ex) {
-            throw new BadRequestException("Invalid HTTP-request parameters", "Некорректные параметры запроса");
+        } catch (DataAccessException ex) {
+            throw new BadRequestException(
+                dataAccessMessage,
+                dataAccessDescription
+            );
         }
     }
 

@@ -32,7 +32,7 @@ public class JooqChatRepository implements ChatRepository {
                 "User with the given chat id is already registered",
                 "Пользователь уже зарегистрирован"
             );
-        } catch (Exception ex) {
+        } catch (DataAccessException ex) {
             throw new BadRequestException(
                 dataAccessMessage,
                 dataAccessDescription
