@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jooq;
 
 import edu.java.api.domain.dto.JoinTableDto;
 import edu.java.api.domain.repository.ChatRepository;
@@ -7,9 +7,9 @@ import edu.java.api.domain.repository.LinkRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
-import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
+import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest
-public class JdbcJoinTableRepositoryTest extends IntegrationTest {
+public class JooqJoinTableRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository jdbcChatRepository;
+    private ChatRepository jooqChatRepository;
     @Autowired
-    private LinkRepository jdbcLinkRepository;
+    private LinkRepository jooqLinkRepository;
     @Autowired
-    private JoinTableRepository jdbcJoinTableRepository;
+    private JoinTableRepository jooqJoinTableRepository;
 
     @Test
     @Transactional
@@ -34,10 +34,10 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
         Long chatId = 1L;
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        jdbcChatRepository.add(chatId);
-        Long linkId = jdbcLinkRepository.add(link);
-        jdbcJoinTableRepository.add(chatId, linkId);
-        List<JoinTableDto> chatsToLinks = jdbcJoinTableRepository.findAll();
+        jooqChatRepository.add(chatId);
+        Long linkId = jooqLinkRepository.add(link);
+        jooqJoinTableRepository.add(chatId, linkId);
+        List<JoinTableDto> chatsToLinks = jooqJoinTableRepository.findAll();
 
         assertThat(chatsToLinks).containsOnly(new JoinTableDto(chatId, linkId));
     }
@@ -49,10 +49,10 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
         Long chatId = 1L;
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        jdbcChatRepository.add(chatId);
-        Long linkId = jdbcLinkRepository.add(link);
-        jdbcJoinTableRepository.add(chatId, linkId);
-        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.add(chatId, linkId));
+        jooqChatRepository.add(chatId);
+        Long linkId = jooqLinkRepository.add(link);
+        jooqJoinTableRepository.add(chatId, linkId);
+        Throwable ex = catchThrowable(() -> jooqJoinTableRepository.add(chatId, linkId));
 
         assertThat(ex).isInstanceOf(BadRequestException.class);
     }
@@ -63,12 +63,12 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     void shouldRemoveLink() {
         Long chatId = 1L;
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
-        jdbcChatRepository.add(chatId);
-        Long linkId = jdbcLinkRepository.add(link);
+        jooqChatRepository.add(chatId);
+        Long linkId = jooqLinkRepository.add(link);
 
-        jdbcJoinTableRepository.add(chatId, linkId);
-        jdbcJoinTableRepository.remove(chatId, linkId);
-        List<JoinTableDto> links = jdbcJoinTableRepository.findAll();
+        jooqJoinTableRepository.add(chatId, linkId);
+        jooqJoinTableRepository.remove(chatId, linkId);
+        List<JoinTableDto> links = jooqJoinTableRepository.findAll();
 
         assertThat(links).isEmpty();
     }
@@ -79,10 +79,10 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     void shouldThrowNotFoundExceptionWhileRemovingLink() {
         Long chatId = 1L;
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
-        jdbcChatRepository.add(chatId);
-        Long linkId = jdbcLinkRepository.add(link);
+        jooqChatRepository.add(chatId);
+        Long linkId = jooqLinkRepository.add(link);
 
-        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.remove(chatId, linkId));
+        Throwable ex = catchThrowable(() -> jooqJoinTableRepository.remove(chatId, linkId));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
@@ -93,11 +93,11 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     void shouldFindByTgChat() {
         Long chatId = 1L;
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
-        jdbcChatRepository.add(chatId);
-        Long linkId = jdbcLinkRepository.add(link);
-        jdbcJoinTableRepository.add(chatId, linkId);
+        jooqChatRepository.add(chatId);
+        Long linkId = jooqLinkRepository.add(link);
+        jooqJoinTableRepository.add(chatId, linkId);
 
-        List<LinkResponse> linkResponseList = jdbcJoinTableRepository.findAllByChatId(chatId);
+        List<LinkResponse> linkResponseList = jooqJoinTableRepository.findAllByChatId(chatId);
 
         assertThat(linkResponseList).containsOnly(new LinkResponse(linkId, link));
     }
@@ -107,9 +107,8 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     @Rollback
     void shouldThrowNotFoundExceptionWhileFindingByTgChat() {
         Long chatId = 1L;
-        Long linkId = 2L;
 
-        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.remove(chatId, linkId));
+        Throwable ex = catchThrowable(() -> jooqJoinTableRepository.findAllByChatId(chatId));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
@@ -122,14 +121,14 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
         Long secondChatId = 2L;
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
-        jdbcChatRepository.add(firstChatId);
-        Long firstLinkId = jdbcLinkRepository.add(firstLink);
-        jdbcChatRepository.add(secondChatId);
-        Long secondLinkId = jdbcLinkRepository.add(secondLink);
-        jdbcJoinTableRepository.add(firstChatId, firstLinkId);
-        jdbcJoinTableRepository.add(secondChatId, secondLinkId);
+        jooqChatRepository.add(firstChatId);
+        Long firstLinkId = jooqLinkRepository.add(firstLink);
+        jooqChatRepository.add(secondChatId);
+        Long secondLinkId = jooqLinkRepository.add(secondLink);
+        jooqJoinTableRepository.add(firstChatId, firstLinkId);
+        jooqJoinTableRepository.add(secondChatId, secondLinkId);
 
-        List<JoinTableDto> linkResponseList = jdbcJoinTableRepository.findAllByLinkId(secondLinkId);
+        List<JoinTableDto> linkResponseList = jooqJoinTableRepository.findAllByLinkId(secondLinkId);
 
         assertThat(linkResponseList).containsOnly(new JoinTableDto(secondChatId, secondLinkId));
     }

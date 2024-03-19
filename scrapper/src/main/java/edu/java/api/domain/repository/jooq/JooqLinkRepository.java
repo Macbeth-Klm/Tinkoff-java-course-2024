@@ -31,7 +31,8 @@ public class JooqLinkRepository implements LinkRepository {
             return dslContext.insertInto(LINK, LINK.URL, LINK.UPDATED_AT, LINK.CHECKED_AT)
                 .values(link.toString(), OffsetDateTime.now(), OffsetDateTime.now())
                 .returning(LINK.LINK_ID)
-                .fetchInto(Long.class)
+                .fetch()
+                .map(r -> r.get(LINK.LINK_ID))
                 .getFirst();
         } catch (DataAccessException ex) {
             throw new BadRequestException(

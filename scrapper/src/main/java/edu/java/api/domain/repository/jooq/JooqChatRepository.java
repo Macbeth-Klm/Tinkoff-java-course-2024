@@ -8,8 +8,8 @@ import edu.java.exceptions.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +27,12 @@ public class JooqChatRepository implements ChatRepository {
             dslContext.insertInto(Tables.CHAT, Tables.CHAT.CHAT_ID)
                 .values(chatId)
                 .execute();
-        } catch (DuplicateKeyException e) {
+        } catch (IntegrityConstraintViolationException e) {
             throw new BadRequestException(
                 "User with the given chat id is already registered",
                 "Пользователь уже зарегистрирован"
             );
-        } catch (DataAccessException ex) {
+        } catch (Exception ex) {
             throw new BadRequestException(
                 dataAccessMessage,
                 dataAccessDescription

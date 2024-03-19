@@ -9,8 +9,8 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.exception.IntegrityConstraintViolationException;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import static edu.java.api.domain.jooq.Tables.LINK;
 import static edu.java.api.domain.jooq.Tables.LINK_CHAT_JOIN_TABLE;
@@ -28,7 +28,7 @@ public class JooqJoinTableRepository implements JoinTableRepository {
             dslContext.insertInto(LINK_CHAT_JOIN_TABLE, LINK_CHAT_JOIN_TABLE.CHAT_ID, LINK_CHAT_JOIN_TABLE.LINK_ID)
                 .values(chatId, linkId)
                 .execute();
-        } catch (DuplicateKeyException e) {
+        } catch (IntegrityConstraintViolationException e) {
             throw new BadRequestException(
                 "User with the given chat id is already tracking this link",
                 "Пользователь уже отслеживает данную ссылку"
