@@ -107,9 +107,8 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     @Rollback
     void shouldThrowNotFoundExceptionWhileFindingByTgChat() {
         Long chatId = 1L;
-        Long linkId = 2L;
 
-        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.remove(chatId, linkId));
+        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.findAllByChatId(chatId));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
