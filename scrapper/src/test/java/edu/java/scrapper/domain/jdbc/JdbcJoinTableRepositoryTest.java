@@ -8,13 +8,15 @@ import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import edu.java.scrapper.IntegrationTest;
-import java.net.URI;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.net.URI;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -107,9 +109,8 @@ public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     @Rollback
     void shouldThrowNotFoundExceptionWhileFindingByTgChat() {
         Long chatId = 1L;
-        Long linkId = 2L;
 
-        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.remove(chatId, linkId));
+        Throwable ex = catchThrowable(() -> jdbcJoinTableRepository.findAllByChatId(chatId));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
