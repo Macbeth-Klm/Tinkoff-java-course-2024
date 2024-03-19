@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain;
 
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
+import edu.java.api.domain.repository.LinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class LinkRepositoryTest extends IntegrationTest {
+public class JdbcLinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private JdbcLinkRepository jdbcLinkRepository;
+    private LinkRepository jdbcLinkRepository;
 
     @Test
     @Transactional
@@ -87,7 +87,7 @@ public class LinkRepositoryTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    void shouldReturnCorrectResultForIsRegisteredChat() {
+    void shouldReturnCorrectResultForIsExistsLink() {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
 
