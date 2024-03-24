@@ -1,12 +1,19 @@
 app:
   scheduler:
-    enable: true
-    interval: 5000
-    force-check-delay: 5000
+    enable: false
+    interval: 15000
+    force-check-delay: 15000
+  database-access-type: jpa
 
 spring:
+  liquibase:
+    enabled: false
   application:
     name: scrapper
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 server:
   port: 8080
