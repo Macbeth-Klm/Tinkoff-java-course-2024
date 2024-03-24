@@ -24,15 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 public class ScrapperController {
-    private final TgChatService jdbcTgChatService;
-    private final LinkService jdbcLinkService;
+    private final TgChatService tgChatService;
+    private final LinkService linkService;
     private final String exceptionName = "Invalid HTTP-request parameters";
     private final String exceptionDescription = "Некорректные параметры запроса";
 
     @PostMapping("/tg-chat/{id}")
     public ResponseEntity<Void> registerChat(@PathVariable("id") Long id) {
         checkValidationId(id);
-        jdbcTgChatService.register(id);
+        tgChatService.register(id);
         return ResponseEntity
             .ok()
             .build();
@@ -41,7 +41,7 @@ public class ScrapperController {
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable("id") Long id) {
         checkValidationId(id);
-        jdbcTgChatService.unregister(id);
+        tgChatService.unregister(id);
         return ResponseEntity
             .ok()
             .build();
@@ -50,7 +50,7 @@ public class ScrapperController {
     @GetMapping("/links")
     public ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
         checkValidationId(id);
-        List<LinkResponse> linkResponseList = jdbcLinkService.listAll(id);
+        List<LinkResponse> linkResponseList = linkService.listAll(id);
         ListLinksResponse response = new ListLinksResponse(linkResponseList, linkResponseList.size());
         return ResponseEntity
             .ok()
@@ -70,7 +70,7 @@ public class ScrapperController {
             );
         }
         URI link = req.link();
-        LinkResponse response = jdbcLinkService.add(id, req.link());
+        LinkResponse response = linkService.add(id, req.link());
         return ResponseEntity
             .ok()
             .body(response);
@@ -89,7 +89,7 @@ public class ScrapperController {
             );
         }
         URI link = req.link();
-        LinkResponse response = jdbcLinkService.remove(id, link);
+        LinkResponse response = linkService.remove(id, link);
         return ResponseEntity
             .ok()
             .body(response);

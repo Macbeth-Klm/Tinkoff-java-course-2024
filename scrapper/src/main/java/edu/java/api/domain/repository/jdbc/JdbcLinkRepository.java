@@ -2,7 +2,6 @@ package edu.java.api.domain.repository.jdbc;
 
 import edu.java.api.domain.dto.Link;
 import edu.java.api.domain.mapper.LinkDtoRowMapper;
-import edu.java.api.domain.repository.LinkRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import java.net.URI;
@@ -16,13 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcLinkRepository implements LinkRepository {
+public class JdbcLinkRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
     private final String findByUrlSqlReq = "SELECT * FROM link WHERE url = ?";
 
-    @Override
     @Transactional
     public Long add(URI link) {
         try {
@@ -39,7 +37,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public void remove(URI link) {
         try {
@@ -61,7 +58,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public void updateLink(URI url, OffsetDateTime updatedAt) {
         try {
@@ -77,7 +73,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public void setCheckedAt(URI checkedLink) {
         try {
@@ -93,7 +88,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<Link> findAll() {
         try {
@@ -109,7 +103,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public Link findByUrl(URI link) {
         try {
@@ -135,7 +128,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<Link> findByCheckedAt(int minutes) {
         try {
@@ -151,7 +143,6 @@ public class JdbcLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public boolean isExist(URI url) {
         try {

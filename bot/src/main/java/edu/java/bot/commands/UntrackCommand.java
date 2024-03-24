@@ -1,15 +1,17 @@
 package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.database.DatabaseImitation;
+import edu.java.bot.client.ScrapperClient;
 import edu.java.bot.linkvalidators.LinkValidatorManager;
+import edu.java.exceptions.ApiException;
+import edu.java.models.RemoveLinkRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UntrackCommand implements Command {
     private final LinkValidatorManager linkManager;
-    private final DatabaseImitation database;
+    private final ScrapperClient scrapperClient;
 
     @Override
     public String name() {
@@ -30,17 +32,11 @@ public class UntrackCommand implements Command {
             String uri = (!enteredUri.startsWith(scheme)) ? scheme + enteredUri : enteredUri;
             if (linkManager.isValid(uri)) {
                 URI link = URI.create(uri);
-                String answer;
                 try {
-                    if (database.isExistSubscription(chatId, link)) {
-                        database.removeSubscriptionToUser(chatId, link);
-                        answer = "Подписка отменена успешно!";
-                    } else {
-                        answer = "Вы не подписаны на данный ресурс!";
-                    }
-                    return new SendMessage(chatId, answer);
-                } catch (Exception e) {
-                    return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
+                    scrapperClient.deleteLink(chatId, new RemoveLinkRequest(link));
+                    return new SendMessage(chatId, "Подписка отменена успешно!");
+                } catch (ApiException e) {
+                    return new SendMessage(chatId, e.getDescription());
                 }
             } else {
                 return new SendMessage(chatId, "Ссылка введена неверно!");

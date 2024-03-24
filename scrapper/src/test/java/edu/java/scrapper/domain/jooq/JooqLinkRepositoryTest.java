@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.jooq;
 
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jooq.JooqLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class JooqLinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private LinkRepository jooqLinkRepository;
+    private JooqLinkRepository jooqLinkRepository;
 
     @Test
     @Transactional

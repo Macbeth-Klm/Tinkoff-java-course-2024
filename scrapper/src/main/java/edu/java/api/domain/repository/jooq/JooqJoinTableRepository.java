@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.dto.JoinTableDto;
-import edu.java.api.domain.repository.JoinTableRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
@@ -17,12 +16,11 @@ import static edu.java.api.domain.jooq.Tables.LINK_CHAT_JOIN_TABLE;
 
 @Repository
 @RequiredArgsConstructor
-public class JooqJoinTableRepository implements JoinTableRepository {
+public class JooqJoinTableRepository {
     private final DSLContext dslContext;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
 
-    @Override
     public void add(Long chatId, Long linkId) {
         try {
             dslContext.insertInto(LINK_CHAT_JOIN_TABLE, LINK_CHAT_JOIN_TABLE.CHAT_ID, LINK_CHAT_JOIN_TABLE.LINK_ID)
@@ -41,7 +39,6 @@ public class JooqJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     public void remove(Long chatId, Long linkId) {
         try {
             int deletedRow = dslContext.deleteFrom(LINK_CHAT_JOIN_TABLE)
@@ -61,7 +58,6 @@ public class JooqJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     public List<JoinTableDto> findAll() {
         try {
             return dslContext.selectFrom(LINK_CHAT_JOIN_TABLE)
@@ -78,7 +74,6 @@ public class JooqJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     public List<LinkResponse> findAllByChatId(Long chatId) {
         try {
             List<LinkResponse> responses = dslContext.select(LINK.LINK_ID, LINK.URL)
@@ -106,7 +101,6 @@ public class JooqJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     public List<JoinTableDto> findAllByLinkId(Long linkId) {
         try {
             return dslContext.selectFrom(LINK_CHAT_JOIN_TABLE)

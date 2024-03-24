@@ -1,6 +1,5 @@
 package edu.java.api.domain.repository.jdbc;
 
-import edu.java.api.domain.repository.ChatRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import java.util.List;
@@ -13,13 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcChatRepository implements ChatRepository {
+public class JdbcChatRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
     private final String chatIdColumn = "chat_id";
 
-    @Override
     @Transactional
     public void add(Long chatId) {
         try {
@@ -40,7 +38,6 @@ public class JdbcChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     @Transactional
     public void remove(Long chatId) {
         try {
@@ -62,7 +59,6 @@ public class JdbcChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<Long> findAll() {
         try {
@@ -78,7 +74,6 @@ public class JdbcChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     @Transactional
     public boolean isNotRegistered(Long id) {
         try {

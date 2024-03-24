@@ -1,22 +1,20 @@
 package edu.java.api.service.jooq;
 
-import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.JoinTableRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jooq.JooqChatRepository;
+import edu.java.api.domain.repository.jooq.JooqJoinTableRepository;
+import edu.java.api.domain.repository.jooq.JooqLinkRepository;
 import edu.java.api.service.LinkService;
 import edu.java.exceptions.BadRequestException;
 import edu.java.models.LinkResponse;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JooqLinkService implements LinkService {
-    private final ChatRepository jooqChatRepository;
-    private final LinkRepository jooqLinkRepository;
-    private final JoinTableRepository jooqJoinTableRepository;
+    private final JooqChatRepository jooqChatRepository;
+    private final JooqLinkRepository jooqLinkRepository;
+    private final JooqJoinTableRepository jooqJoinTableRepository;
 
     @Override
     public LinkResponse add(Long tgChatId, URI url) {

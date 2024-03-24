@@ -1,15 +1,15 @@
 package edu.java.scrapper.domain.jooq;
 
 import edu.java.api.domain.dto.JoinTableDto;
-import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.JoinTableRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jooq.JooqChatRepository;
+import edu.java.api.domain.repository.jooq.JooqJoinTableRepository;
+import edu.java.api.domain.repository.jooq.JooqLinkRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
+import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
-import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,11 +21,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @SpringBootTest
 public class JooqJoinTableRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository jooqChatRepository;
+    private JooqChatRepository jooqChatRepository;
     @Autowired
-    private LinkRepository jooqLinkRepository;
+    private JooqLinkRepository jooqLinkRepository;
     @Autowired
-    private JoinTableRepository jooqJoinTableRepository;
+    private JooqJoinTableRepository jooqJoinTableRepository;
 
     @Test
     @Transactional

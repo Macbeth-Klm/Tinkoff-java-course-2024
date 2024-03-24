@@ -1,8 +1,9 @@
 app:
   scheduler:
-    enable: true
-    interval: 5000
-    force-check-delay: 5000
+    enable: false
+    interval: 15000
+    force-check-delay: 15000
+  database-access-type: jpa
 
 spring:
   liquibase:

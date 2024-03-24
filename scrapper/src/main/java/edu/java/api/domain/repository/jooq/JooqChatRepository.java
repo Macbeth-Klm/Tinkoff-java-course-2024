@@ -2,7 +2,6 @@ package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.jooq.Tables;
 import edu.java.api.domain.jooq.tables.records.ChatRecord;
-import edu.java.api.domain.repository.ChatRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import java.util.List;
@@ -15,12 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class JooqChatRepository implements ChatRepository {
+public class JooqChatRepository {
     private final DSLContext dslContext;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
 
-    @Override
     @Transactional
     public void add(Long chatId) {
         try {
@@ -40,7 +38,6 @@ public class JooqChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     @Transactional
     public void remove(Long chatId) {
         try {
@@ -61,7 +58,6 @@ public class JooqChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<Long> findAll() {
         try {
@@ -76,7 +72,6 @@ public class JooqChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     @Transactional
     public boolean isNotRegistered(Long chatId) {
         try {

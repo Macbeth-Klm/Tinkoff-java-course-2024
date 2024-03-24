@@ -1,33 +1,31 @@
 package edu.java.scrapper.domain.jdbc;
 
 import edu.java.api.domain.dto.JoinTableDto;
-import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.JoinTableRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
+import edu.java.api.domain.repository.jdbc.JdbcJoinTableRepository;
+import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import edu.java.scrapper.IntegrationTest;
+import java.net.URI;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.net.URI;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @SpringBootTest
 public class JdbcJoinTableRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository jdbcChatRepository;
+    private JdbcChatRepository jdbcChatRepository;
     @Autowired
-    private LinkRepository jdbcLinkRepository;
+    private JdbcLinkRepository jdbcLinkRepository;
     @Autowired
-    private JoinTableRepository jdbcJoinTableRepository;
+    private JdbcJoinTableRepository jdbcJoinTableRepository;
 
     @Test
     @Transactional

@@ -1,15 +1,15 @@
 package edu.java.scrapper.domain.jooq;
 
-import edu.java.api.domain.repository.ChatRepository;
+import edu.java.api.domain.repository.jooq.JooqChatRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class JooqChatRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository jooqChatRepository;
+    private JooqChatRepository jooqChatRepository;
 
     @Test
     @Transactional

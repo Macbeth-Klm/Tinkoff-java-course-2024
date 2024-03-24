@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.LinkRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import java.net.URI;
@@ -19,12 +18,11 @@ import static edu.java.api.domain.jooq.Tables.LINK;
 
 @Repository
 @RequiredArgsConstructor
-public class JooqLinkRepository implements LinkRepository {
+public class JooqLinkRepository {
     private final DSLContext dslContext;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
 
-    @Override
     @Transactional
     public Long add(URI link) {
         try {
@@ -42,7 +40,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public void remove(URI link) {
         try {
@@ -63,7 +60,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public void updateLink(URI url, OffsetDateTime updatedAt) {
         try {
@@ -80,7 +76,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public void setCheckedAt(URI checkedLink) {
         try {
@@ -96,7 +91,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<Link> findAll() {
         try {
@@ -116,7 +110,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public Link findByUrl(URI link) {
         try {
@@ -146,7 +139,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<Link> findByCheckedAt(int minutes) {
         try {
@@ -170,7 +162,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     @Transactional
     public boolean isExist(URI url) {
         try {

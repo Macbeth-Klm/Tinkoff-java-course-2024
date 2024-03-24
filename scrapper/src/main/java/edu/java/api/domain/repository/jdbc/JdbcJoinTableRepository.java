@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jdbc;
 
 import edu.java.api.domain.dto.JoinTableDto;
-import edu.java.api.domain.repository.JoinTableRepository;
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
@@ -16,14 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcJoinTableRepository implements JoinTableRepository {
+public class JdbcJoinTableRepository {
     private final JdbcTemplate template;
     private final String dataAccessMessage = "Server error";
     private final String dataAccessDescription = "Ошибка сервера: нет доступа к данным";
     private final String chatIdColumn = "chat_id";
     private final String linkIdColumn = "link_id";
 
-    @Override
     @Transactional
     public void add(Long chatId, Long linkId) {
         try {
@@ -45,7 +43,6 @@ public class JdbcJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     @Transactional
     public void remove(Long chatId, Long linkId) {
         try {
@@ -68,7 +65,6 @@ public class JdbcJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<JoinTableDto> findAll() {
         try {
@@ -84,7 +80,6 @@ public class JdbcJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<LinkResponse> findAllByChatId(Long chatId) {
         try {
@@ -112,7 +107,6 @@ public class JdbcJoinTableRepository implements JoinTableRepository {
         }
     }
 
-    @Override
     @Transactional
     public List<JoinTableDto> findAllByLinkId(Long linkId) {
         try {
