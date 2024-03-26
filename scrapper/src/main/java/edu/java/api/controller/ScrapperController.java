@@ -117,7 +117,7 @@ public class ScrapperController {
             );
         }
         for (LinkPattern pattern : LinkPattern.values()) {
-            if (uri.toString().matches(pattern.getRegex())) {
+            if (uriString.matches(pattern.getRegex())) {
                 return;
             }
         }
