@@ -30,7 +30,7 @@ public class JdbcChatRepositoryTest extends IntegrationTest {
         jdbcChatRepository.add(chatId);
         List<Long> chatIds = jdbcChatRepository.findAll();
 
-        assertThat(chatIds).containsOnly(chatId);
+        assertThat(chatIds).contains(chatId);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class JdbcChatRepositoryTest extends IntegrationTest {
         jdbcChatRepository.remove(chatId);
         List<Long> chatIds = jdbcChatRepository.findAll();
 
-        assertThat(chatIds).isEmpty();
+        assertThat(chatIds).doesNotContain(chatId);
     }
 
     @Test

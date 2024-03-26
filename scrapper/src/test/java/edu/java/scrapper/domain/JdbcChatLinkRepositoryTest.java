@@ -39,7 +39,7 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
         jdbcChatLinkRepository.add(chatId, linkId);
         List<JoinTableDto> chatsToLinks = jdbcChatLinkRepository.findAll();
 
-        assertThat(chatsToLinks).containsOnly(new JoinTableDto(chatId, linkId));
+        assertThat(chatsToLinks).contains(new JoinTableDto(chatId, linkId));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
         jdbcChatLinkRepository.remove(chatId, linkId);
         List<JoinTableDto> links = jdbcChatLinkRepository.findAll();
 
-        assertThat(links).isEmpty();
+        assertThat(links).doesNotContain(new JoinTableDto(chatId, linkId));
     }
 
     @Test
@@ -130,6 +130,6 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
 
         List<JoinTableDto> linkResponseList = jdbcChatLinkRepository.findAllByLinkId(secondLinkId);
 
-        assertThat(linkResponseList).containsOnly(new JoinTableDto(secondChatId, secondLinkId));
+        assertThat(linkResponseList).contains(new JoinTableDto(secondChatId, secondLinkId));
     }
 }

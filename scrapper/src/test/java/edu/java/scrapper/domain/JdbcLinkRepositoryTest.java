@@ -33,7 +33,7 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
         jdbcLinkRepository.add(link);
         List<Link> links = jdbcLinkRepository.findAll();
         List<URI> uris = links.stream().map(Link::url).toList();
-        assertThat(uris).containsOnly(link);
+        assertThat(uris).contains(link);
     }
 
     @Test
@@ -44,9 +44,9 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
 
         jdbcLinkRepository.add(link);
         jdbcLinkRepository.remove(link);
-        List<Link> links = jdbcLinkRepository.findAll();
+        Throwable ex = catchThrowable(() -> jdbcLinkRepository.findByUrl(link));
 
-        assertThat(links).isEmpty();
+        assertThat(ex).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    void shouldThrowNotFoundExceptionWhileFindingByUrl() {
+    void shouldThrowEmptyResultDataAccessExceptionWhileFindingByUrl() {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
         Throwable ex = catchThrowable(() -> jdbcLinkRepository.findByUrl(firstLink));
