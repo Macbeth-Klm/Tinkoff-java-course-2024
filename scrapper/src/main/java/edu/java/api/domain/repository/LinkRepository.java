@@ -16,9 +16,9 @@ public interface LinkRepository {
 
     List<Link> findAll();
 
-    Link findByUrl(URI link);
+    Long findByUrl(URI link);
 
     List<Link> findByCheckedAt(int minutes);
 
-    boolean isExist(URI url);
+    boolean exists(URI url);
 }

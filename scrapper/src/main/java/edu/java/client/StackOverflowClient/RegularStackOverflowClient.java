@@ -1,7 +1,7 @@
-package edu.java.clients.StackOverflowClient;
+package edu.java.client.StackOverflowClient;
 
-import edu.java.Responses.StackOverflowItem;
-import edu.java.Responses.StackOverflowResponse;
+import edu.java.response.StackOverflowItem;
+import edu.java.response.StackOverflowResponse;
 import java.util.Optional;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.client.WebClient;

@@ -1,6 +1,6 @@
-package edu.java.clients.GitHubClient;
+package edu.java.client.GitHubClient;
 
-import edu.java.Responses.GitHubResponse;
+import edu.java.response.GitHubResponse;
 import java.util.Optional;
 
 public interface GitHubClient {

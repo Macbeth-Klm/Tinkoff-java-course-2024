@@ -1,6 +1,6 @@
-package edu.java.clients.StackOverflowClient;
+package edu.java.client.StackOverflowClient;
 
-import edu.java.Responses.StackOverflowResponse;
+import edu.java.response.StackOverflowResponse;
 import java.util.Optional;
 
 public interface StackOverflowClient {

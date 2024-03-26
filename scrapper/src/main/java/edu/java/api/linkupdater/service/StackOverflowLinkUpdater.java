@@ -1,13 +1,13 @@
-package edu.java.api.service.linkupdater;
+package edu.java.api.linkupdater.service;
 
-import edu.java.Responses.StackOverflowResponse;
 import edu.java.api.domain.dto.JoinTableDto;
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.jdbc.JdbcJoinTableRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
-import edu.java.clients.BotClient.BotClient;
-import edu.java.clients.StackOverflowClient.StackOverflowClient;
+import edu.java.client.BotClient.BotClient;
+import edu.java.client.StackOverflowClient.StackOverflowClient;
 import edu.java.models.LinkUpdate;
+import edu.java.response.StackOverflowResponse;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
     private final String host = "stackoverflow.com";
     private final StackOverflowClient stackOverflowClient;
     private final JdbcLinkRepository jdbcLinkRepository;
-    private final JdbcJoinTableRepository jdbcJoinTableRepository;
+    private final JdbcChatLinkRepository jdbcChatLinkRepository;
     private final BotClient botClient;
 
     @Override
@@ -31,7 +31,7 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
         StackOverflowResponse response = stackOverflowClient.fetchQuestionUpdates(questionId)
             .orElseThrow(IllegalArgumentException::new);
-        List<JoinTableDto> joinTableDtos = jdbcJoinTableRepository.findAllByLinkId(link.id());
+        List<JoinTableDto> joinTableDtos = jdbcChatLinkRepository.findAllByLinkId(link.id());
         if (joinTableDtos.isEmpty()) {
             jdbcLinkRepository.remove(link.url());
             return 1;

@@ -1,13 +1,13 @@
-package edu.java.api.service.linkupdater;
+package edu.java.api.linkupdater.service;
 
-import edu.java.Responses.GitHubResponse;
 import edu.java.api.domain.dto.JoinTableDto;
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.jdbc.JdbcJoinTableRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
-import edu.java.clients.BotClient.BotClient;
-import edu.java.clients.GitHubClient.GitHubClient;
+import edu.java.client.BotClient.BotClient;
+import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.models.LinkUpdate;
+import edu.java.response.GitHubResponse;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class GitHubLinkUpdater implements LinkUpdater {
     private final String host = "github.com";
     private final GitHubClient gitHubClient;
     private final JdbcLinkRepository jdbcLinkRepository;
-    private final JdbcJoinTableRepository jdbcJoinTableRepository;
+    private final JdbcChatLinkRepository jdbcChatLinkRepository;
     private final BotClient botClient;
 
     @Override
@@ -30,7 +30,7 @@ public class GitHubLinkUpdater implements LinkUpdater {
         String repo = splitLink[splitLink.length - 1];
         GitHubResponse response = gitHubClient.fetchRepositoryEvents(owner, repo)
             .orElseThrow(IllegalArgumentException::new);
-        List<JoinTableDto> joinTableDtos = jdbcJoinTableRepository.findAllByLinkId(link.id());
+        List<JoinTableDto> joinTableDtos = jdbcChatLinkRepository.findAllByLinkId(link.id());
         if (joinTableDtos.isEmpty()) {
             jdbcLinkRepository.remove(link.url());
             return 1;

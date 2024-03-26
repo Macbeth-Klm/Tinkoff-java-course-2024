@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 public class LinkDtoRowMapper implements RowMapper<Link> {
     @Override
     public Link mapRow(ResultSet rowSet, int rowNum) throws SQLException {
-        Long linkId = rowSet.getLong("link_id");
+        Long linkId = rowSet.getLong("id");
         String url = rowSet.getString("url");
         OffsetDateTime updatedAt = rowSet.getObject("updated_at", OffsetDateTime.class);
         OffsetDateTime checkedAt = rowSet.getObject("checked_at", OffsetDateTime.class);

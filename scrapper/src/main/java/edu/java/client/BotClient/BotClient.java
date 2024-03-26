@@ -1,4 +1,4 @@
-package edu.java.clients.BotClient;
+package edu.java.client.BotClient;
 
 import edu.java.exceptions.ApiException;
 import edu.java.models.ApiErrorResponse;

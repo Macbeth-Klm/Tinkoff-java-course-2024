@@ -1,4 +1,4 @@
-package edu.java.api.service.linkupdater;
+package edu.java.api.linkupdater.service;
 
 import edu.java.api.domain.dto.Link;
 

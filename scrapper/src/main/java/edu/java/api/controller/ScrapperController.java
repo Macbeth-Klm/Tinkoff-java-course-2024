@@ -7,12 +7,12 @@ import edu.java.models.AddLinkRequest;
 import edu.java.models.LinkResponse;
 import edu.java.models.ListLinksResponse;
 import edu.java.models.RemoveLinkRequest;
-import jakarta.validation.Valid;
+import edu.java.pattern.LinkPattern;
 import java.net.URI;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,13 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScrapperController {
     private final TgChatService jdbcTgChatService;
     private final LinkService jdbcLinkService;
-    private final String exceptionName = "Invalid HTTP-request parameters";
-    private final String exceptionDescription = "Некорректные параметры запроса";
+    private static final String BAD_REQ_EXCEPTION_NAME = "Invalid HTTP-request parameters";
+    private static final String BAD_REQ_EXCEPTION_DESCRIPTION = "Некорректные параметры запроса";
 
     @PostMapping("/tg-chat/{id}")
     public ResponseEntity<Void> registerChat(@PathVariable("id") Long id) {
-        checkValidationId(id);
-        jdbcTgChatService.register(id);
+        idValidation(id);
+        try {
+            jdbcTgChatService.register(id);
+        } catch (DuplicateKeyException ex) {
+            throw new BadRequestException(
+                "The user is already registered",
+                "Вы уже зарегистрированы!"
+            );
+        }
         return ResponseEntity
             .ok()
             .build();
@@ -40,7 +47,7 @@ public class ScrapperController {
 
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable("id") Long id) {
-        checkValidationId(id);
+        idValidation(id);
         jdbcTgChatService.unregister(id);
         return ResponseEntity
             .ok()
@@ -49,7 +56,7 @@ public class ScrapperController {
 
     @GetMapping("/links")
     public ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
-        checkValidationId(id);
+        idValidation(id);
         List<LinkResponse> linkResponseList = jdbcLinkService.listAll(id);
         ListLinksResponse response = new ListLinksResponse(linkResponseList, linkResponseList.size());
         return ResponseEntity
@@ -60,47 +67,63 @@ public class ScrapperController {
     @PostMapping("/links")
     public ResponseEntity<LinkResponse> addLinks(
         @RequestHeader("Tg-Chat-Id") Long id,
-        @RequestBody @Valid AddLinkRequest req,
-        BindingResult errors
+        @RequestBody AddLinkRequest req
     ) {
-        if (id < 1L || errors.hasErrors()) {
+        idValidation(id);
+        URI link = req.link();
+        urlValidation(link);
+        try {
+            LinkResponse response = jdbcLinkService.add(id, link);
+            return ResponseEntity
+                .ok()
+                .body(response);
+        } catch (DuplicateKeyException ex) {
             throw new BadRequestException(
-                exceptionName,
-                exceptionDescription
+                "The user is already tracking this link",
+                "Вы уже отслеживаете данный ресурс!"
             );
         }
-        URI link = req.link();
-        LinkResponse response = jdbcLinkService.add(id, req.link());
-        return ResponseEntity
-            .ok()
-            .body(response);
     }
 
     @DeleteMapping("/links")
     public ResponseEntity<LinkResponse> deleteLinks(
         @RequestHeader("Tg-Chat-Id") Long id,
-        @RequestBody @Valid RemoveLinkRequest req,
-        BindingResult errors
+        @RequestBody RemoveLinkRequest req
     ) {
-        if (id < 1L || errors.hasErrors()) {
-            throw new BadRequestException(
-                exceptionName,
-                exceptionDescription
-            );
-        }
+        idValidation(id);
         URI link = req.link();
+        urlValidation(link);
         LinkResponse response = jdbcLinkService.remove(id, link);
         return ResponseEntity
             .ok()
             .body(response);
     }
 
-    private void checkValidationId(Long id) {
+    private void idValidation(Long id) {
         if (id < 1L) {
             throw new BadRequestException(
-                exceptionName,
-                exceptionDescription
+                BAD_REQ_EXCEPTION_NAME,
+                BAD_REQ_EXCEPTION_DESCRIPTION
             );
         }
+    }
+
+    private void urlValidation(URI uri) {
+        String uriString = uri.toString();
+        if (uriString.isEmpty()) {
+            throw new BadRequestException(
+                BAD_REQ_EXCEPTION_NAME,
+                BAD_REQ_EXCEPTION_DESCRIPTION
+            );
+        }
+        for (LinkPattern pattern : LinkPattern.values()) {
+            if (uri.toString().matches(pattern.getRegex())) {
+                return;
+            }
+        }
+        throw new BadRequestException(
+            "Given url is not supported by that service",
+            "Данный ресурс не поддерживается сервисом!"
+        );
     }
 }

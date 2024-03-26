@@ -1,13 +1,13 @@
 package edu.java.scrapper.domain;
 
 import edu.java.api.domain.repository.ChatRepository;
-import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +43,7 @@ public class JdbcChatRepositoryTest extends IntegrationTest {
 
         Throwable ex = catchThrowable(() -> jdbcChatRepository.add(chatId));
 
-        assertThat(ex).isInstanceOf(BadRequestException.class);
+        assertThat(ex).isInstanceOf(DuplicateKeyException.class);
     }
 
     @Test
@@ -78,12 +78,12 @@ public class JdbcChatRepositoryTest extends IntegrationTest {
         Long secondChatId = 2L;
 
         jdbcChatRepository.add(firstChatId);
-        boolean firstIsNotRegistered = jdbcChatRepository.isNotRegistered(firstChatId);
-        boolean secondIsNotRegistered = jdbcChatRepository.isNotRegistered(secondChatId);
+        boolean firstIsNotRegistered = jdbcChatRepository.isRegistered(firstChatId);
+        boolean secondIsNotRegistered = jdbcChatRepository.isRegistered(secondChatId);
 
         assertAll(
-            () -> assertFalse(firstIsNotRegistered),
-            () -> assertTrue(secondIsNotRegistered)
+            () -> assertTrue(firstIsNotRegistered),
+            () -> assertFalse(secondIsNotRegistered)
         );
     }
 }

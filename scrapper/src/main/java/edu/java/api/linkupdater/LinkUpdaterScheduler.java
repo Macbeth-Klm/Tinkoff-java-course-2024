@@ -1,6 +1,6 @@
-package edu.java;
+package edu.java.api.linkupdater;
 
-import edu.java.api.service.LinkUpdateService;
+import edu.java.api.linkupdater.service.LinkUpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

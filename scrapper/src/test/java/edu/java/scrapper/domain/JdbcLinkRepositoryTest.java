@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,9 +69,9 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
 
         jdbcLinkRepository.add(firstLink);
         jdbcLinkRepository.add(secondLink);
-        Link link = jdbcLinkRepository.findByUrl(firstLink);
+        Long id = jdbcLinkRepository.findByUrl(firstLink);
 
-        assertEquals(firstLink, link.url());
+        assertEquals(10, id);
     }
 
     @Test
@@ -81,7 +82,7 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
 
         Throwable ex = catchThrowable(() -> jdbcLinkRepository.findByUrl(firstLink));
 
-        assertThat(ex).isInstanceOf(NotFoundException.class);
+        assertThat(ex).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test
@@ -92,8 +93,8 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
 
         jdbcLinkRepository.add(firstLink);
-        boolean firstIsExists = jdbcLinkRepository.isExist(firstLink);
-        boolean secondIsNotExists = jdbcLinkRepository.isExist(secondLink);
+        boolean firstIsExists = jdbcLinkRepository.exists(firstLink);
+        boolean secondIsNotExists = jdbcLinkRepository.exists(secondLink);
 
         assertAll(
             () -> assertTrue(firstIsExists),

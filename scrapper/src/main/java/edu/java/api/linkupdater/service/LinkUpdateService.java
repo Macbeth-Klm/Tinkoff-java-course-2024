@@ -1,8 +1,7 @@
-package edu.java.api.service;
+package edu.java.api.linkupdater.service;
 
 import edu.java.api.domain.dto.Link;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
-import edu.java.api.service.linkupdater.LinkUpdater;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

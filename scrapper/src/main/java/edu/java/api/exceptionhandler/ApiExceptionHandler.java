@@ -1,4 +1,4 @@
-package edu.java.api.exceptionhandlers;
+package edu.java.api.exceptionhandler;
 
 import edu.java.exceptions.BadRequestException;
 import edu.java.exceptions.NotFoundException;
