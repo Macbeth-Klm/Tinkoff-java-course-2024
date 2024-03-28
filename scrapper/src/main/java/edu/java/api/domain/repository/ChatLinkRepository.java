@@ -4,7 +4,7 @@ import edu.java.api.domain.dto.JoinTableDto;
 import edu.java.models.LinkResponse;
 import java.util.List;
 
-public interface JoinTableRepository {
+public interface ChatLinkRepository {
     void add(Long chatId, Long linkId);
 
     void remove(Long chatId, Long linkId);

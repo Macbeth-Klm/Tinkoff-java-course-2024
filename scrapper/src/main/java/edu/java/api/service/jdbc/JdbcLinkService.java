@@ -1,7 +1,7 @@
 package edu.java.api.service.jdbc;
 
+import edu.java.api.domain.repository.ChatLinkRepository;
 import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.JoinTableRepository;
 import edu.java.api.domain.repository.LinkRepository;
 import edu.java.api.service.LinkService;
 import edu.java.exceptions.NotFoundException;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcLinkService implements LinkService {
     private final ChatRepository jdbcChatRepository;
     private final LinkRepository jdbcLinkRepository;
-    private final JoinTableRepository jdbcChatLinkRepository;
+    private final ChatLinkRepository jdbcChatLinkRepository;
 
     @Override
     @Transactional

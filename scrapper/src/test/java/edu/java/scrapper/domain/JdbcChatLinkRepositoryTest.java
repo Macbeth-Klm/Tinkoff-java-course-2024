@@ -1,8 +1,8 @@
 package edu.java.scrapper.domain;
 
 import edu.java.api.domain.dto.JoinTableDto;
+import edu.java.api.domain.repository.ChatLinkRepository;
 import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.JoinTableRepository;
 import edu.java.api.domain.repository.LinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
@@ -25,7 +25,7 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Autowired
     private LinkRepository jdbcLinkRepository;
     @Autowired
-    private JoinTableRepository jdbcChatLinkRepository;
+    private ChatLinkRepository jdbcChatLinkRepository;
 
     @Test
     @Transactional

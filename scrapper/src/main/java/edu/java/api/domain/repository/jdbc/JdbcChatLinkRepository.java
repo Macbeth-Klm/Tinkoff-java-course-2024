@@ -1,7 +1,7 @@
 package edu.java.api.domain.repository.jdbc;
 
 import edu.java.api.domain.dto.JoinTableDto;
-import edu.java.api.domain.repository.JoinTableRepository;
+import edu.java.api.domain.repository.ChatLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import java.net.URI;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @SuppressWarnings("MultipleStringLiterals")
-public class JdbcChatLinkRepository implements JoinTableRepository {
+public class JdbcChatLinkRepository implements ChatLinkRepository {
     private final JdbcTemplate template;
 
     @Override
