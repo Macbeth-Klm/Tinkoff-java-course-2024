@@ -38,17 +38,17 @@ public class InitDatabaseTest extends IntegrationTest {
         );
         assert (linkTableEntriesCount != null);
 
-        Integer joinTableEntriesCount = jdbcTemplate.queryForObject(
+        Integer chatLinkTableEntriesCount = jdbcTemplate.queryForObject(
             "SELECT count(*) FROM information_schema.tables WHERE table_name = ?",
             Integer.class,
-            "link_chat_join_table"
+            "chat_link"
         );
-        assert (joinTableEntriesCount != null);
+        assert (chatLinkTableEntriesCount != null);
 
         assertAll(
             () -> assertEquals(1, (int) chatTableEntriesCount),
             () -> assertEquals(1, (int) linkTableEntriesCount),
-            () -> assertEquals(1, (int) joinTableEntriesCount)
+            () -> assertEquals(1, (int) chatLinkTableEntriesCount)
         );
     }
 }
