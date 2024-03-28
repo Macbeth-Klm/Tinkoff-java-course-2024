@@ -1,6 +1,6 @@
 package edu.java.api.linkupdater.service;
 
-import edu.java.api.domain.dto.JoinTableDto;
+import edu.java.api.domain.dto.ChatLinkDto;
 import edu.java.api.domain.dto.Link;
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
@@ -30,13 +30,13 @@ public class GitHubLinkUpdater implements LinkUpdater {
         String repo = splitLink[splitLink.length - 1];
         GitHubResponse response = gitHubClient.fetchRepositoryEvents(owner, repo)
             .orElseThrow(IllegalArgumentException::new);
-        List<JoinTableDto> joinTableDtos = jdbcChatLinkRepository.findAllByLinkId(link.id());
-        if (joinTableDtos.isEmpty()) {
+        List<ChatLinkDto> chatLinkDtos = jdbcChatLinkRepository.findAllByLinkId(link.id());
+        if (chatLinkDtos.isEmpty()) {
             jdbcLinkRepository.remove(link.url());
             return 1;
         }
         if (link.updatedAt().isAfter(response.createdAt())) {
-            List<Long> tgChatIds = joinTableDtos.stream().map(JoinTableDto::chatId).toList();
+            List<Long> tgChatIds = chatLinkDtos.stream().map(ChatLinkDto::chatId).toList();
             botClient.postUpdates(new LinkUpdate(
                 link.id(),
                 link.url(),
@@ -50,9 +50,13 @@ public class GitHubLinkUpdater implements LinkUpdater {
         return 1;
     }
 
+    /* Метод реализует задачу 1 из hw5-bonus, но я написал его в hw5, исходя из полей LinkUpdate и response
+     каждого клиента, реализованного в предыдущих дз, и из того, что LinkUpdate.description пойдет в качестве
+     ответа пользователю из скелета бота. Поэтому оставлю тут коммент, чтобы он пошёл в hw5-bonus PR
+     */
     private String getDescription(GitHubResponse response) {
-        return "Произошло обновление типа " + response.type()
-            + " в репозитории " + response.repo() + " от автора "
-            + response.actor();
+        return "Обновление на GitHub!\n"
+            + "Пользователь " + response.actor().login() + " внёс изменение " + response.type()
+            + " в репозиторий " + response.repo().name();
     }
 }

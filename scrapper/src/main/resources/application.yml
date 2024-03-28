@@ -1,6 +1,6 @@
 app:
   scheduler:
-    enable: true
+    enable: false
     interval: 5000
     force-check-delay: 5000
 

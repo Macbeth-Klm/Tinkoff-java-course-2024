@@ -1,6 +1,6 @@
 package edu.java.api.domain.repository.jdbc;
 
-import edu.java.api.domain.dto.JoinTableDto;
+import edu.java.api.domain.dto.ChatLinkDto;
 import edu.java.api.domain.repository.ChatLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
@@ -41,10 +41,10 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
-    public List<JoinTableDto> findAll() {
+    public List<ChatLinkDto> findAll() {
         return template.query(
             "SELECT * FROM chat_link",
-            (rowSet, rowNum) -> new JoinTableDto(rowSet.getLong("chat_id"), rowSet.getLong("link_id"))
+            (rowSet, rowNum) -> new ChatLinkDto(rowSet.getLong("chat_id"), rowSet.getLong("link_id"))
         );
     }
 
@@ -61,10 +61,10 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
-    public List<JoinTableDto> findAllByLinkId(Long linkId) {
+    public List<ChatLinkDto> findAllByLinkId(Long linkId) {
         return template.query(
             "SELECT * FROM chat_link WHERE link_id = ?",
-            (rowSet, rowNum) -> new JoinTableDto(
+            (rowSet, rowNum) -> new ChatLinkDto(
                 rowSet.getLong("chat_id"),
                 rowSet.getLong("link_id")
             ),

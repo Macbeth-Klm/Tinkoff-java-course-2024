@@ -1,9 +1,9 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
-import edu.java.api.domain.dto.JoinTableDto;
-import edu.java.api.domain.repository.ChatLinkRepository;
-import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.dto.ChatLinkDto;
+import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
+import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import edu.java.scrapper.IntegrationTest;
@@ -21,11 +21,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @SpringBootTest
 public class JdbcChatLinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository jdbcChatRepository;
+    private JdbcChatRepository jdbcChatRepository;
     @Autowired
-    private LinkRepository jdbcLinkRepository;
+    private JdbcLinkRepository jdbcLinkRepository;
     @Autowired
-    private ChatLinkRepository jdbcChatLinkRepository;
+    private JdbcChatLinkRepository jdbcChatLinkRepository;
 
     @Test
     @Transactional
@@ -37,9 +37,9 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
         jdbcChatRepository.add(chatId);
         Long linkId = jdbcLinkRepository.add(link);
         jdbcChatLinkRepository.add(chatId, linkId);
-        List<JoinTableDto> chatsToLinks = jdbcChatLinkRepository.findAll();
+        List<ChatLinkDto> chatsToLinks = jdbcChatLinkRepository.findAll();
 
-        assertThat(chatsToLinks).contains(new JoinTableDto(chatId, linkId));
+        assertThat(chatsToLinks).contains(new ChatLinkDto(chatId, linkId));
     }
 
     @Test
@@ -68,9 +68,9 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
 
         jdbcChatLinkRepository.add(chatId, linkId);
         jdbcChatLinkRepository.remove(chatId, linkId);
-        List<JoinTableDto> links = jdbcChatLinkRepository.findAll();
+        List<ChatLinkDto> links = jdbcChatLinkRepository.findAll();
 
-        assertThat(links).doesNotContain(new JoinTableDto(chatId, linkId));
+        assertThat(links).doesNotContain(new ChatLinkDto(chatId, linkId));
     }
 
     @Test
@@ -128,8 +128,8 @@ public class JdbcChatLinkRepositoryTest extends IntegrationTest {
         jdbcChatLinkRepository.add(firstChatId, firstLinkId);
         jdbcChatLinkRepository.add(secondChatId, secondLinkId);
 
-        List<JoinTableDto> linkResponseList = jdbcChatLinkRepository.findAllByLinkId(secondLinkId);
+        List<ChatLinkDto> linkResponseList = jdbcChatLinkRepository.findAllByLinkId(secondLinkId);
 
-        assertThat(linkResponseList).contains(new JoinTableDto(secondChatId, secondLinkId));
+        assertThat(linkResponseList).contains(new ChatLinkDto(secondChatId, secondLinkId));
     }
 }

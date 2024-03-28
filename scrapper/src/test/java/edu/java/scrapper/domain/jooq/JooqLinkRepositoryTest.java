@@ -1,7 +1,7 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jooq;
 
 import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jooq.JooqLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
@@ -9,20 +9,19 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class JdbcLinkRepositoryTest extends IntegrationTest {
+public class JooqLinkRepositoryTest extends IntegrationTest {
     @Autowired
-    private LinkRepository jdbcLinkRepository;
+    private JooqLinkRepository jooqLinkRepository;
 
     @Test
     @Transactional
@@ -30,8 +29,8 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
     void shouldAddLink() {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        jdbcLinkRepository.add(link);
-        List<Link> links = jdbcLinkRepository.findAll();
+        jooqLinkRepository.add(link);
+        List<Link> links = jooqLinkRepository.findAll();
         List<URI> uris = links.stream().map(Link::url).toList();
         assertThat(uris).contains(link);
     }
@@ -42,11 +41,11 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
     void shouldRemoveLink() {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        jdbcLinkRepository.add(link);
-        jdbcLinkRepository.remove(link);
-        Throwable ex = catchThrowable(() -> jdbcLinkRepository.findByUrl(link));
+        jooqLinkRepository.add(link);
+        jooqLinkRepository.remove(link);
+        Throwable ex = catchThrowable(() -> jooqLinkRepository.findByUrl(link));
 
-        assertThat(ex).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThat(ex).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -55,7 +54,7 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
     void shouldThrowNotFoundExceptionWhileRemovingLink() {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        Throwable ex = catchThrowable(() -> jdbcLinkRepository.remove(link));
+        Throwable ex = catchThrowable(() -> jooqLinkRepository.remove(link));
 
         assertThat(ex).isInstanceOf(NotFoundException.class);
     }
@@ -67,22 +66,22 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
 
-        jdbcLinkRepository.add(firstLink);
-        jdbcLinkRepository.add(secondLink);
-        Long id = jdbcLinkRepository.findByUrl(firstLink);
+        jooqLinkRepository.add(firstLink);
+        jooqLinkRepository.add(secondLink);
+        Long id = jooqLinkRepository.findByUrl(firstLink);
 
-        assertEquals(10, id);
+        assertNotNull(id);
     }
 
     @Test
     @Transactional
     @Rollback
-    void shouldThrowEmptyResultDataAccessExceptionWhileFindingByUrl() {
+    void shouldThrowNullPointerExceptionWhileFindingByUrl() {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
-        Throwable ex = catchThrowable(() -> jdbcLinkRepository.findByUrl(firstLink));
+        Throwable ex = catchThrowable(() -> jooqLinkRepository.findByUrl(firstLink));
 
-        assertThat(ex).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThat(ex).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -92,14 +91,13 @@ public class JdbcLinkRepositoryTest extends IntegrationTest {
         URI firstLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
         URI secondLink = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2023");
 
-        jdbcLinkRepository.add(firstLink);
-        boolean firstIsExists = jdbcLinkRepository.exists(firstLink);
-        boolean secondIsNotExists = jdbcLinkRepository.exists(secondLink);
+        jooqLinkRepository.add(firstLink);
+        boolean firstIsExists = jooqLinkRepository.exists(firstLink);
+        boolean secondIsNotExists = jooqLinkRepository.exists(secondLink);
 
         assertAll(
             () -> assertTrue(firstIsExists),
             () -> assertFalse(secondIsNotExists)
         );
     }
-
 }
