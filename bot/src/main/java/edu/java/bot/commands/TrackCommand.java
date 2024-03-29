@@ -1,15 +1,15 @@
 package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.database.DatabaseImitation;
-import edu.java.bot.linkvalidators.LinkValidatorManager;
+import edu.java.bot.client.ScrapperClient;
+import edu.java.exceptions.ApiException;
+import edu.java.models.AddLinkRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class TrackCommand implements Command {
-    private final LinkValidatorManager linkManager;
-    private final DatabaseImitation database;
+    private final ScrapperClient scrapperClient;
 
     @Override
     public String name() {
@@ -28,22 +28,12 @@ public class TrackCommand implements Command {
             String enteredUri = commandAndUri[1];
             String scheme = "https://";
             String uri = (!enteredUri.startsWith(scheme)) ? scheme + enteredUri : enteredUri;
-            if (linkManager.isValid(uri)) {
-                URI link = URI.create(uri);
-                String answer;
-                try {
-                    if (!database.isExistSubscription(chatId, link)) {
-                        database.addSubscriptionToUser(chatId, link);
-                        answer = "Подписка выполнена успешно!";
-                    } else {
-                        answer = "Вы уже подписаны на данный ресурс!";
-                    }
-                    return new SendMessage(chatId, answer);
-                } catch (Exception e) {
-                    return new SendMessage(chatId, "Вы не зарегистрированы! Введите /start");
-                }
-            } else {
-                return new SendMessage(chatId, "Ссылка введена неверно!");
+            URI link = URI.create(uri);
+            try {
+                scrapperClient.addLink(chatId, new AddLinkRequest(link));
+                return new SendMessage(chatId, "Подписка выполнена успешно!");
+            } catch (ApiException e) {
+                return new SendMessage(chatId, e.getDescription());
             }
         }
         return new SendMessage(
