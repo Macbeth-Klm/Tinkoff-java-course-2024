@@ -1,6 +1,6 @@
 package edu.java.api.linkupdater.service;
 
-import edu.java.api.domain.dto.JoinTableDto;
+import edu.java.api.domain.dto.ChatLinkDto;
 import edu.java.api.domain.dto.Link;
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
@@ -31,13 +31,13 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
         StackOverflowResponse response = stackOverflowClient.fetchQuestionUpdates(questionId)
             .orElseThrow(IllegalArgumentException::new);
-        List<JoinTableDto> joinTableDtos = jdbcChatLinkRepository.findAllByLinkId(link.id());
-        if (joinTableDtos.isEmpty()) {
+        List<ChatLinkDto> chatLinkDtos = jdbcChatLinkRepository.findAllByLinkId(link.id());
+        if (chatLinkDtos.isEmpty()) {
             jdbcLinkRepository.remove(link.url());
             return 1;
         }
         if (link.updatedAt().isAfter(response.lastActivityDate())) {
-            List<Long> tgChatIds = joinTableDtos.stream().map(JoinTableDto::chatId).toList();
+            List<Long> tgChatIds = chatLinkDtos.stream().map(ChatLinkDto::chatId).toList();
             botClient.postUpdates(new LinkUpdate(
                 link.id(),
                 link.url(),
@@ -50,8 +50,13 @@ public class StackOverflowLinkUpdater implements LinkUpdater {
         return 1;
     }
 
+    /* Метод реализует задачу 1 из hw5-bonus, но я написал его в hw5, исходя из полей LinkUpdate и response
+     каждого клиента, реализованного в предыдущих дз, и из того, что LinkUpdate.description пойдет в качестве
+     ответа пользователю из скелета бота. Поэтому оставлю тут коммент, чтобы он пошёл в hw5-bonus PR
+     */
     private String getDescription(StackOverflowResponse response) {
-        return "На вопрос " + response.questionId() + " пришел новый ответ на Stackoverflow от "
-            + response.owner().displayName();
+        return "Обновление на StackOverflow!\n"
+            + "На вопрос №" + response.questionId() + " пришёл ответ №" + response.answerId()
+            + " от пользователя " + response.owner().displayName();
     }
 }

@@ -1,6 +1,6 @@
 package edu.java.api.domain.repository;
 
-import edu.java.api.domain.dto.JoinTableDto;
+import edu.java.api.domain.dto.ChatLinkDto;
 import edu.java.models.LinkResponse;
 import java.util.List;
 
@@ -9,10 +9,10 @@ public interface ChatLinkRepository {
 
     void remove(Long chatId, Long linkId);
 
-    List<JoinTableDto> findAll();
+    List<ChatLinkDto> findAll();
 
     List<LinkResponse> findAllByChatId(Long chatId);
 
-    List<JoinTableDto> findAllByLinkId(Long linkId);
+    List<ChatLinkDto> findAllByLinkId(Long linkId);
 
 }

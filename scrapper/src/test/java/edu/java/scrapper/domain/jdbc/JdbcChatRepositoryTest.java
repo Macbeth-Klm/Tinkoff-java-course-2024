@@ -1,6 +1,6 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
-import edu.java.api.domain.repository.ChatRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class JdbcChatRepositoryTest extends IntegrationTest {
     @Autowired
-    private ChatRepository jdbcChatRepository;
+    private JdbcChatRepository jdbcChatRepository;
 
     @Test
     @Transactional
