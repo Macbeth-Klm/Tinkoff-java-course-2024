@@ -1,4 +1,4 @@
-package edu.java.models;
+package edu.java.model;
 
 import java.net.URI;
 

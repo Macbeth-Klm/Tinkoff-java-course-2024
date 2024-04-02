@@ -1,6 +1,6 @@
 package edu.java.api.domain.repository.jpa;
 
-import edu.java.models.jpa.Link;
+import edu.java.model.jpa.Link;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;

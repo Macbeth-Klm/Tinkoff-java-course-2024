@@ -6,7 +6,7 @@ import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
-import edu.java.models.LinkUpdate;
+import edu.java.model.LinkUpdate;
 import edu.java.response.StackOverflowResponse;
 import java.util.List;
 import lombok.Getter;

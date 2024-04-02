@@ -1,7 +1,7 @@
-package edu.java.bot.api.controllers;
+package edu.java.bot.api.controller;
 
-import edu.java.bot.api.services.BotService;
-import edu.java.models.LinkUpdate;
+import edu.java.bot.api.service.BotService;
+import edu.java.model.LinkUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

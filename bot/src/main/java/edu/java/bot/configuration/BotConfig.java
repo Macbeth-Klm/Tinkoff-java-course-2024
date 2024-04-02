@@ -2,12 +2,12 @@ package edu.java.bot.configuration;
 
 import com.pengrad.telegrambot.TelegramBot;
 import edu.java.bot.client.ScrapperClient;
-import edu.java.bot.commands.Command;
-import edu.java.bot.commands.HelpCommand;
-import edu.java.bot.commands.ListCommand;
-import edu.java.bot.commands.StartCommand;
-import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.commands.UntrackCommand;
+import edu.java.bot.command.Command;
+import edu.java.bot.command.HelpCommand;
+import edu.java.bot.command.ListCommand;
+import edu.java.bot.command.StartCommand;
+import edu.java.bot.command.TrackCommand;
+import edu.java.bot.command.UntrackCommand;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

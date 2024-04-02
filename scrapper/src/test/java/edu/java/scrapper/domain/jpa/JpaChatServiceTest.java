@@ -3,7 +3,7 @@ package edu.java.scrapper.domain.jpa;
 import edu.java.api.domain.repository.jpa.JpaChatRepository;
 import edu.java.api.service.TgChatService;
 import edu.java.api.service.jpa.JpaTgChatService;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

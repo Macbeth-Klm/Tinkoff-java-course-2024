@@ -1,7 +1,7 @@
 package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.jooq.tables.records.ChatRecord;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;

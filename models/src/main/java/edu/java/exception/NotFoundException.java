@@ -1,13 +1,13 @@
-package edu.java.exceptions;
+package edu.java.exception;
 
 import lombok.Getter;
 
 @Getter
-public class BadRequestException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
     private final String message;
     private final String description;
 
-    public BadRequestException(String message, String description) {
+    public NotFoundException(String message, String description) {
         this.message = message;
         this.description = description;
     }

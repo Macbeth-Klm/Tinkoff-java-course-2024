@@ -1,13 +1,13 @@
-package edu.java.exceptions;
+package edu.java.exception;
 
 import lombok.Getter;
 
 @Getter
-public class NotFoundException extends RuntimeException {
+public class ApiException extends RuntimeException {
     private final String message;
     private final String description;
 
-    public NotFoundException(String message, String description) {
+    public ApiException(String message, String description) {
         this.message = message;
         this.description = description;
     }

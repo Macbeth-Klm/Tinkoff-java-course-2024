@@ -2,7 +2,7 @@ package edu.java.scrapper.domain.jooq;
 
 import edu.java.api.domain.dto.LinkDto;
 import edu.java.api.domain.repository.jooq.JooqLinkRepository;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;

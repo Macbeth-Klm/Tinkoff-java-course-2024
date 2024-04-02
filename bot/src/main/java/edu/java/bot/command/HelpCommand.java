@@ -1,4 +1,4 @@
-package edu.java.bot.commands;
+package edu.java.bot.command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import java.util.List;

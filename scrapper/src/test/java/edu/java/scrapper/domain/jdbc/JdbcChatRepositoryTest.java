@@ -1,7 +1,7 @@
 package edu.java.scrapper.domain.jdbc;
 
 import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;

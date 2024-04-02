@@ -1,9 +1,9 @@
-package edu.java.bot.commands;
+package edu.java.bot.command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.ScrapperClient;
-import edu.java.exceptions.ApiException;
-import edu.java.models.LinkResponse;
+import edu.java.exception.ApiException;
+import edu.java.model.LinkResponse;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

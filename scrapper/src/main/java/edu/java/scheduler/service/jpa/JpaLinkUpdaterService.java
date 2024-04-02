@@ -1,7 +1,7 @@
 package edu.java.scheduler.service.jpa;
 
 import edu.java.api.domain.repository.jpa.JpaLinkRepository;
-import edu.java.models.jpa.Link;
+import edu.java.model.jpa.Link;
 import edu.java.scheduler.service.LinkUpdaterService;
 import edu.java.scheduler.updater.jpa.JpaLinkUpdater;
 import java.time.Duration;

@@ -2,11 +2,11 @@ package edu.java.api.controller;
 
 import edu.java.api.service.LinkService;
 import edu.java.api.service.TgChatService;
-import edu.java.exceptions.BadRequestException;
-import edu.java.models.AddLinkRequest;
-import edu.java.models.LinkResponse;
-import edu.java.models.ListLinksResponse;
-import edu.java.models.RemoveLinkRequest;
+import edu.java.exception.BadRequestException;
+import edu.java.model.AddLinkRequest;
+import edu.java.model.LinkResponse;
+import edu.java.model.ListLinksResponse;
+import edu.java.model.RemoveLinkRequest;
 import edu.java.pattern.LinkPattern;
 import java.net.URI;
 import java.util.List;

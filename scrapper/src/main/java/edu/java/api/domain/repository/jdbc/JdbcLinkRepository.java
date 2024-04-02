@@ -2,7 +2,7 @@ package edu.java.api.domain.repository.jdbc;
 
 import edu.java.api.domain.dto.LinkDto;
 import edu.java.api.domain.mapper.LinkDtoRowMapper;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;

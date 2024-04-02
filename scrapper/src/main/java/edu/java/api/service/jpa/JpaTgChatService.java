@@ -2,8 +2,8 @@ package edu.java.api.service.jpa;
 
 import edu.java.api.domain.repository.jpa.JpaChatRepository;
 import edu.java.api.service.TgChatService;
-import edu.java.exceptions.NotFoundException;
-import edu.java.models.jpa.Chat;
+import edu.java.exception.NotFoundException;
+import edu.java.model.jpa.Chat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;

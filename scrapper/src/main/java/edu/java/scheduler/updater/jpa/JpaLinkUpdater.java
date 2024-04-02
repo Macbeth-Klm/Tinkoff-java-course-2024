@@ -1,6 +1,6 @@
 package edu.java.scheduler.updater.jpa;
 
-import edu.java.models.jpa.Link;
+import edu.java.model.jpa.Link;
 
 public interface JpaLinkUpdater {
     String getHost();

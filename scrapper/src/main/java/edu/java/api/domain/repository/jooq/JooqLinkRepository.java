@@ -1,7 +1,7 @@
 package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.dto.LinkDto;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;

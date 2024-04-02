@@ -6,7 +6,7 @@ import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
-import edu.java.models.LinkUpdate;
+import edu.java.model.LinkUpdate;
 import edu.java.response.GitHubResponse;
 import java.util.List;
 import lombok.Getter;

@@ -1,7 +1,7 @@
-package edu.java.bot.api.exceptionhandlers;
+package edu.java.bot.api.exceptionhandler;
 
-import edu.java.exceptions.BadRequestException;
-import edu.java.models.ApiErrorResponse;
+import edu.java.exception.BadRequestException;
+import edu.java.model.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

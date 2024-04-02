@@ -1,6 +1,6 @@
 package edu.java.api.domain.repository.jdbc;
 
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

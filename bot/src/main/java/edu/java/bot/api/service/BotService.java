@@ -1,9 +1,9 @@
-package edu.java.bot.api.services;
+package edu.java.bot.api.service;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.exceptions.BadRequestException;
-import edu.java.models.LinkUpdate;
+import edu.java.exception.BadRequestException;
+import edu.java.model.LinkUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
