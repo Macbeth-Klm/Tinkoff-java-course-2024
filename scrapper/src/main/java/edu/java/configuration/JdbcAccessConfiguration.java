@@ -7,6 +7,15 @@ import edu.java.api.service.LinkService;
 import edu.java.api.service.TgChatService;
 import edu.java.api.service.jdbc.JdbcLinkService;
 import edu.java.api.service.jdbc.JdbcTgChatService;
+import edu.java.client.BotClient.BotClient;
+import edu.java.client.GitHubClient.GitHubClient;
+import edu.java.client.StackOverflowClient.StackOverflowClient;
+import edu.java.scheduler.service.LinkUpdaterService;
+import edu.java.scheduler.service.jdbc.JdbcLinkUpdaterService;
+import edu.java.scheduler.updater.jdbc.JdbcGitHubLinkUpdater;
+import edu.java.scheduler.updater.jdbc.JdbcLinkUpdater;
+import edu.java.scheduler.updater.jdbc.JdbcStackOverflowLinkUpdater;
+import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +38,47 @@ public class JdbcAccessConfiguration {
             jdbcChatRepository,
             jdbcLinkRepository,
             jdbcChatLinkRepository
+        );
+    }
+
+    @Bean
+    JdbcLinkUpdater jdbcGitHubLinkUpdater(
+        JdbcLinkRepository jdbcLinkRepository,
+        JdbcChatLinkRepository jdbcChatLinkRepository,
+        GitHubClient gitHubClient,
+        BotClient botClient
+    ) {
+        return new JdbcGitHubLinkUpdater(
+            jdbcLinkRepository,
+            jdbcChatLinkRepository,
+            gitHubClient,
+            botClient
+        );
+    }
+
+    @Bean
+    JdbcLinkUpdater jdbcStackOverflowLinkUpdater(
+        JdbcLinkRepository jdbcLinkRepository,
+        JdbcChatLinkRepository jdbcChatLinkRepository,
+        StackOverflowClient stackOverflowClient,
+        BotClient botClient
+    ) {
+        return new JdbcStackOverflowLinkUpdater(
+            jdbcLinkRepository,
+            jdbcChatLinkRepository,
+            stackOverflowClient,
+            botClient
+        );
+    }
+
+    @Bean
+    LinkUpdaterService linkUpdaterService(
+        JdbcLinkRepository jdbcLinkRepository,
+        List<JdbcLinkUpdater> linkUpdaters
+    ) {
+        return new JdbcLinkUpdaterService(
+            jdbcLinkRepository,
+            linkUpdaters
         );
     }
 }

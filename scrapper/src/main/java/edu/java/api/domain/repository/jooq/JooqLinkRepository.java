@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jooq;
 
-import edu.java.api.domain.dto.Link;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.dto.LinkDto;
 import edu.java.exceptions.NotFoundException;
 import java.net.URI;
 import java.sql.Timestamp;
@@ -16,10 +15,9 @@ import static edu.java.api.domain.jooq.Tables.LINK;
 
 @Repository
 @RequiredArgsConstructor
-public class JooqLinkRepository implements LinkRepository {
+public class JooqLinkRepository {
     private final DSLContext dslContext;
 
-    @Override
     public Long add(URI link) {
         return dslContext.insertInto(LINK, LINK.URL, LINK.UPDATED_AT, LINK.CHECKED_AT)
             .values(link.toString(), OffsetDateTime.now(), OffsetDateTime.now())
@@ -28,7 +26,6 @@ public class JooqLinkRepository implements LinkRepository {
             .map(r -> r.get(LINK.ID));
     }
 
-    @Override
     public void remove(URI link) {
         int deletedRow = dslContext.deleteFrom(LINK)
             .where(LINK.URL.eq(link.toString()))
@@ -41,7 +38,6 @@ public class JooqLinkRepository implements LinkRepository {
         }
     }
 
-    @Override
     public void updateLink(URI url, OffsetDateTime updatedAt) {
         dslContext.update(LINK)
             .set(LINK.UPDATED_AT, updatedAt)
@@ -50,7 +46,6 @@ public class JooqLinkRepository implements LinkRepository {
             .execute();
     }
 
-    @Override
     public void setCheckedAt(URI checkedLink) {
         dslContext.update(LINK)
             .set(LINK.CHECKED_AT, OffsetDateTime.now())
@@ -58,11 +53,10 @@ public class JooqLinkRepository implements LinkRepository {
             .execute();
     }
 
-    @Override
-    public List<Link> findAll() {
+    public List<LinkDto> findAll() {
         return dslContext.selectFrom(LINK)
             .fetch()
-            .map(r -> new Link(
+            .map(r -> new LinkDto(
                 r.getId(),
                 URI.create(r.getUrl()),
                 r.getUpdatedAt(),
@@ -70,7 +64,6 @@ public class JooqLinkRepository implements LinkRepository {
             ));
     }
 
-    @Override
     public Long findByUrl(URI link) {
         return dslContext.selectFrom(LINK)
             .where(LINK.URL.eq(link.toString()))
@@ -78,15 +71,14 @@ public class JooqLinkRepository implements LinkRepository {
             .map(r -> r.get(LINK.ID));
     }
 
-    @Override
-    public List<Link> findByCheckedAt(int minutes) {
-        Field<Timestamp> diff = DSL.field("current_timestamp - checked_at", Timestamp.class);
-        Field<Timestamp> interval = DSL.field("INTERVAL ? MINUTES", Timestamp.class, minutes);
+    public List<LinkDto> findByCheckedAt(int minutes) {
+        Field<Timestamp> diff = DSL.field("CURRENT_TIMESTAMP - checked_at", Timestamp.class);
+        Field<Timestamp> interval = DSL.field("'" + minutes + "minutes'", Timestamp.class);
         return dslContext.select()
             .from(LINK)
             .where(diff.gt(interval))
             .fetch()
-            .map(r -> new Link(
+            .map(r -> new LinkDto(
                 r.get(LINK.ID),
                 URI.create(r.get(LINK.URL)),
                 r.get(LINK.UPDATED_AT),
@@ -94,7 +86,6 @@ public class JooqLinkRepository implements LinkRepository {
             ));
     }
 
-    @Override
     public boolean exists(URI url) {
         List<Long> links = dslContext.selectFrom(LINK)
             .where(LINK.URL.eq(url.toString()))

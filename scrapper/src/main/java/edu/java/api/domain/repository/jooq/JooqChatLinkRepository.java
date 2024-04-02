@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.dto.ChatLinkDto;
-import edu.java.api.domain.repository.ChatLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import java.net.URI;
@@ -14,17 +13,15 @@ import static edu.java.api.domain.jooq.Tables.LINK;
 
 @Repository
 @RequiredArgsConstructor
-public class JooqChatLinkRepository implements ChatLinkRepository {
+public class JooqChatLinkRepository {
     private final DSLContext dslContext;
 
-    @Override
     public void add(Long chatId, Long linkId) {
         dslContext.insertInto(CHAT_LINK, CHAT_LINK.CHAT_ID, CHAT_LINK.LINK_ID)
             .values(chatId, linkId)
             .execute();
     }
 
-    @Override
     public void remove(Long chatId, Long linkId) {
         int deletedRow = dslContext.deleteFrom(CHAT_LINK)
             .where(CHAT_LINK.CHAT_ID.eq(chatId).and(CHAT_LINK.LINK_ID.eq(linkId)))
@@ -37,7 +34,6 @@ public class JooqChatLinkRepository implements ChatLinkRepository {
         }
     }
 
-    @Override
     public List<ChatLinkDto> findAll() {
         return dslContext.selectFrom(CHAT_LINK)
             .fetch()
@@ -47,7 +43,6 @@ public class JooqChatLinkRepository implements ChatLinkRepository {
             ));
     }
 
-    @Override
     public List<LinkResponse> findAllByChatId(Long chatId) {
         return dslContext.select(LINK.ID, LINK.URL)
             .from(LINK)
@@ -61,7 +56,6 @@ public class JooqChatLinkRepository implements ChatLinkRepository {
             ));
     }
 
-    @Override
     public List<ChatLinkDto> findAllByLinkId(Long linkId) {
         return dslContext.selectFrom(CHAT_LINK)
             .where(CHAT_LINK.LINK_ID.eq(linkId))

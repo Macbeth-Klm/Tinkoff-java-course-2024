@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jooq;
 
 import edu.java.api.domain.jooq.tables.records.ChatRecord;
-import edu.java.api.domain.repository.ChatRepository;
 import edu.java.exceptions.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,17 +10,15 @@ import static edu.java.api.domain.jooq.Tables.CHAT;
 
 @Repository
 @RequiredArgsConstructor
-public class JooqChatRepository implements ChatRepository {
+public class JooqChatRepository {
     private final DSLContext dslContext;
 
-    @Override
     public void add(Long chatId) {
         dslContext.insertInto(CHAT, CHAT.ID)
             .values(chatId)
             .execute();
     }
 
-    @Override
     public void remove(Long chatId) {
         int deletedRow = dslContext.deleteFrom(CHAT)
             .where(CHAT.ID.eq(chatId))
@@ -34,14 +31,12 @@ public class JooqChatRepository implements ChatRepository {
         }
     }
 
-    @Override
     public List<Long> findAll() {
         return dslContext.selectFrom(CHAT)
             .fetch()
             .map(ChatRecord::getId);
     }
 
-    @Override
     public boolean isRegistered(Long chatId) {
         List<Long> chats = dslContext.selectFrom(CHAT)
             .where(CHAT.ID.eq(chatId))

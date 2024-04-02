@@ -1,7 +1,6 @@
 package edu.java.api.domain.repository.jdbc;
 
 import edu.java.api.domain.dto.ChatLinkDto;
-import edu.java.api.domain.repository.ChatLinkRepository;
 import edu.java.exceptions.NotFoundException;
 import edu.java.models.LinkResponse;
 import java.net.URI;
@@ -13,10 +12,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @SuppressWarnings("MultipleStringLiterals")
-public class JdbcChatLinkRepository implements ChatLinkRepository {
+public class JdbcChatLinkRepository {
     private final JdbcTemplate template;
 
-    @Override
     public void add(Long chatId, Long linkId) {
         template.update(
             "INSERT INTO chat_link (chat_id, link_id) VALUES (?, ?)",
@@ -25,7 +23,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         );
     }
 
-    @Override
     public void remove(Long chatId, Long linkId) {
         int deletedRow = template.update(
             "DELETE FROM chat_link WHERE chat_id = ? AND link_id = ?",
@@ -40,7 +37,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         }
     }
 
-    @Override
     public List<ChatLinkDto> findAll() {
         return template.query(
             "SELECT * FROM chat_link",
@@ -48,7 +44,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         );
     }
 
-    @Override
     public List<LinkResponse> findAllByChatId(Long chatId) {
         return template.query(
             "SELECT id, url FROM link JOIN chat_link ON link.id = chat_link.link_id WHERE chat_link.chat_id = ?",
@@ -60,7 +55,6 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
         );
     }
 
-    @Override
     public List<ChatLinkDto> findAllByLinkId(Long linkId) {
         return template.query(
             "SELECT * FROM chat_link WHERE link_id = ?",
