@@ -25,7 +25,7 @@ public class JdbcStackOverflowLinkUpdater implements JdbcLinkUpdater {
     public int process(LinkDto linkDto) {
         String[] splitLink = linkDto.url().getPath().split("/");
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        StackOverflowResponse response = stackOverflowClient.fetchQuestionUpdates(questionId)
+        StackOverflowResponse response = stackOverflowClient.retryFetchQuestionUpdates(questionId)
             .orElse(null);
         List<ChatLinkDto> chatLinkDtoList = jdbcChatLinkRepository.findAllByLinkId(linkDto.id());
         if (chatLinkDtoList.isEmpty() || response == null) {
@@ -35,7 +35,7 @@ public class JdbcStackOverflowLinkUpdater implements JdbcLinkUpdater {
         if (linkDto.updatedAt().isBefore(response.lastActivityDate())) {
             jdbcLinkRepository.updateLink(linkDto.url(), response.lastActivityDate());
             List<Long> tgChatIds = chatLinkDtoList.stream().map(ChatLinkDto::chatId).toList();
-            botClient.postUpdates(new LinkUpdate(
+            botClient.retryPostUpdates(new LinkUpdate(
                 linkDto.id(),
                 linkDto.url(),
                 getDescription(response),

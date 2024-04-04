@@ -30,7 +30,7 @@ public class TrackCommand implements Command {
             String uri = (!enteredUri.startsWith(scheme)) ? scheme + enteredUri : enteredUri;
             URI link = URI.create(uri);
             try {
-                scrapperClient.addLink(chatId, new AddLinkRequest(link));
+                scrapperClient.retryAddLink(chatId, new AddLinkRequest(link));
                 return new SendMessage(chatId, "Подписка выполнена успешно!");
             } catch (ApiException e) {
                 return new SendMessage(chatId, e.getDescription());

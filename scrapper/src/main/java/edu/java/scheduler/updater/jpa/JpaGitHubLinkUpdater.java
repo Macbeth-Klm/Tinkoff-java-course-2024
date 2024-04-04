@@ -26,7 +26,7 @@ public class JpaGitHubLinkUpdater implements JpaLinkUpdater {
         String[] splitLink = link.getUrl().split("/");
         String owner = splitLink[splitLink.length - 2];
         String repo = splitLink[splitLink.length - 1];
-        GitHubResponse response = gitHubClient.fetchRepositoryEvents(owner, repo)
+        GitHubResponse response = gitHubClient.retryFetchRepositoryEvents(owner, repo)
             .orElse(null);
         List<Long> chats = link.getChats().stream().map(Chat::getId).toList();
         if (chats.isEmpty() || response == null) {
@@ -36,7 +36,7 @@ public class JpaGitHubLinkUpdater implements JpaLinkUpdater {
         }
         if (link.getUpdatedAt().isBefore(response.createdAt())) {
             link.setUpdatedAt(response.createdAt());
-            botClient.postUpdates(new LinkUpdate(
+            botClient.retryPostUpdates(new LinkUpdate(
                 link.getId(),
                 URI.create(link.getUrl()),
                 getDescription(response),

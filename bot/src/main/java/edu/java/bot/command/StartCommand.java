@@ -23,7 +23,7 @@ public class StartCommand implements Command {
     public SendMessage handle(long chatId, String text) {
         if (text.equals(this.name())) {
             try {
-                scrapperClient.registerChat(chatId);
+                scrapperClient.retryRegisterChat(chatId);
             } catch (ApiException e) {
                 return new SendMessage(chatId, e.getDescription());
             }

@@ -25,7 +25,7 @@ public class JpaStackOverflowLinkUpdater implements JpaLinkUpdater {
     public int process(Link link) {
         String[] splitLink = link.getUrl().split("/");
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        StackOverflowResponse response = stackOverflowClient.fetchQuestionUpdates(questionId)
+        StackOverflowResponse response = stackOverflowClient.retryFetchQuestionUpdates(questionId)
             .orElse(null);
         List<Long> chats = link.getChats().stream().map(Chat::getId).toList();
         if (chats.isEmpty() || response == null) {
@@ -35,7 +35,7 @@ public class JpaStackOverflowLinkUpdater implements JpaLinkUpdater {
         }
         if (link.getUpdatedAt().isBefore(response.lastActivityDate())) {
             link.setUpdatedAt(response.lastActivityDate());
-            botClient.postUpdates(new LinkUpdate(
+            botClient.retryPostUpdates(new LinkUpdate(
                 link.getId(),
                 URI.create(link.getUrl()),
                 getDescription(response),

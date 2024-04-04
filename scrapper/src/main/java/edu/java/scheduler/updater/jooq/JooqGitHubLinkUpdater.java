@@ -26,7 +26,7 @@ public class JooqGitHubLinkUpdater implements JooqLinkUpdater {
         String[] splitLink = linkDto.url().getPath().split("/");
         String owner = splitLink[splitLink.length - 2];
         String repo = splitLink[splitLink.length - 1];
-        GitHubResponse response = gitHubClient.fetchRepositoryEvents(owner, repo)
+        GitHubResponse response = gitHubClient.retryFetchRepositoryEvents(owner, repo)
             .orElse(null);
         List<ChatLinkDto> chatLinkDtoList = jooqChatLinkRepository.findAllByLinkId(linkDto.id());
         if (chatLinkDtoList.isEmpty() || response == null) {
@@ -36,7 +36,7 @@ public class JooqGitHubLinkUpdater implements JooqLinkUpdater {
         if (linkDto.updatedAt().isBefore(response.createdAt())) {
             jooqLinkRepository.updateLink(linkDto.url(), response.createdAt());
             List<Long> tgChatIds = chatLinkDtoList.stream().map(ChatLinkDto::chatId).toList();
-            botClient.postUpdates(new LinkUpdate(
+            botClient.retryPostUpdates(new LinkUpdate(
                 linkDto.id(),
                 linkDto.url(),
                 getDescription(response),
