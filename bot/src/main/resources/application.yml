@@ -24,3 +24,6 @@ api:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+bucket:
+  queryCount: 15
