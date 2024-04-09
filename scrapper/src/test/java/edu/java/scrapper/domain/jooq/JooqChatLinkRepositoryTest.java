@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jooq;
 
-import edu.java.api.domain.dto.ChatLinkDto;
+import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.api.domain.repository.jooq.JooqChatLinkRepository;
 import edu.java.api.domain.repository.jooq.JooqChatRepository;
 import edu.java.api.domain.repository.jooq.JooqLinkRepository;

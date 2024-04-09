@@ -1,7 +1,8 @@
 package edu.java.api.domain.repository.jooq;
 
-import edu.java.api.domain.dto.LinkDto;
 import edu.java.exception.NotFoundException;
+import edu.java.model.domain.GeneralLink;
+import edu.java.model.domain.dto.LinkDto;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
@@ -53,7 +54,7 @@ public class JooqLinkRepository {
             .execute();
     }
 
-    public List<LinkDto> findAll() {
+    public List<GeneralLink> findAll() {
         return dslContext.selectFrom(LINK)
             .fetch()
             .map(r -> new LinkDto(
@@ -71,7 +72,7 @@ public class JooqLinkRepository {
             .map(r -> r.get(LINK.ID));
     }
 
-    public List<LinkDto> findByCheckedAt(int minutes) {
+    public List<GeneralLink> findByCheckedAt(int minutes) {
         Field<Timestamp> diff = DSL.field("CURRENT_TIMESTAMP - checked_at", Timestamp.class);
         Field<Timestamp> interval = DSL.field("'" + minutes + "minutes'", Timestamp.class);
         return dslContext.select()

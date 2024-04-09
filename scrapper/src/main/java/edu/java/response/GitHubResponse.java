@@ -12,7 +12,12 @@ public record GitHubResponse(
     Repo repo,
     @JsonProperty("created_at")
     OffsetDateTime createdAt
-) {
+) implements ResourceResponse {
+    @Override
+    public OffsetDateTime getUpdatedAt() {
+        return createdAt;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Actor(
         String login

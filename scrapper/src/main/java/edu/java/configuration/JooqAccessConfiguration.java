@@ -10,10 +10,10 @@ import edu.java.api.service.jooq.JooqTgChatService;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
-import edu.java.scheduler.service.LinkUpdaterService;
+import edu.java.scheduler.service.SchedulerService;
 import edu.java.scheduler.service.jooq.JooqLinkUpdaterService;
+import edu.java.scheduler.updater.LinkUpdater;
 import edu.java.scheduler.updater.jooq.JooqGitHubLinkUpdater;
-import edu.java.scheduler.updater.jooq.JooqLinkUpdater;
 import edu.java.scheduler.updater.jooq.JooqStackOverflowLinkUpdater;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,7 +42,7 @@ public class JooqAccessConfiguration {
     }
 
     @Bean
-    JooqLinkUpdater jooqGitHubLinkUpdater(
+    LinkUpdater jooqGitHubLinkUpdater(
         JooqLinkRepository jooqLinkRepository,
         JooqChatLinkRepository jooqChatLinkRepository,
         GitHubClient gitHubClient,
@@ -57,7 +57,7 @@ public class JooqAccessConfiguration {
     }
 
     @Bean
-    JooqLinkUpdater jooqStackOverflowLinkUpdater(
+    LinkUpdater jooqStackOverflowLinkUpdater(
         JooqLinkRepository jooqLinkRepository,
         JooqChatLinkRepository jooqChatLinkRepository,
         StackOverflowClient stackOverflowClient,
@@ -72,9 +72,9 @@ public class JooqAccessConfiguration {
     }
 
     @Bean
-    LinkUpdaterService linkUpdaterService(
+    SchedulerService schedulerService(
         JooqLinkRepository jooqLinkRepository,
-        List<JooqLinkUpdater> linkUpdaters
+        List<LinkUpdater> linkUpdaters
     ) {
         return new JooqLinkUpdaterService(
             jooqLinkRepository,

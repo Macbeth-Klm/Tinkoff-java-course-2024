@@ -3,51 +3,70 @@ package edu.java.scheduler.updater.jpa;
 import edu.java.api.domain.repository.jpa.JpaLinkRepository;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
-import edu.java.model.LinkUpdate;
-import edu.java.model.jpa.Chat;
-import edu.java.model.jpa.Link;
+import edu.java.model.domain.GeneralLink;
+import edu.java.model.domain.jpa.Chat;
+import edu.java.model.domain.jpa.Link;
+import edu.java.response.ResourceResponse;
 import edu.java.response.StackOverflowResponse;
-import java.net.URI;
+import edu.java.scheduler.updater.LinkUpdater;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class JpaStackOverflowLinkUpdater implements JpaLinkUpdater {
+public class JpaStackOverflowLinkUpdater extends LinkUpdater {
     @Getter
     private final String host = "stackoverflow.com";
     private final JpaLinkRepository jpaLinkRepository;
     private final StackOverflowClient stackOverflowClient;
-    private final BotClient botClient;
 
-    @Override
-    public int process(Link link) {
-        String[] splitLink = link.getUrl().split("/");
-        long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        StackOverflowResponse response = stackOverflowClient.fetchQuestionUpdates(questionId)
-            .orElse(null);
-        List<Long> chats = link.getChats().stream().map(Chat::getId).toList();
-        if (chats.isEmpty() || response == null) {
-            jpaLinkRepository.delete(link);
-            jpaLinkRepository.flush();
-            return 1;
-        }
-        if (link.getUpdatedAt().isBefore(response.lastActivityDate())) {
-            link.setUpdatedAt(response.lastActivityDate());
-            botClient.postUpdates(new LinkUpdate(
-                link.getId(),
-                URI.create(link.getUrl()),
-                getDescription(response),
-                chats
-            ));
-        }
-        link.setCheckedAt(OffsetDateTime.now());
-        jpaLinkRepository.saveAndFlush(link);
-        return 1;
+    public JpaStackOverflowLinkUpdater(
+        JpaLinkRepository jpaLinkRepository,
+        StackOverflowClient stackOverflowClient,
+        BotClient botClient
+    ) {
+        super(botClient);
+        this.jpaLinkRepository = jpaLinkRepository;
+        this.stackOverflowClient = stackOverflowClient;
     }
 
-    private String getDescription(StackOverflowResponse response) {
+    @Override
+    protected ResourceResponse getResponse(GeneralLink link) {
+        String[] splitLink = link.getUrl().getPath().split("/");
+        long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
+        return stackOverflowClient.fetchQuestionUpdates(questionId)
+            .orElse(null);
+    }
+
+    @Override
+    protected List<Long> getTrackingTgChats(GeneralLink link) {
+        Link jpaLink = (Link) link;
+        return jpaLink.getChats().stream().map(Chat::getId).toList();
+    }
+
+    @Override
+    protected void removeLink(GeneralLink link) {
+        Link jpaLink = (Link) link;
+        jpaLinkRepository.delete(jpaLink);
+        jpaLinkRepository.flush();
+    }
+
+    @Override
+    protected void setUpdatedAt(GeneralLink link, OffsetDateTime updatedAt) {
+        Link jpaLink = (Link) link;
+        jpaLink.setUpdatedAt(updatedAt);
+        jpaLinkRepository.saveAndFlush(jpaLink);
+    }
+
+    @Override
+    protected void setCheckedAt(GeneralLink link) {
+        Link jpaLink = (Link) link;
+        jpaLink.setCheckedAt(OffsetDateTime.now());
+        jpaLinkRepository.saveAndFlush(jpaLink);
+    }
+
+    @Override
+    protected String getDescription(ResourceResponse res) {
+        StackOverflowResponse response = (StackOverflowResponse) res;
         return "Обновление на StackOverflow!\n"
             + "На вопрос №" + response.questionId() + " пришёл ответ №" + response.answerId()
             + " от пользователя " + response.owner().displayName();

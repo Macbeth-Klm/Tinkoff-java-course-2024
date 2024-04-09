@@ -1,32 +1,25 @@
 package edu.java.scheduler.service.jpa;
 
 import edu.java.api.domain.repository.jpa.JpaLinkRepository;
-import edu.java.model.jpa.Link;
-import edu.java.scheduler.service.LinkUpdaterService;
-import edu.java.scheduler.updater.jpa.JpaLinkUpdater;
+import edu.java.model.domain.GeneralLink;
+import edu.java.scheduler.service.SchedulerService;
+import edu.java.scheduler.updater.LinkUpdater;
 import java.time.Duration;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
-public class JpaLinkUpdaterService implements LinkUpdaterService {
+public class JpaLinkUpdaterService extends SchedulerService {
     private final JpaLinkRepository jpaLinkRepository;
-    private final List<JpaLinkUpdater> linkUpdaters;
 
-    @Transactional
-    public int update() {
-        int count = 0;
-        List<Link> links = jpaLinkRepository.findLinkByCheckedAt(Duration.ofMinutes(1));
-        for (var link : links) {
-            String host = link.getUrl().split("/")[2];
-            for (var linkUpdater : linkUpdaters) {
-                if (host.equals(linkUpdater.getHost())) {
-                    count += linkUpdater.process(link);
-                    break;
-                }
-            }
-        }
-        return count;
+    public JpaLinkUpdaterService(
+        JpaLinkRepository jpaLinkRepository,
+        List<LinkUpdater> linkUpdaters
+    ) {
+        super(linkUpdaters);
+        this.jpaLinkRepository = jpaLinkRepository;
+    }
+
+    @Override
+    protected List<GeneralLink> getLinks() {
+        return jpaLinkRepository.findLinkByCheckedAt(Duration.ofMinutes(1));
     }
 }

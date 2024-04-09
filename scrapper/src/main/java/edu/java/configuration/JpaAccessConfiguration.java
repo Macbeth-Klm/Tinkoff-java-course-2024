@@ -9,10 +9,10 @@ import edu.java.api.service.jpa.JpaTgChatService;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
-import edu.java.scheduler.service.LinkUpdaterService;
+import edu.java.scheduler.service.SchedulerService;
 import edu.java.scheduler.service.jpa.JpaLinkUpdaterService;
+import edu.java.scheduler.updater.LinkUpdater;
 import edu.java.scheduler.updater.jpa.JpaGitHubLinkUpdater;
-import edu.java.scheduler.updater.jpa.JpaLinkUpdater;
 import edu.java.scheduler.updater.jpa.JpaStackOverflowLinkUpdater;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,7 +39,7 @@ public class JpaAccessConfiguration {
     }
 
     @Bean
-    JpaLinkUpdater jpaGitHubLinkUpdater(
+    LinkUpdater jpaGitHubLinkUpdater(
         JpaLinkRepository jpaLinkRepository,
         GitHubClient gitHubClient,
         BotClient botClient
@@ -52,7 +52,7 @@ public class JpaAccessConfiguration {
     }
 
     @Bean
-    JpaLinkUpdater jpaStackOverflowLinkUpdater(
+    LinkUpdater jpaStackOverflowLinkUpdater(
         JpaLinkRepository jpaLinkRepository,
         StackOverflowClient stackOverflowClient,
         BotClient botClient
@@ -65,9 +65,9 @@ public class JpaAccessConfiguration {
     }
 
     @Bean
-    LinkUpdaterService linkUpdaterService(
+    SchedulerService schedulerService(
         JpaLinkRepository jpaLinkRepository,
-        List<JpaLinkUpdater> linkUpdaters
+        List<LinkUpdater> linkUpdaters
     ) {
         return new JpaLinkUpdaterService(
             jpaLinkRepository,

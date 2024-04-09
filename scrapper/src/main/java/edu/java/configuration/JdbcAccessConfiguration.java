@@ -10,10 +10,10 @@ import edu.java.api.service.jdbc.JdbcTgChatService;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
-import edu.java.scheduler.service.LinkUpdaterService;
+import edu.java.scheduler.service.SchedulerService;
 import edu.java.scheduler.service.jdbc.JdbcLinkUpdaterService;
+import edu.java.scheduler.updater.LinkUpdater;
 import edu.java.scheduler.updater.jdbc.JdbcGitHubLinkUpdater;
-import edu.java.scheduler.updater.jdbc.JdbcLinkUpdater;
 import edu.java.scheduler.updater.jdbc.JdbcStackOverflowLinkUpdater;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,7 +42,7 @@ public class JdbcAccessConfiguration {
     }
 
     @Bean
-    JdbcLinkUpdater jdbcGitHubLinkUpdater(
+    LinkUpdater jdbcGitHubLinkUpdater(
         JdbcLinkRepository jdbcLinkRepository,
         JdbcChatLinkRepository jdbcChatLinkRepository,
         GitHubClient gitHubClient,
@@ -57,7 +57,7 @@ public class JdbcAccessConfiguration {
     }
 
     @Bean
-    JdbcLinkUpdater jdbcStackOverflowLinkUpdater(
+    LinkUpdater jdbcStackOverflowLinkUpdater(
         JdbcLinkRepository jdbcLinkRepository,
         JdbcChatLinkRepository jdbcChatLinkRepository,
         StackOverflowClient stackOverflowClient,
@@ -72,9 +72,9 @@ public class JdbcAccessConfiguration {
     }
 
     @Bean
-    LinkUpdaterService linkUpdaterService(
+    SchedulerService schedulerService(
         JdbcLinkRepository jdbcLinkRepository,
-        List<JdbcLinkUpdater> linkUpdaters
+        List<LinkUpdater> linkUpdaters
     ) {
         return new JdbcLinkUpdaterService(
             jdbcLinkRepository,
