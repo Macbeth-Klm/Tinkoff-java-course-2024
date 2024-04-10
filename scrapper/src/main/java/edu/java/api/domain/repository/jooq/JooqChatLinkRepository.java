@@ -1,8 +1,8 @@
 package edu.java.api.domain.repository.jooq;
 
-import edu.java.api.domain.dto.ChatLinkDto;
 import edu.java.exception.NotFoundException;
 import edu.java.model.LinkResponse;
+import edu.java.model.domain.dto.ChatLinkDto;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

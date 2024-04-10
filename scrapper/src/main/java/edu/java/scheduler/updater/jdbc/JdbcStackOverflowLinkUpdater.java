@@ -1,55 +1,71 @@
 package edu.java.scheduler.updater.jdbc;
 
-import edu.java.api.domain.dto.ChatLinkDto;
-import edu.java.api.domain.dto.LinkDto;
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.client.BotClient.BotClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
-import edu.java.model.LinkUpdate;
+import edu.java.model.domain.GeneralLink;
+import edu.java.model.domain.dto.ChatLinkDto;
+import edu.java.response.ResourceResponse;
 import edu.java.response.StackOverflowResponse;
+import edu.java.scheduler.updater.LinkUpdater;
+import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class JdbcStackOverflowLinkUpdater implements JdbcLinkUpdater {
+public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
     @Getter
     private final String host = "stackoverflow.com";
     private final JdbcLinkRepository jdbcLinkRepository;
     private final JdbcChatLinkRepository jdbcChatLinkRepository;
     private final StackOverflowClient stackOverflowClient;
-    private final BotClient botClient;
 
-    @Override
-    public int process(LinkDto linkDto) {
-        String[] splitLink = linkDto.url().getPath().split("/");
-        long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        StackOverflowResponse response = stackOverflowClient.retryFetchQuestionUpdates(questionId)
-            .orElse(null);
-        List<ChatLinkDto> chatLinkDtoList = jdbcChatLinkRepository.findAllByLinkId(linkDto.id());
-        if (chatLinkDtoList.isEmpty() || response == null) {
-            jdbcLinkRepository.remove(linkDto.url());
-            return 1;
-        }
-        if (linkDto.updatedAt().isBefore(response.lastActivityDate())) {
-            jdbcLinkRepository.updateLink(linkDto.url(), response.lastActivityDate());
-            List<Long> tgChatIds = chatLinkDtoList.stream().map(ChatLinkDto::chatId).toList();
-            botClient.retryPostUpdates(new LinkUpdate(
-                linkDto.id(),
-                linkDto.url(),
-                getDescription(response),
-                tgChatIds
-            ));
-        } else {
-            jdbcLinkRepository.setCheckedAt(linkDto.url());
-        }
-        return 1;
+    public JdbcStackOverflowLinkUpdater(
+        JdbcLinkRepository jdbcLinkRepository,
+        JdbcChatLinkRepository jdbcChatLinkRepository,
+        StackOverflowClient stackOverflowClient,
+        BotClient botClient
+    ) {
+        super(botClient);
+        this.jdbcLinkRepository = jdbcLinkRepository;
+        this.jdbcChatLinkRepository = jdbcChatLinkRepository;
+        this.stackOverflowClient = stackOverflowClient;
     }
 
-    private String getDescription(StackOverflowResponse response) {
+    @Override
+    protected ResourceResponse getResponse(GeneralLink link) {
+        String[] splitLink = link.getUrl().getPath().split("/");
+        long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
+        return stackOverflowClient.fetchQuestionUpdates(questionId)
+            .orElse(null);
+    }
+
+    @Override
+    protected List<Long> getTrackingTgChats(GeneralLink link) {
+        return jdbcChatLinkRepository.findAllByLinkId(link.getId())
+            .stream().map(ChatLinkDto::chatId).toList();
+    }
+
+    @Override
+    protected void removeLink(GeneralLink link) {
+        jdbcLinkRepository.remove(link.getUrl());
+    }
+
+    @Override
+    protected void setUpdatedAt(GeneralLink link, OffsetDateTime updatedAt) {
+        jdbcLinkRepository.updateLink(link.getUrl(), updatedAt);
+    }
+
+    @Override
+    protected void setCheckedAt(GeneralLink link) {
+        jdbcLinkRepository.setCheckedAt(link.getUrl());
+    }
+
+    @Override
+    protected String getDescription(ResourceResponse response) {
+        StackOverflowResponse res = (StackOverflowResponse) response;
         return "Обновление на StackOverflow!\n"
-            + "На вопрос №" + response.questionId() + " пришёл ответ №" + response.answerId()
-            + " от пользователя " + response.owner().displayName();
+            + "На вопрос №" + res.questionId() + " пришёл ответ №" + res.answerId()
+            + " от пользователя " + res.owner().displayName();
     }
 }

@@ -1,6 +1,6 @@
 package edu.java.scheduler;
 
-import edu.java.scheduler.service.LinkUpdaterService;
+import edu.java.scheduler.service.SchedulerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "app.scheduler.enable", havingValue = "true")
 public class LinkUpdaterScheduler {
-    private final LinkUpdaterService linkUpdaterService;
+    private final SchedulerService schedulerService;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     public void update() {
         log.info("START UPDATE");
-        int checkedLinksCount = linkUpdaterService.update();
+        int checkedLinksCount = schedulerService.update();
         log.info("{} links have been checked", checkedLinksCount);
     }
 }

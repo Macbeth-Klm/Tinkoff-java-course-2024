@@ -1,6 +1,6 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.api.domain.dto.ChatLinkDto;
+import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;

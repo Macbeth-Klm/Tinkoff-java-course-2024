@@ -6,8 +6,8 @@ import edu.java.api.service.LinkService;
 import edu.java.exception.BadRequestException;
 import edu.java.exception.NotFoundException;
 import edu.java.model.LinkResponse;
-import edu.java.model.jpa.Chat;
-import edu.java.model.jpa.Link;
+import edu.java.model.domain.jpa.Chat;
+import edu.java.model.domain.jpa.Link;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -35,15 +35,15 @@ public class JpaLinkService implements LinkService {
                     registrationExceptionDescription
                 )
             );
-        var links = chat.getLinks().stream().map(Link::getUrl).toList();
-        if (links.contains(urlToString)) {
+        List<URI> links = chat.getLinks().stream().map(Link::getUrl).toList();
+        if (links.contains(url)) {
             throw new DuplicateKeyException("Вы уже отслеживаете данный ресурс!");
         }
 
-        Link link = jpaLinkRepository.findLinkByUrl(urlToString).orElseGet(
+        Link link = (Link) jpaLinkRepository.findLinkByUrl(urlToString).orElseGet(
             () -> {
                 Link l = new Link();
-                l.setUrl(urlToString);
+                l.setUrl(url);
                 l.setUpdatedAt(OffsetDateTime.now());
                 l.setCheckedAt(OffsetDateTime.now());
                 l.setChats(new HashSet<>());
@@ -70,15 +70,15 @@ public class JpaLinkService implements LinkService {
                     registrationExceptionDescription
                 )
             );
-        var links = chat.getLinks().stream().map(Link::getUrl).toList();
-        if (!links.contains(urlToString)) {
+        List<URI> links = chat.getLinks().stream().map(Link::getUrl).toList();
+        if (!links.contains(url)) {
             throw new NotFoundException(
                 "User with the given chat id is not tracking this link",
                 "Пользователь не отслеживает данную ссылку"
             );
         }
 
-        Link link = jpaLinkRepository.findLinkByUrl(urlToString).get();
+        Link link = (Link) jpaLinkRepository.findLinkByUrl(urlToString).get();
         chat.removeLink(link);
         jpaChatRepository.saveAndFlush(chat);
         link = jpaLinkRepository.saveAndFlush(link);
@@ -99,6 +99,6 @@ public class JpaLinkService implements LinkService {
                 )
             );
         return chat.getLinks().stream()
-            .map(link -> new LinkResponse(link.getId(), URI.create(link.getUrl()))).toList();
+            .map(link -> new LinkResponse(link.getId(), link.getUrl())).toList();
     }
 }

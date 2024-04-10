@@ -1,6 +1,7 @@
 package edu.java.api.domain.repository.jpa;
 
-import edu.java.model.jpa.Link;
+import edu.java.model.domain.GeneralLink;
+import edu.java.model.domain.jpa.Link;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaLinkRepository extends JpaRepository<Link, Long> {
-    Optional<Link> findLinkByUrl(String uri);
+    Optional<GeneralLink> findLinkByUrl(String uri);
 
     @Query(
         value = "SELECT l FROM Link l WHERE CURRENT_TIMESTAMP - l.checkedAt > :min"
     )
-    List<Link> findLinkByCheckedAt(@Param("min") Duration minutes);
+    List<GeneralLink> findLinkByCheckedAt(@Param("min") Duration minutes);
 }

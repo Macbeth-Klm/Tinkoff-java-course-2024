@@ -13,7 +13,12 @@ public record StackOverflowResponse(
     long answerId,
     @JsonProperty("question_id")
     long questionId
-) {
+) implements ResourceResponse {
+    @Override
+    public OffsetDateTime getUpdatedAt() {
+        return lastActivityDate;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Owner(
         @JsonProperty("display_name")

@@ -1,8 +1,8 @@
 package edu.java.api.domain.repository.jdbc;
 
-import edu.java.api.domain.dto.LinkDto;
 import edu.java.api.domain.mapper.LinkDtoRowMapper;
 import edu.java.exception.NotFoundException;
+import edu.java.model.domain.GeneralLink;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -50,7 +50,7 @@ public class JdbcLinkRepository {
         );
     }
 
-    public List<LinkDto> findAll() {
+    public List<GeneralLink> findAll() {
         return template.query(
             "SELECT * FROM link",
             new LinkDtoRowMapper()
@@ -65,7 +65,7 @@ public class JdbcLinkRepository {
         );
     }
 
-    public List<LinkDto> findByCheckedAt(int minutes) {
+    public List<GeneralLink> findByCheckedAt(int minutes) {
         return template.query(
             "SELECT * FROM link WHERE CURRENT_TIMESTAMP - checked_at > '" + minutes + " minutes'",
             new LinkDtoRowMapper()
