@@ -1,11 +1,11 @@
 package edu.java.bot.client;
 
-import edu.java.exceptions.ApiException;
-import edu.java.models.AddLinkRequest;
-import edu.java.models.ApiErrorResponse;
-import edu.java.models.LinkResponse;
-import edu.java.models.ListLinksResponse;
-import edu.java.models.RemoveLinkRequest;
+import edu.java.exception.ApiException;
+import edu.java.model.AddLinkRequest;
+import edu.java.model.ApiErrorResponse;
+import edu.java.model.LinkResponse;
+import edu.java.model.ListLinksResponse;
+import edu.java.model.RemoveLinkRequest;
 import java.util.Optional;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

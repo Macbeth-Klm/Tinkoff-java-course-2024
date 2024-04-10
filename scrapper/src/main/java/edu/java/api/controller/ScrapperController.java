@@ -2,11 +2,11 @@ package edu.java.api.controller;
 
 import edu.java.api.service.LinkService;
 import edu.java.api.service.TgChatService;
-import edu.java.exceptions.BadRequestException;
-import edu.java.models.AddLinkRequest;
-import edu.java.models.LinkResponse;
-import edu.java.models.ListLinksResponse;
-import edu.java.models.RemoveLinkRequest;
+import edu.java.exception.BadRequestException;
+import edu.java.model.AddLinkRequest;
+import edu.java.model.LinkResponse;
+import edu.java.model.ListLinksResponse;
+import edu.java.model.RemoveLinkRequest;
 import edu.java.pattern.LinkPattern;
 import java.net.URI;
 import java.util.List;
@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 public class ScrapperController {
-    private final TgChatService jdbcTgChatService;
-    private final LinkService jdbcLinkService;
+    private final TgChatService tgChatService;
+    private final LinkService linkService;
     private static final String BAD_REQ_EXCEPTION_NAME = "Invalid HTTP-request parameters";
     private static final String BAD_REQ_EXCEPTION_DESCRIPTION = "Некорректные параметры запроса";
 
@@ -33,7 +33,7 @@ public class ScrapperController {
     public ResponseEntity<Void> registerChat(@PathVariable("id") Long id) {
         idValidation(id);
         try {
-            jdbcTgChatService.register(id);
+            tgChatService.register(id);
         } catch (DuplicateKeyException ex) {
             throw new BadRequestException(
                 "The user is already registered",
@@ -48,7 +48,7 @@ public class ScrapperController {
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable("id") Long id) {
         idValidation(id);
-        jdbcTgChatService.unregister(id);
+        tgChatService.unregister(id);
         return ResponseEntity
             .ok()
             .build();
@@ -57,7 +57,7 @@ public class ScrapperController {
     @GetMapping("/links")
     public ResponseEntity<ListLinksResponse> getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
         idValidation(id);
-        List<LinkResponse> linkResponseList = jdbcLinkService.listAll(id);
+        List<LinkResponse> linkResponseList = linkService.listAll(id);
         ListLinksResponse response = new ListLinksResponse(linkResponseList, linkResponseList.size());
         return ResponseEntity
             .ok()
@@ -73,7 +73,7 @@ public class ScrapperController {
         URI link = req.link();
         urlValidation(link);
         try {
-            LinkResponse response = jdbcLinkService.add(id, link);
+            LinkResponse response = linkService.add(id, link);
             return ResponseEntity
                 .ok()
                 .body(response);
@@ -93,7 +93,7 @@ public class ScrapperController {
         idValidation(id);
         URI link = req.link();
         urlValidation(link);
-        LinkResponse response = jdbcLinkService.remove(id, link);
+        LinkResponse response = linkService.remove(id, link);
         return ResponseEntity
             .ok()
             .body(response);

@@ -1,8 +1,8 @@
 package edu.java.api.exceptionhandler;
 
-import edu.java.exceptions.BadRequestException;
-import edu.java.exceptions.NotFoundException;
-import edu.java.models.ApiErrorResponse;
+import edu.java.exception.BadRequestException;
+import edu.java.exception.NotFoundException;
+import edu.java.model.ApiErrorResponse;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
 package edu.java.scrapper.domain.jooq;
 
-import edu.java.api.domain.dto.Link;
+import edu.java.model.domain.GeneralLink;
 import edu.java.api.domain.repository.jooq.JooqLinkRepository;
-import edu.java.exceptions.NotFoundException;
+import edu.java.exception.NotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;
@@ -30,8 +30,8 @@ public class JooqLinkRepositoryTest extends IntegrationTest {
         URI link = URI.create("https://github.com/Macbeth-Klm/Tinkoff-java-course-2024");
 
         jooqLinkRepository.add(link);
-        List<Link> links = jooqLinkRepository.findAll();
-        List<URI> uris = links.stream().map(Link::url).toList();
+        List<GeneralLink> linkDtoList = jooqLinkRepository.findAll();
+        List<URI> uris = linkDtoList.stream().map(GeneralLink::getUrl).toList();
         assertThat(uris).contains(link);
     }
 

@@ -1,11 +1,11 @@
 package edu.java.scrapper.domain.jdbc;
 
-import edu.java.api.domain.dto.ChatLinkDto;
+import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
-import edu.java.exceptions.NotFoundException;
-import edu.java.models.LinkResponse;
+import edu.java.exception.NotFoundException;
+import edu.java.model.LinkResponse;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;

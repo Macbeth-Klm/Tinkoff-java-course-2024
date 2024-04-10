@@ -1,11 +1,11 @@
 package edu.java.scrapper.domain.jooq;
 
-import edu.java.api.domain.dto.ChatLinkDto;
+import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.api.domain.repository.jooq.JooqChatLinkRepository;
 import edu.java.api.domain.repository.jooq.JooqChatRepository;
 import edu.java.api.domain.repository.jooq.JooqLinkRepository;
-import edu.java.exceptions.NotFoundException;
-import edu.java.models.LinkResponse;
+import edu.java.exception.NotFoundException;
+import edu.java.model.LinkResponse;
 import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.util.List;

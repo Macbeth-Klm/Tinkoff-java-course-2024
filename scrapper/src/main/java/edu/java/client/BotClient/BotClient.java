@@ -1,8 +1,8 @@
 package edu.java.client.BotClient;
 
-import edu.java.exceptions.ApiException;
-import edu.java.models.ApiErrorResponse;
-import edu.java.models.LinkUpdate;
+import edu.java.exception.ApiException;
+import edu.java.model.ApiErrorResponse;
+import edu.java.model.LinkUpdate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;

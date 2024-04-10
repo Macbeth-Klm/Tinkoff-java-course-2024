@@ -1,24 +1,22 @@
 package edu.java.api.service.jdbc;
 
-import edu.java.api.domain.repository.ChatLinkRepository;
-import edu.java.api.domain.repository.ChatRepository;
-import edu.java.api.domain.repository.LinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
+import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
+import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
 import edu.java.api.service.LinkService;
-import edu.java.exceptions.NotFoundException;
-import edu.java.models.LinkResponse;
+import edu.java.exception.NotFoundException;
+import edu.java.model.LinkResponse;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
-    private final ChatRepository jdbcChatRepository;
-    private final LinkRepository jdbcLinkRepository;
-    private final ChatLinkRepository jdbcChatLinkRepository;
+    private final JdbcChatRepository jdbcChatRepository;
+    private final JdbcLinkRepository jdbcLinkRepository;
+    private final JdbcChatLinkRepository jdbcChatLinkRepository;
 
     @Override
     @Transactional

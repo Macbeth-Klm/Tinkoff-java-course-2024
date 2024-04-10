@@ -4,15 +4,13 @@ import edu.java.api.domain.repository.jooq.JooqChatLinkRepository;
 import edu.java.api.domain.repository.jooq.JooqChatRepository;
 import edu.java.api.domain.repository.jooq.JooqLinkRepository;
 import edu.java.api.service.LinkService;
-import edu.java.exceptions.NotFoundException;
-import edu.java.models.LinkResponse;
+import edu.java.exception.NotFoundException;
+import edu.java.model.LinkResponse;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 public class JooqLinkService implements LinkService {
     private final JooqChatRepository jooqChatRepository;
