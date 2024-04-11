@@ -23,10 +23,7 @@ public record ApplicationConfig(
 
     public record Kafka(
         String bootstrapServers,
-        Producer producer,
         String topicName
     ) {
-        public record Producer(String keySerializer, String valueSerializer) {
-        }
     }
 }

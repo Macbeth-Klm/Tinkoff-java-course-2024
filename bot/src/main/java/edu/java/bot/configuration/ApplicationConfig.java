@@ -16,10 +16,9 @@ public record ApplicationConfig(
     public record Kafka(
         boolean useQueue,
         String bootstrapServers,
-        Consumer consumer,
+        String groupId,
         String topicName,
         String badResponseTopicName
     ) {
-        public record Consumer(String groupId, String mappings) {}
     }
 }
