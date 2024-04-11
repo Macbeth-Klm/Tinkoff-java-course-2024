@@ -1,4 +1,4 @@
-package edu.java.bot.configuration;
+package edu.java.configuration.bucket;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;

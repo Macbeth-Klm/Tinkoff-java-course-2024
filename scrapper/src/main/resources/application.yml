@@ -4,6 +4,13 @@ app:
     interval: 15000
     force-check-delay: 15000
   database-access-type: jpa
+  useQueue: true
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topicName: bot-updates
 
 spring:
   liquibase:

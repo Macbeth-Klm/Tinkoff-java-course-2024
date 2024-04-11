@@ -1,5 +1,12 @@
 app:
   telegram-token: ${TELEGRAM_TOKEN}
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: bot-messages
+      mappings: edu.java.model.LinkUpdate:edu.java.model.LinkUpdate
+    topicName: bot-updates
+    badResponseTopicName: bot-updates-dlq
 
 spring:
   application:
