@@ -15,7 +15,7 @@ public class ScrapperQueueConsumer {
     private final BotService botService;
     private final KafkaTemplate<String, LinkUpdate> dlqKafkaTemplate;
 
-    @KafkaListener(topics = "${app.kafka.topicName}", groupId = "${app.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${app.kafka.topicName}", groupId = "${app.kafka.group-id}")
     public void listen(LinkUpdate update) {
         try {
             botService.postUpdate(update);
