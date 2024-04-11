@@ -2,13 +2,13 @@ package edu.java.scheduler.updater.jooq;
 
 import edu.java.api.domain.repository.jooq.JooqChatLinkRepository;
 import edu.java.api.domain.repository.jooq.JooqLinkRepository;
-import edu.java.client.BotClient.BotClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
 import edu.java.model.domain.GeneralLink;
 import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.response.ResourceResponse;
 import edu.java.response.StackOverflowResponse;
 import edu.java.scheduler.updater.LinkUpdater;
+import edu.java.scheduler.updater.NotificationSender;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -24,9 +24,9 @@ public class JooqStackOverflowLinkUpdater extends LinkUpdater {
         JooqLinkRepository jooqLinkRepository,
         JooqChatLinkRepository jooqChatLinkRepository,
         StackOverflowClient stackOverflowClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
-        super(botClient);
+        super(notificationSender);
         this.jooqLinkRepository = jooqLinkRepository;
         this.jooqChatLinkRepository = jooqChatLinkRepository;
         this.stackOverflowClient = stackOverflowClient;
