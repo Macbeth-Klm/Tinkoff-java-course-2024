@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class LinkUpdater {
-    private final BotClient botClient;
+    private final NotificationSender notificationSender;
 
     public abstract String getHost();
 
@@ -24,7 +24,7 @@ public abstract class LinkUpdater {
         OffsetDateTime responseUpdatedAt = res.getUpdatedAt();
         if (link.getUpdatedAt().isBefore(responseUpdatedAt)) {
             setUpdatedAt(link, responseUpdatedAt);
-            botClient.postUpdates(new LinkUpdate(
+            notificationSender.sendUpdate(new LinkUpdate(
                 link.getId(),
                 link.getUrl(),
                 getDescription(res),
