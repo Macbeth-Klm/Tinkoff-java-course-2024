@@ -1,6 +1,5 @@
 package edu.java.scheduler.updater;
 
-import edu.java.client.BotClient.BotClient;
 import edu.java.model.LinkUpdate;
 import edu.java.model.domain.GeneralLink;
 import edu.java.response.ResourceResponse;

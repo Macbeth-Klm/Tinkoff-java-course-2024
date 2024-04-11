@@ -1,4 +1,4 @@
-package edu.java.client;
+package edu.java.client.Kafka;
 
 import edu.java.configuration.ApplicationConfig;
 import edu.java.model.LinkUpdate;
