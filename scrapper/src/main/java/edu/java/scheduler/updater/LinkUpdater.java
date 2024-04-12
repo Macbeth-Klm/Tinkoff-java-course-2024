@@ -24,7 +24,7 @@ public abstract class LinkUpdater {
         OffsetDateTime responseUpdatedAt = res.getUpdatedAt();
         if (link.getUpdatedAt().isBefore(responseUpdatedAt)) {
             setUpdatedAt(link, responseUpdatedAt);
-            botClient.postUpdates(new LinkUpdate(
+            botClient.retryPostUpdates(new LinkUpdate(
                 link.getId(),
                 link.getUrl(),
                 getDescription(res),

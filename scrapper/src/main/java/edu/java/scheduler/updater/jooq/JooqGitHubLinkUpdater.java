@@ -37,7 +37,7 @@ public class JooqGitHubLinkUpdater extends LinkUpdater {
         String[] splitLink = link.getUrl().getPath().split("/");
         String owner = splitLink[splitLink.length - 2];
         String repo = splitLink[splitLink.length - 1];
-        return gitHubClient.fetchRepositoryEvents(owner, repo)
+        return gitHubClient.retryFetchRepositoryEvents(owner, repo)
             .orElse(null);
     }
 
