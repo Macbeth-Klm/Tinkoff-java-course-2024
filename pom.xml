@@ -35,9 +35,8 @@
         <checkstyle.version>10.12.7</checkstyle.version>
 
         <!-- Metrics -->
-        <spring-actuator.version>3.2.1</spring-actuator.version>
-        <micrometer-prometheus.version>1.12.2</micrometer-prometheus.version>
-        <micrometer-bridgebrave.version>1.2.3</micrometer-bridgebrave.version>
+        <micrometer-prometheus.version>1.12.4</micrometer-prometheus.version>
+        <micrometer-tracing.version>1.2.4</micrometer-tracing.version>
     </properties>
     <modules>
         <module>bot</module>
@@ -78,6 +77,21 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer-prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-brave</artifactId>
+                <version>${micrometer-tracing.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

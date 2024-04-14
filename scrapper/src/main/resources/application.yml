@@ -57,19 +57,11 @@ management:
     port: 8081
   endpoints:
     web:
-      base-path: /
       exposure:
-        include: health, info, prometheus
+        include: health,prometheus,info
       path-mapping:
-        prometheus: /metrics
+        prometheus: metrics
+      base-path: /
   metrics:
     tags:
       application: ${spring.application.name}
-  endpoint:
-    info:
-      enabled: true
-    health:
-      enabled: true
-      show-details: always
-    prometheus:
-      enabled: true
