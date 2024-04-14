@@ -4,7 +4,7 @@ app:
     interval: 15000
     force-check-delay: 15000
   database-access-type: jpa
-  useQueue: true
+  useQueue: false
   kafka:
     bootstrap-servers: localhost:9092
     topicName: bot-updates
@@ -51,3 +51,25 @@ springdoc:
 
 bucket:
   queryCount: 15
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: /metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    prometheus:
+      enabled: true
