@@ -1,13 +1,11 @@
 app:
   scheduler:
-    enable: false
+    enable: true
     interval: 15000
     force-check-delay: 15000
-  database-access-type: jpa
+  database-access-type: jdbc
   useQueue: true
-  kafka:
-    bootstrap-servers: localhost:9092
-    topicName: bot-updates
+  topicName: bot-updates
 
 spring:
   liquibase:
@@ -18,6 +16,17 @@ spring:
     url: jdbc:postgresql://localhost:5432/scrapper
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
 
 server:
   port: 8080

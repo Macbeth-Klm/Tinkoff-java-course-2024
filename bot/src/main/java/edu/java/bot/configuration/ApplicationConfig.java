@@ -11,14 +11,8 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     @NotNull
-    Kafka kafka
+    String topicName,
+    @NotNull
+    String badResponseTopicName
 ) {
-    public record Kafka(
-        boolean useQueue,
-        String bootstrapServers,
-        String groupId,
-        String topicName,
-        String badResponseTopicName
-    ) {
-    }
 }

@@ -16,14 +16,8 @@ public record ApplicationConfig(
     @NotNull
     Boolean useQueue,
     @NotNull
-    Kafka kafka) {
+    String topicName) {
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
-    }
-
-    public record Kafka(
-        String bootstrapServers,
-        String topicName
-    ) {
     }
 }
