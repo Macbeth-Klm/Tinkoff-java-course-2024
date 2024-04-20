@@ -29,7 +29,7 @@ services:
       - backend
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.2.1
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -38,7 +38,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   kafka:
-    image: confluentinc/cp-server:7.2.1
+    image: confluentinc/cp-server:latest
     hostname: kafka
     container_name: kafka
     depends_on:

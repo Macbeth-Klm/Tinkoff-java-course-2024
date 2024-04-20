@@ -62,10 +62,10 @@ public class JdbcGitHubLinkUpdater extends LinkUpdater {
     }
 
     @Override
-    protected String getDescription(ResourceResponse response) {
-        GitHubResponse res = (GitHubResponse) response;
+    protected String getDescription(ResourceResponse res) {
+        GitHubResponse response = (GitHubResponse) res;
         return "Обновление на GitHub!\n"
-            + "Пользователь " + res.actor().login() + " внёс изменение " + res.type()
-            + " в репозиторий " + res.repo().name();
+            + "Пользователь " + response.actor().login() + " внёс изменение " + response.type()
+            + " в репозиторий " + "https://" + host + "/" + response.repo().name();
     }
 }

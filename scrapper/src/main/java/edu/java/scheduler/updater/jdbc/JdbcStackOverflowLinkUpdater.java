@@ -62,10 +62,11 @@ public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
     }
 
     @Override
-    protected String getDescription(ResourceResponse response) {
-        StackOverflowResponse res = (StackOverflowResponse) response;
+    protected String getDescription(ResourceResponse res) {
+        StackOverflowResponse response = (StackOverflowResponse) res;
         return "Обновление на StackOverflow!\n"
-            + "На вопрос №" + res.questionId() + " пришёл ответ №" + res.answerId()
-            + " от пользователя " + res.owner().displayName();
+            + "На вопрос https://" + host + "/questions/" + response.questionId()
+            + " пришёл ответ №" + response.answerId()
+            + " от пользователя " + response.owner().displayName();
     }
 }

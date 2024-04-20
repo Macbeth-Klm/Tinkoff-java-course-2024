@@ -67,6 +67,6 @@ public class JooqGitHubLinkUpdater extends LinkUpdater {
         GitHubResponse response = (GitHubResponse) res;
         return "Обновление на GitHub!\n"
             + "Пользователь " + response.actor().login() + " внёс изменение " + response.type()
-            + " в репозиторий " + response.repo().name();
+            + " в репозиторий " + "https://" + host + "/" + response.repo().name();
     }
 }

@@ -22,7 +22,7 @@ public abstract class KafkaIntegrationTest {
     public static KafkaTemplate<String, String> KAFKA_TEMPLATE;
 
     static {
-        KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.2"));
+        KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
         KAFKA.start();
         CONSUMER_FACTORY = createConsumerFactory();
         KAFKA_TEMPLATE = createKafkaTemplate();
