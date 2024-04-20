@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class RegularBotService implements BotService {
     private final TelegramBot telegramBot;
 
+    @Override
     public void postUpdate(LinkUpdate req) {
         String message = req.description();
         for (Long tgChatId : req.tgChatIds()) {

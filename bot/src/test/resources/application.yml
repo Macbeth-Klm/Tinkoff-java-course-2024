@@ -1,31 +1,34 @@
-#app:
-#  telegram-token: ${TELEGRAM_TOKEN}
-#  topicName: bot-updates-test
-#  badResponseTopicName: bot-updates-test_dlq
-#
-#spring:
-#  application:
-#    name: macbeth_link_tracker_bot
-#  jackson:
-#    time-zone: UTC
-#
-#server:
-#  port: 8090
-#
-#logging:
-#  config: classpath:log4j2-plain.xml
-#
-#api:
-#  scrapper:
-#    defaultUrl: http://localhost:8080
-#    backoffType: CONSTANT
-#    retryCount: 3
-#    retryInterval: 1
-#    statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
-#
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui
-#
-#bucket:
-#  queryCount: 15
+app:
+  telegram-token: ${TELEGRAM_TOKEN}
+  topicName: bot-updates-test
+  badResponseTopicName: bot-updates-test_dlq
+
+spring:
+  application:
+    name: macbeth_link_tracker_bot
+  jackson:
+    time-zone: UTC
+  kafka:
+    consumer:
+      group-id: bot-messages-test
+
+server:
+  port: 8090
+
+logging:
+  config: classpath:log4j2-plain.xml
+
+api:
+  scrapper:
+    defaultUrl: http://localhost:8080
+    backoffType: CONSTANT
+    retryCount: 3
+    retryInterval: 1
+    statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
+bucket:
+  queryCount: 15

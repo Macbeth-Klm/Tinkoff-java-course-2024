@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.bot.api.service.BotService;
 import edu.java.model.LinkUpdate;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,6 +20,7 @@ public class ScrapperQueueConsumer {
     @Value(value = "${app.badResponseTopicName}")
     private String badResponseTopicName;
 
+    @Autowired
     public ScrapperQueueConsumer(
         @Qualifier("regularBotService") BotService botService,
         KafkaTemplate<String, String> dlqKafkaTemplate
