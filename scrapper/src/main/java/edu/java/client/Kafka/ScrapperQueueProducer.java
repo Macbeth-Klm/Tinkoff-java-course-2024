@@ -13,6 +13,6 @@ public class ScrapperQueueProducer {
     private final ApplicationConfig applicationConfig;
 
     public void send(LinkUpdate update) {
-        kafkaTemplate.send(applicationConfig.kafka().topicName(), update);
+        kafkaTemplate.send(applicationConfig.topicName(), update);
     }
 }

@@ -34,7 +34,7 @@ public class JpaGitHubLinkUpdater extends LinkUpdater {
         String[] splitLink = link.getUrl().getPath().split("/");
         String owner = splitLink[splitLink.length - 2];
         String repo = splitLink[splitLink.length - 1];
-        return gitHubClient.fetchRepositoryEvents(owner, repo)
+        return gitHubClient.retryFetchRepositoryEvents(owner, repo)
             .orElse(null);
     }
 
@@ -70,6 +70,6 @@ public class JpaGitHubLinkUpdater extends LinkUpdater {
         GitHubResponse response = (GitHubResponse) res;
         return "Обновление на GitHub!\n"
             + "Пользователь " + response.actor().login() + " внёс изменение " + response.type()
-            + " в репозиторий " + response.repo().name();
+            + " в репозиторий " + "https://" + host + "/" + response.repo().name();
     }
 }

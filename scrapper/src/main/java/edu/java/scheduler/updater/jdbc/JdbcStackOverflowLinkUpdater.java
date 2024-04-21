@@ -36,7 +36,7 @@ public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
     protected ResourceResponse getResponse(GeneralLink link) {
         String[] splitLink = link.getUrl().getPath().split("/");
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        return stackOverflowClient.fetchQuestionUpdates(questionId)
+        return stackOverflowClient.retryFetchQuestionUpdates(questionId)
             .orElse(null);
     }
 
@@ -62,10 +62,11 @@ public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
     }
 
     @Override
-    protected String getDescription(ResourceResponse response) {
-        StackOverflowResponse res = (StackOverflowResponse) response;
+    protected String getDescription(ResourceResponse res) {
+        StackOverflowResponse response = (StackOverflowResponse) res;
         return "Обновление на StackOverflow!\n"
-            + "На вопрос №" + res.questionId() + " пришёл ответ №" + res.answerId()
-            + " от пользователя " + res.owner().displayName();
+            + "На вопрос https://" + host + "/questions/" + response.questionId()
+            + " пришёл ответ №" + response.answerId()
+            + " от пользователя " + response.owner().displayName();
     }
 }

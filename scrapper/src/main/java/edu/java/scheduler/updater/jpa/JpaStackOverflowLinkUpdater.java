@@ -33,7 +33,7 @@ public class JpaStackOverflowLinkUpdater extends LinkUpdater {
     protected ResourceResponse getResponse(GeneralLink link) {
         String[] splitLink = link.getUrl().getPath().split("/");
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        return stackOverflowClient.fetchQuestionUpdates(questionId)
+        return stackOverflowClient.retryFetchQuestionUpdates(questionId)
             .orElse(null);
     }
 
@@ -68,7 +68,8 @@ public class JpaStackOverflowLinkUpdater extends LinkUpdater {
     protected String getDescription(ResourceResponse res) {
         StackOverflowResponse response = (StackOverflowResponse) res;
         return "Обновление на StackOverflow!\n"
-            + "На вопрос №" + response.questionId() + " пришёл ответ №" + response.answerId()
+            + "На вопрос https://" + host + "/questions/" + response.questionId()
+            + " пришёл ответ №" + response.answerId()
             + " от пользователя " + response.owner().displayName();
     }
 }

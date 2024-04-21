@@ -1,16 +1,22 @@
 app:
   telegram-token: ${TELEGRAM_TOKEN}
-  kafka:
-    bootstrap-servers: localhost:9092
-    group-id: bot-messages
-    topicName: bot-updates
-    badResponseTopicName: bot-updates_dlq
+  topicName: bot-updates
+  badResponseTopicName: bot-updates_dlq
 
 spring:
   application:
     name: macbeth_link_tracker_bot
   jackson:
     time-zone: UTC
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      group-id: bot-messages
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server:
   port: 8090
