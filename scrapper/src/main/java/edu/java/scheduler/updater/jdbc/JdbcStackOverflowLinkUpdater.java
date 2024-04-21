@@ -36,7 +36,7 @@ public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
     protected ResourceResponse getResponse(GeneralLink link) {
         String[] splitLink = link.getUrl().getPath().split("/");
         long questionId = Long.parseLong(splitLink[splitLink.length - 1]);
-        return stackOverflowClient.fetchQuestionUpdates(questionId)
+        return stackOverflowClient.retryFetchQuestionUpdates(questionId)
             .orElse(null);
     }
 
