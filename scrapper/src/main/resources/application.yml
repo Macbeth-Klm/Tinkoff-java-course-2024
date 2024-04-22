@@ -24,11 +24,26 @@ logging:
 api:
   github:
     defaultUrl: https://api.github.com
+    backoffType: CONSTANT
+    retryCount: 3
+    retryInterval: 1
+    statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
   stackoverflow:
     defaultUrl: https://api.stackexchange.com/2.3
+    backoffType: CONSTANT
+    retryCount: 3
+    retryInterval: 1
+    statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
   bot:
     defaultUrl: http://localhost:8090
+    backoffType: CONSTANT
+    retryCount: 3
+    retryInterval: 1
+    statuses: INTERNAL_SERVER_ERROR, BAD_GATEWAY, INSUFFICIENT_STORAGE, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
 
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+bucket:
+  queryCount: 15

@@ -12,9 +12,7 @@ import edu.java.scheduler.updater.LinkUpdater;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class JpaGitHubLinkUpdater extends LinkUpdater {
     @Getter
     private final String host = "github.com";
@@ -33,12 +31,10 @@ public class JpaGitHubLinkUpdater extends LinkUpdater {
 
     @Override
     protected ResourceResponse getResponse(GeneralLink link) {
-        log.info("JpaGitHubLinkUpdater: getting response");
         String[] splitLink = link.getUrl().getPath().split("/");
         String owner = splitLink[splitLink.length - 2];
         String repo = splitLink[splitLink.length - 1];
-        log.info("owner: {}; repo: {}", owner, repo);
-        return gitHubClient.fetchRepositoryEvents(owner, repo)
+        return gitHubClient.retryFetchRepositoryEvents(owner, repo)
             .orElse(null);
     }
 

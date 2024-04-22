@@ -26,7 +26,7 @@ public class ListCommand implements Command {
     public SendMessage handle(long chatId, String text) {
         if (text.equals(this.name())) {
             try {
-                List<URI> links = scrapperClient.getLinks(chatId).get().links().stream()
+                List<URI> links = scrapperClient.retryGetLinks(chatId).get().links().stream()
                     .map(LinkResponse::url).toList();
                 if (links.isEmpty()) {
                     return new SendMessage(chatId, "У вас нет подписок!");

@@ -5,4 +5,6 @@ import java.util.Optional;
 
 public interface StackOverflowClient {
     Optional<StackOverflowResponse> fetchQuestionUpdates(long questionId);
+
+    Optional<StackOverflowResponse> retryFetchQuestionUpdates(long questionId);
 }

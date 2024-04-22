@@ -30,7 +30,7 @@ public class UntrackCommand implements Command {
             String uri = (!enteredUri.startsWith(scheme)) ? scheme + enteredUri : enteredUri;
             URI link = URI.create(uri);
             try {
-                scrapperClient.deleteLink(chatId, new RemoveLinkRequest(link));
+                scrapperClient.retryDeleteLink(chatId, new RemoveLinkRequest(link));
                 return new SendMessage(chatId, "Подписка отменена успешно!");
             } catch (ApiException e) {
                 return new SendMessage(chatId, e.getDescription());
