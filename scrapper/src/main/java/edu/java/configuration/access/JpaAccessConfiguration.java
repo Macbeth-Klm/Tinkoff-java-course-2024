@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.configuration.access;
 
 import edu.java.api.domain.repository.jpa.JpaChatRepository;
 import edu.java.api.domain.repository.jpa.JpaLinkRepository;
@@ -6,12 +6,12 @@ import edu.java.api.service.LinkService;
 import edu.java.api.service.TgChatService;
 import edu.java.api.service.jpa.JpaLinkService;
 import edu.java.api.service.jpa.JpaTgChatService;
-import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
 import edu.java.scheduler.service.SchedulerService;
 import edu.java.scheduler.service.jpa.JpaLinkUpdaterService;
 import edu.java.scheduler.updater.LinkUpdater;
+import edu.java.scheduler.updater.NotificationSender;
 import edu.java.scheduler.updater.jpa.JpaGitHubLinkUpdater;
 import edu.java.scheduler.updater.jpa.JpaStackOverflowLinkUpdater;
 import java.util.List;
@@ -42,12 +42,12 @@ public class JpaAccessConfiguration {
     LinkUpdater jpaGitHubLinkUpdater(
         JpaLinkRepository jpaLinkRepository,
         GitHubClient gitHubClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
         return new JpaGitHubLinkUpdater(
             jpaLinkRepository,
             gitHubClient,
-            botClient
+            notificationSender
         );
     }
 
@@ -55,12 +55,12 @@ public class JpaAccessConfiguration {
     LinkUpdater jpaStackOverflowLinkUpdater(
         JpaLinkRepository jpaLinkRepository,
         StackOverflowClient stackOverflowClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
         return new JpaStackOverflowLinkUpdater(
             jpaLinkRepository,
             stackOverflowClient,
-            botClient
+            notificationSender
         );
     }
 

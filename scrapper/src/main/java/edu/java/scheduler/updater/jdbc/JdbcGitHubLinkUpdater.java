@@ -2,13 +2,13 @@ package edu.java.scheduler.updater.jdbc;
 
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
-import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.model.domain.GeneralLink;
 import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.response.GitHubResponse;
 import edu.java.response.ResourceResponse;
 import edu.java.scheduler.updater.LinkUpdater;
+import edu.java.scheduler.updater.NotificationSender;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -24,9 +24,9 @@ public class JdbcGitHubLinkUpdater extends LinkUpdater {
         JdbcLinkRepository jdbcLinkRepository,
         JdbcChatLinkRepository jdbcChatLinkRepository,
         GitHubClient gitHubClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
-        super(botClient);
+        super(notificationSender);
         this.jdbcLinkRepository = jdbcLinkRepository;
         this.jdbcChatLinkRepository = jdbcChatLinkRepository;
         this.gitHubClient = gitHubClient;
@@ -62,10 +62,10 @@ public class JdbcGitHubLinkUpdater extends LinkUpdater {
     }
 
     @Override
-    protected String getDescription(ResourceResponse response) {
-        GitHubResponse res = (GitHubResponse) response;
+    protected String getDescription(ResourceResponse res) {
+        GitHubResponse response = (GitHubResponse) res;
         return "Обновление на GitHub!\n"
-            + "Пользователь " + res.actor().login() + " внёс изменение " + res.type()
-            + " в репозиторий " + res.repo().name();
+            + "Пользователь " + response.actor().login() + " внёс изменение " + response.type()
+            + " в репозиторий " + "https://" + host + "/" + response.repo().name();
     }
 }

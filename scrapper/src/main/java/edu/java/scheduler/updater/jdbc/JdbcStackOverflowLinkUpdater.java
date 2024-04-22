@@ -2,13 +2,13 @@ package edu.java.scheduler.updater.jdbc;
 
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcLinkRepository;
-import edu.java.client.BotClient.BotClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
 import edu.java.model.domain.GeneralLink;
 import edu.java.model.domain.dto.ChatLinkDto;
 import edu.java.response.ResourceResponse;
 import edu.java.response.StackOverflowResponse;
 import edu.java.scheduler.updater.LinkUpdater;
+import edu.java.scheduler.updater.NotificationSender;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -24,9 +24,9 @@ public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
         JdbcLinkRepository jdbcLinkRepository,
         JdbcChatLinkRepository jdbcChatLinkRepository,
         StackOverflowClient stackOverflowClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
-        super(botClient);
+        super(notificationSender);
         this.jdbcLinkRepository = jdbcLinkRepository;
         this.jdbcChatLinkRepository = jdbcChatLinkRepository;
         this.stackOverflowClient = stackOverflowClient;
@@ -62,10 +62,11 @@ public class JdbcStackOverflowLinkUpdater extends LinkUpdater {
     }
 
     @Override
-    protected String getDescription(ResourceResponse response) {
-        StackOverflowResponse res = (StackOverflowResponse) response;
+    protected String getDescription(ResourceResponse res) {
+        StackOverflowResponse response = (StackOverflowResponse) res;
         return "Обновление на StackOverflow!\n"
-            + "На вопрос №" + res.questionId() + " пришёл ответ №" + res.answerId()
-            + " от пользователя " + res.owner().displayName();
+            + "На вопрос https://" + host + "/questions/" + response.questionId()
+            + " пришёл ответ №" + response.answerId()
+            + " от пользователя " + response.owner().displayName();
     }
 }

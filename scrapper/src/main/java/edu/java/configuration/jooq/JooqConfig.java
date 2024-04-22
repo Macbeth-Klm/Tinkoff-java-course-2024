@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.configuration.jooq;
 
 import org.jooq.DSLContext;
 import org.jooq.conf.RenderQuotedNames;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnMissingBean(DSLContext.class)
-public class JooqConfigJava {
+public class JooqConfig {
     @Bean
     public DefaultConfigurationCustomizer postgresJooqCustomizer() {
         return (DefaultConfiguration c) -> c.settings()

@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.configuration.access;
 
 import edu.java.api.domain.repository.jdbc.JdbcChatLinkRepository;
 import edu.java.api.domain.repository.jdbc.JdbcChatRepository;
@@ -7,12 +7,12 @@ import edu.java.api.service.LinkService;
 import edu.java.api.service.TgChatService;
 import edu.java.api.service.jdbc.JdbcLinkService;
 import edu.java.api.service.jdbc.JdbcTgChatService;
-import edu.java.client.BotClient.BotClient;
 import edu.java.client.GitHubClient.GitHubClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
 import edu.java.scheduler.service.SchedulerService;
 import edu.java.scheduler.service.jdbc.JdbcLinkUpdaterService;
 import edu.java.scheduler.updater.LinkUpdater;
+import edu.java.scheduler.updater.NotificationSender;
 import edu.java.scheduler.updater.jdbc.JdbcGitHubLinkUpdater;
 import edu.java.scheduler.updater.jdbc.JdbcStackOverflowLinkUpdater;
 import java.util.List;
@@ -46,13 +46,13 @@ public class JdbcAccessConfiguration {
         JdbcLinkRepository jdbcLinkRepository,
         JdbcChatLinkRepository jdbcChatLinkRepository,
         GitHubClient gitHubClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
         return new JdbcGitHubLinkUpdater(
             jdbcLinkRepository,
             jdbcChatLinkRepository,
             gitHubClient,
-            botClient
+            notificationSender
         );
     }
 
@@ -61,13 +61,13 @@ public class JdbcAccessConfiguration {
         JdbcLinkRepository jdbcLinkRepository,
         JdbcChatLinkRepository jdbcChatLinkRepository,
         StackOverflowClient stackOverflowClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
         return new JdbcStackOverflowLinkUpdater(
             jdbcLinkRepository,
             jdbcChatLinkRepository,
             stackOverflowClient,
-            botClient
+            notificationSender
         );
     }
 

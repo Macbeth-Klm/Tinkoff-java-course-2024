@@ -1,7 +1,6 @@
 package edu.java.scheduler.updater.jpa;
 
 import edu.java.api.domain.repository.jpa.JpaLinkRepository;
-import edu.java.client.BotClient.BotClient;
 import edu.java.client.StackOverflowClient.StackOverflowClient;
 import edu.java.model.domain.GeneralLink;
 import edu.java.model.domain.jpa.Chat;
@@ -9,6 +8,7 @@ import edu.java.model.domain.jpa.Link;
 import edu.java.response.ResourceResponse;
 import edu.java.response.StackOverflowResponse;
 import edu.java.scheduler.updater.LinkUpdater;
+import edu.java.scheduler.updater.NotificationSender;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -22,9 +22,9 @@ public class JpaStackOverflowLinkUpdater extends LinkUpdater {
     public JpaStackOverflowLinkUpdater(
         JpaLinkRepository jpaLinkRepository,
         StackOverflowClient stackOverflowClient,
-        BotClient botClient
+        NotificationSender notificationSender
     ) {
-        super(botClient);
+        super(notificationSender);
         this.jpaLinkRepository = jpaLinkRepository;
         this.stackOverflowClient = stackOverflowClient;
     }
@@ -68,7 +68,8 @@ public class JpaStackOverflowLinkUpdater extends LinkUpdater {
     protected String getDescription(ResourceResponse res) {
         StackOverflowResponse response = (StackOverflowResponse) res;
         return "Обновление на StackOverflow!\n"
-            + "На вопрос №" + response.questionId() + " пришёл ответ №" + response.answerId()
+            + "На вопрос https://" + host + "/questions/" + response.questionId()
+            + " пришёл ответ №" + response.answerId()
             + " от пользователя " + response.owner().displayName();
     }
 }

@@ -1,7 +1,7 @@
 app:
   telegram-token: ${TELEGRAM_TOKEN}
-  topicName: bot-updates
-  badResponseTopicName: bot-updates_dlq
+  topicName: bot-updates-test
+  badResponseTopicName: bot-updates-test_dlq
 
 spring:
   application:
@@ -9,14 +9,8 @@ spring:
   jackson:
     time-zone: UTC
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
     consumer:
-      group-id: bot-messages
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      group-id: bot-messages-test
 
 server:
   port: 8090

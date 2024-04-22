@@ -1,6 +1,5 @@
 package edu.java.scheduler.updater;
 
-import edu.java.client.BotClient.BotClient;
 import edu.java.model.LinkUpdate;
 import edu.java.model.domain.GeneralLink;
 import edu.java.response.ResourceResponse;
@@ -10,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class LinkUpdater {
-    private final BotClient botClient;
+    private final NotificationSender notificationSender;
 
     public abstract String getHost();
 
@@ -24,7 +23,7 @@ public abstract class LinkUpdater {
         OffsetDateTime responseUpdatedAt = res.getUpdatedAt();
         if (link.getUpdatedAt().isBefore(responseUpdatedAt)) {
             setUpdatedAt(link, responseUpdatedAt);
-            botClient.retryPostUpdates(new LinkUpdate(
+            notificationSender.sendUpdate(new LinkUpdate(
                 link.getId(),
                 link.getUrl(),
                 getDescription(res),
