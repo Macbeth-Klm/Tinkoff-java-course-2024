@@ -38,3 +38,17 @@ springdoc:
 
 bucket:
   queryCount: 15
+
+management:
+  server:
+    port: 8091
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+      path-mapping:
+        prometheus: metrics
+      base-path: /
+  metrics:
+    tags:
+      application: ${spring.application.name}

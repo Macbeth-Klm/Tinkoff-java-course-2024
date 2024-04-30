@@ -4,7 +4,7 @@ app:
     interval: 15000
     force-check-delay: 15000
   database-access-type: jdbc
-  useQueue: true
+  useQueue: false
   topicName: bot-updates
 
 spring:
@@ -60,3 +60,17 @@ springdoc:
 
 bucket:
   queryCount: 15
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+      path-mapping:
+        prometheus: metrics
+      base-path: /
+  metrics:
+    tags:
+      application: ${spring.application.name}

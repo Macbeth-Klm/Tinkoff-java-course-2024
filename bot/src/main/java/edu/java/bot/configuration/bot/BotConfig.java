@@ -9,17 +9,29 @@ import edu.java.bot.command.StartCommand;
 import edu.java.bot.command.TrackCommand;
 import edu.java.bot.command.UntrackCommand;
 import edu.java.bot.configuration.ApplicationConfig;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
+@RequiredArgsConstructor
 public class BotConfig {
+    private final MeterRegistry registry;
+
     @Bean
     TelegramBot telegramBot(ApplicationConfig applicationConfig) {
         return new TelegramBot(applicationConfig.telegramToken());
+    }
+
+    @Bean Counter counter() {
+        return Counter.builder("messages.processed")
+            .description("Processed messages count")
+            .register(registry);
     }
 
     @Bean
